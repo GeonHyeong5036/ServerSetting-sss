@@ -11,7 +11,7 @@
         echo "Failed to connect " . mysqli_connect_errno();
         return null;
       }
-      return $rhis->con;
+      return $this->con;
     }
   }
 
