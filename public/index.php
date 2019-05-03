@@ -13,48 +13,62 @@ $app = new \Slim\App;
   method: Post
 */
 
-$app->post('/createuser', function(Request $request, Response $repense){
-  if(haveEmptyParameters(array('imageURL', 'name'))){
-    $request_data = $request->getParsedBody();
-    $imageURL = $request_data['imageURL'];
-    $name = $request_data['name'];
+$app->post('/createuser', function(Request $request, Response $response){
 
-    $db = new DbOperations;
+    if(!haveEmptyParameters(array('email', 'password', 'name', 'school'), $request, $response)){
 
-    $result = $db->createUser($imageURL, $name);
-    if($result == USER_CREATED){
-      $message = array();
-      $message['error'] = false;
-      $message['message'] = 'User created successfully';
+        $request_data = $request->getParsedBody();
 
-      $response->write(json_encode($message));
-      return $response
-                  ->withHeader('Content-type', 'application/json');
-                  ->withStatus(201); //complete and new resource is created
+        $email = $request_data['email'];
+        $password = $request_data['password'];
+        $name = $request_data['name'];
+        $school = $request_data['school'];
 
-    }else if($result == USER_FAILURE){
-      $message = array();
-      $message['error'] = true;
-      $message['message'] = 'Some error occurred';
+        $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-      $response->write(json_encode($message));
-      return $response
-                  ->withHeader('Content-type', 'application/json');
-                  ->withStatus(422);
+        $db = new DbOperations;
 
-    }else if($result == USER_EXISTS){
-      $message = array();
-      $message['error'] = true;
-      $message['message'] = 'User Already Exists';
+        $result = $db->createUser($email, $hash_password, $name, $school);
 
-      $response->write(json_encode($message));
-      return $response
-                  ->withHeader('Content-type', 'application/json');
-                  ->withStatus(422);
-  }
-  return $response
-              ->withHeader('Content-type', 'application/json');
-              ->withStatus(422);
+        if($result == USER_CREATED){
+
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'User created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+
+        }else if($result == USER_FAILURE){
+
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+
+        }else if($result == USER_EXISTS){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'User Already Exists';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
 });
 
 function haveEmptyParameters($required_params, $response){
@@ -80,7 +94,7 @@ function haveEmptyParameters($required_params, $response){
 
 $app->run();
 
-/* init setting
+/* check connect
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
