@@ -14,21 +14,14 @@ $app = new \Slim\App;
 */
 
 $app->post('/createuser', function(Request $request, Response $response){
-
-    if(!haveEmptyParameters(array('email', 'password', 'name', 'school'), $request, $response)){
-
+    if(!haveEmptyParameters(array('imageURL', 'name'), $request, $response)){
         $request_data = $request->getParsedBody();
-
-        $email = $request_data['email'];
-        $password = $request_data['password'];
+        $imageURL = $request_data['imageURL'];
         $name = $request_data['name'];
-        $school = $request_data['school'];
-
-        $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
         $db = new DbOperations;
 
-        $result = $db->createUser($email, $hash_password, $name, $school);
+        $result = $db->createUser($imageURL, $name);
 
         if($result == USER_CREATED){
 
@@ -72,24 +65,24 @@ $app->post('/createuser', function(Request $request, Response $response){
 });
 
 function haveEmptyParameters($required_params, $response){
-  $error = false;
-  $error_params = '';
-  $request_params = $_REQUEST;
+    $error = false;
+    $error_params = '';
+    $request_params = $_REQUEST;
 
-  foreach ($required_params as $param) {
-    if(!isset($request_params[$param]) || strlen($request_params[$param])<=0){
-      $error = true;
-      $error_params .= $param . ', ';
+    foreach ($required_params as $param) {
+      if(!isset($request_params[$param]) || strlen($request_params[$param])<=0){
+        $error = true;
+        $error_params .= $param . ', ';
+      }
     }
-  }
 
-  if($error){
-    $error_detail = array();
-    $error_detail['error'] = true;
-    $error_detail['message'] = 'Required parameters ' . substr($error_params, 0 ,-2) . ' are missing or empty';
-    $response->write(json_encode($error_detail));
-  }
-  return $error;
+    if($error){
+      $error_detail = array();
+      $error_detail['error'] = true;
+      $error_detail['message'] = 'Required parameters ' . substr($error_params, 0 ,-2) . ' are missing or empty';
+      $response->write(json_encode($error_detail));
+    }
+    return $error;
 }
 
 $app->run();
