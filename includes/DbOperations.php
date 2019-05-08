@@ -8,10 +8,10 @@
       $this->con = $db->connect();
     }
 
-    public function createUser($imageURL, $name){
-      if(!$this->isImageURLExist($imageURL)){
-        $stmt = $this->con->prepare("insert into users (imageURL, name) values (?, ?)");
-        $stmt->bind_param("ss", $imageURL, $name);
+    public function createUser($kakaoId, $name){
+      if(!$this->isKakaoIdExist($kakaoId)){
+        $stmt = $this->con->prepare("insert into users (kakaoId, name) values (?, ?)");
+        $stmt->bind_param("ss", $kakaoId, $name);
         if($stmt->execute()){
           return USER_CREATED;
         }else{
@@ -21,9 +21,9 @@
       return USER_EXISTS;
     }
 
-    private function isImageURLExist($imageURL){
-      $stmt = $this->con->prepare("select userId from users where email = ?");
-      $stmt->bind_param("s", $imageURL);
+    private function isKakaoIdExist($imageURL){
+      $stmt = $this->con->prepare("select id from users where kakaoId = ?");
+      $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->store_result();
       return $stmt->num_rows > 0;

@@ -9,19 +9,20 @@ $app = new \Slim\App;
 
 /*
   endporint: createuser
-  parameters: imageURL, name
+  parameters: kakaoId, name
   method: Post
 */
 
 $app->post('/createuser', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('imageURL', 'name'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'name'), $request, $response)){
+echo "string";
         $request_data = $request->getParsedBody();
-        $imageURL = $request_data['imageURL'];
+        $kakaoId = $request_data['kakaoId'];
         $name = $request_data['name'];
 
         $db = new DbOperations;
 
-        $result = $db->createUser($imageURL, $name);
+        $result = $db->createUser($kakaoId, $name);
 
         if($result == USER_CREATED){
 
