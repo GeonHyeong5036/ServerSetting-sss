@@ -7,4 +7,8 @@
     define('USER_CREATED', 101);
     define('USER_EXISTS', 102);
     define('USER_FAILURE', 103);
+
+    define('FRIEND_CREATED', 201);
+    define('FRIEND_EXISTS', 202);
+    define('FRIEND_FAILURE', 203);
 ?>

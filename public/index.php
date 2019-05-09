@@ -25,7 +25,6 @@ echo "string";
         $result = $db->createUser($kakaoId, $name);
 
         if($result == USER_CREATED){
-
             $message = array();
             $message['error'] = false;
             $message['message'] = 'User created successfully';
@@ -37,7 +36,6 @@ echo "string";
                         ->withStatus(201);
 
         }else if($result == USER_FAILURE){
-
             $message = array();
             $message['error'] = true;
             $message['message'] = 'Some error occurred';
@@ -52,6 +50,56 @@ echo "string";
             $message = array();
             $message['error'] = true;
             $message['message'] = 'User Already Exists';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
+});
+
+$app->post('/createFriend', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('userId', 'friendId'), $request, $response)){
+echo "string";
+        $request_data = $request->getParsedBody();
+        $userId = $request_data['userId'];
+        $friendId = $request_data['friendId'];
+
+        $db = new DbOperations;
+
+        $result = $db->createUser($userId, $friendId);
+
+        if($result == FRIEND_CREATED){
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'Friend of User created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+
+        }else if($result == FRIEND_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+
+        }else if($result == FRIEND_EXISTS){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Friend of User Already Exists';
 
             $response->write(json_encode($message));
 
