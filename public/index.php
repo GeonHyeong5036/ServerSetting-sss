@@ -5,7 +5,11 @@ use Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
 
-$app = new \Slim\App;
+$app = new \Slim\App([
+    'settings'=>[
+        'displayErrorDetails'=>true
+    ]
+]);
 
 /*
   endporint: createuser
@@ -14,15 +18,16 @@ $app = new \Slim\App;
 */
 
 $app->post('/createuser', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'name'), $request, $response)){
-echo "string";
+    if(!haveEmptyParameters(array('kakaoId', 'name', 'member'), $request, $response)){
+
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
         $name = $request_data['name'];
+        $member = $request_data['member'];
 
         $db = new DbOperations;
 
-        $result = $db->createUser($kakaoId, $name);
+        $result = $db->createUser($kakaoId, $name, $member);
 
         if($result == USER_CREATED){
             $message = array();
@@ -111,6 +116,27 @@ echo "string";
     return $response
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
+});
+
+$app->get('/user', function(Request $request, Response $response){
+    $request_data = $request->getParsedBody();
+    $kakaoId = $request_data['kakaoId'];
+
+    $db = new DbOperations;
+
+    $user = $db->getUser($kakaoId);
+
+    $response_data = array();
+
+    $response_data['error'] = false;
+    $response_data['users'] = $user;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
 });
 
 function haveEmptyParameters($required_params, $request, $response){
