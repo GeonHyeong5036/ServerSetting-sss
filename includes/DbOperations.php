@@ -17,10 +17,8 @@
         }else{
           return USER_FAILURE;
         }
-      }else{
-        if($this->isMemberAlready($kakaoId, $member)){
+      }else if($this->isMemberAlready($kakaoId, $member)){
           return USER_UPDATE;
-        }
       }
       return USER_EXISTS;
     }
