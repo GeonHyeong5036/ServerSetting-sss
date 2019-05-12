@@ -241,7 +241,7 @@ $app->get('/getcourse', function(Request $request, Response $response){
 
     $db = new DbOperations;
 
-    $course = $db->getUser($kakaoId);
+    $course = $db->getCourse($kakaoId);
 
     $response_data = array();
 
