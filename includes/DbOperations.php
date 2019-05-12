@@ -70,7 +70,7 @@
       if($userId==null || $friendId==null){
         return FRIEND_MISSING;
       }else if($userId==$friendId){
-        
+        return FRIEND_SAME;
       }
 
       if(!$this->isFriendShipExist($userId, $friendId)){
