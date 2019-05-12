@@ -2,6 +2,9 @@
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
@@ -14,7 +17,7 @@ $app = new \Slim\App([
 
 /*
   endporint: createuser
-  parameters: kakaoId, name
+  parameters: kakaoId, name, memeber
   method: Post
 */
 
@@ -41,6 +44,16 @@ $app->post('/createuser', function(Request $request, Response $response){
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(201);
 
+        }else if($result == USER_UPDATE){
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'User Upate';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
         }else if($result == USER_FAILURE){
             $message = array();
             $message['error'] = true;
@@ -140,6 +153,18 @@ $app->get('/user', function(Request $request, Response $response){
 
 });
 
+$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+    $name = $args['name'];
+    $response->getBody()->write("Hello, $name");
+    $db = new DbConnect;
+
+    if($db->connect() != null){
+      echo 'Connection Successfull';
+    }
+
+    return $response;
+});
+
 function haveEmptyParameters($required_params, $request, $response){
     $error = false;
     $error_params = '';
@@ -160,17 +185,5 @@ function haveEmptyParameters($required_params, $request, $response){
     }
     return $error;
 }
-
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    $db = new DibConnect;
-
-    if($db->connect() != null){
-      echo 'Connection Successfull';
-    }
-
-    return $response;
-});
 
 $app->run();
