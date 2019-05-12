@@ -12,4 +12,5 @@
     define('FRIEND_CREATED', 201);
     define('FRIEND_EXISTS', 202);
     define('FRIEND_FAILURE', 203);
+    define('FRIEND_MISSING', 204);
 ?>

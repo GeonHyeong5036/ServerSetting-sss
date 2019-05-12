@@ -64,15 +64,33 @@
         return $user;
     }
 
-    public function createFriend($userKakaoId, $friendKakaoId){
-      $userId = getIdByKakaoId($userKakaoId);
-      $friendId = getIdByKakaoId($friendKakaoId);
-      $stmt = $this->con->prepare("INSERT into friendRelationShip (userId, friendId) values (?, ?)");
-      $stmt->bind_param("ss", $userId, $friendId);
-      if($stmt->execute()){
-        return FRIEND_CREATED;
-      }else{
-        return FRIEND_FAILURE;
-      }
+    private function isFriendShipExist($userId, $friendId){
+      $stmt1 = $this->con->prepare("SELECT * from friendRelationShip where (userId = ? and friendId = ?)");
+      $stmt1 ->bind_param("ii", $userId, $friendId);
+      $stmt1 ->execute();
+      $stmt1 ->store_result();
+
+      $stmt2 = $this->con->prepare("SELECT * from friendRelationShip where (userId = ? and friendId = ?)");
+      $stmt2 ->bind_param("ii", $friendId, $userId);
+      $stmt2 ->execute();
+      $stmt2 ->store_result();
+      return (($stmt1->num_rows > 0) || ($stmt2->num_rows > 0));
     }
+
+    public function createFriend($userKakaoId, $friendKakaoId){
+      if(!$this->isFriendShipExist($kakaoId)){
+        $userId = $this->getIdByKakaoId($userKakaoId);
+        $friendId = $this->getIdByKakaoId($friendKakaoId);
+        if($userId==null || $friendId==null){
+          return FRIEND_MISSING;
+        }
+        $stmt = $this->con->prepare("INSERT into friendRelationShip (userId, friendId) values (?, ?)");
+        $stmt->bind_param("ii", $userId, $friendId);
+        if($stmt->execute()){
+          return FRIEND_CREATED;
+        }else{
+          return FRIEND_FAILURE;
+        }
+      }
+    }return FRIEND_EXISTS;
   }

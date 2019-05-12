@@ -82,7 +82,7 @@ $app->post('/createuser', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
-$app->post('/createFriend', function(Request $request, Response $response){
+$app->post('/createfriend', function(Request $request, Response $response){
     if(!haveEmptyParameters(array('userId', 'friendId'), $request, $response)){
 echo "string";
         $request_data = $request->getParsedBody();
@@ -91,7 +91,7 @@ echo "string";
 
         $db = new DbOperations;
 
-        $result = $db->createUser($userId, $friendId);
+        $result = $db->createFriend($userId, $friendId);
 
         if($result == FRIEND_CREATED){
             $message = array();
@@ -104,6 +104,16 @@ echo "string";
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(201);
 
+        }else if($result == FRIEND_MISSING){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Not find Friend';
+            
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
         }else if($result == FRIEND_FAILURE){
             $message = array();
             $message['error'] = true;
@@ -143,7 +153,7 @@ $app->get('/user', function(Request $request, Response $response){
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['users'] = $user;
+    $response_data['user'] = $user;
 
     $response->write(json_encode($response_data));
 
