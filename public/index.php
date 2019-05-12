@@ -104,10 +104,10 @@ echo "string";
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(201);
 
-        }else if($result == FRIEND_MISSING){
+        }else if($result == USERID_MISSING){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'Not find Friend in User';
+            $message['message'] = 'Not find userId in User';
 
             $response->write(json_encode($message));
 
@@ -139,6 +139,58 @@ echo "string";
             $message = array();
             $message['error'] = true;
             $message['message'] = 'Friend of User Already Exists';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
+});
+
+$app->post('/createcourse', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('kakaoId', 'start', 'end', 'dayOfWeek'), $request, $response)){
+
+        $request_data = $request->getParsedBody();
+        $kakaoId = $request_data['kakaoId'];
+        $start = $request_data['start'];
+        $end = $request_data['end'];
+        $dayOfWeek = $request_data['dayOfWeek'];
+
+        $db = new DbOperations;
+
+        $result = $db->createCourse($kakaoId, $start, $end, $dayOfWeek);
+
+        if($result == COURSE_CREATED){
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'Course created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+
+        }else if($result == COURSE_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred in course';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+
+        }else if($result == COURSE_EXISTS){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'course already Exists';
 
             $response->write(json_encode($message));
 

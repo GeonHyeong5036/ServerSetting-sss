@@ -68,7 +68,7 @@
       $userId = $this->getIdByKakaoId($userKakaoId);
       $friendId = $this->getIdByKakaoId($friendKakaoId);
       if($userId==null || $friendId==null){
-        return FRIEND_MISSING;
+        return USERID_MISSING;
       }else if($userId==$friendId){
         return FRIEND_SAME;
       }
@@ -86,16 +86,36 @@
     }
 
     private function isFriendShipExist($userId, $friendId){
-      $stmt1 = $this->con->prepare("SELECT * from friendRelationShip where (userId = ? and friendId = ?)");
-      $stmt1 ->bind_param("ii", $userId, $friendId);
-      $stmt1 ->execute();
-      $stmt1 ->store_result();
+      $stmt = $this->con->prepare("SELECT * from friendRelationShip where (userId = ? and friendId = ?) or (userId = ? and friendId = ?)");
+      $stmt ->bind_param("iiii", $userId, $friendId, $friendId, $userId);
+      $stmt ->execute();
+      $stmt ->store_result();
 
-      $stmt2 = $this->con->prepare("SELECT * from friendRelationShip where (userId = ? and friendId = ?)");
-      $stmt2 ->bind_param("ii", $friendId, $userId);
-      $stmt2 ->execute();
-      $stmt2 ->store_result();
-
-      return (($stmt1->num_rows > 0) || ($stmt2->num_rows > 0));
+      return ($stmt->num_rows > 0);
     }
+
+    public function createCourse($kakaoId, $start, $end, $dayOfWeek){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      if($userId==null){
+        return USERID_MISSING;
+      }
+      if(!$this->isCourseExist($userId, $start, $end, $dayOfWeek)){
+        $stmt = $this->con->prepare("INSERT into course (userId, start, end, dayOfWeek) values (?, ?, ?, ?)");
+        $stmt->bind_param("iiis", $userId, $start, $end, $dayOfWeek);
+        if($stmt->execute()){
+          return COURSE_CREATED;
+        }else{
+          return COURSE_FAILURE;
+        }
+      return COURSE_EXISTS;
+    }
+
+    private function isCourseExist($userId, $start, $end, $dayOfWeek){
+      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (start = ?) and (end = ?) and (dayOfWeek))");
+      $stmt->bind_param("iiis", $userId, $start, $end, $dayOfWeek);
+      $stmt->execute();
+      $stmt->store_result();
+      return $stmt->num_rows > 0;
+    }
+
   }
