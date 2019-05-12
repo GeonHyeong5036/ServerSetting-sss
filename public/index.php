@@ -175,6 +175,16 @@ $app->post('/createcourse', function(Request $request, Response $response){
             return $response
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(201);
+        }else if($result == USERID_MISSING){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Not find userId in User';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
 
         }else if($result == COURSE_FAILURE){
             $message = array();
@@ -204,7 +214,7 @@ $app->post('/createcourse', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
-$app->get('/user', function(Request $request, Response $response){
+$app->get('/getuser', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
 
@@ -216,6 +226,27 @@ $app->get('/user', function(Request $request, Response $response){
 
     $response_data['error'] = false;
     $response_data['user'] = $user;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
+$app->get('/getcourse', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $kakaoId = $request_data['kakaoId'];
+
+    $db = new DbOperations;
+
+    $course = $db->getUser($kakaoId);
+
+    $response_data = array();
+
+    $response_data['error'] = false;
+    $response_data['course'] = $course;
 
     $response->write(json_encode($response_data));
 
