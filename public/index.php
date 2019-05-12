@@ -107,8 +107,18 @@ echo "string";
         }else if($result == FRIEND_MISSING){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'Not find Friend';
-            
+            $message['message'] = 'Not find Friend in User';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }else if($result == FRIEND_SAME){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Same UserId';
+
             $response->write(json_encode($message));
 
             return $response

@@ -13,4 +13,5 @@
     define('FRIEND_EXISTS', 202);
     define('FRIEND_FAILURE', 203);
     define('FRIEND_MISSING', 204);
+    define('FRIEND_SAME', 205);
 ?>
