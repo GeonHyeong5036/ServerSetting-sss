@@ -4,6 +4,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
+require '../includes/DbConnect.php';
 
 $app = new \Slim\App([
     'settings'=>[
@@ -119,7 +120,7 @@ echo "string";
 });
 
 $app->get('/user', function(Request $request, Response $response){
-    $request_data = $request->getParsedBody();
+    $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
 
     $db = new DbOperations;
@@ -160,13 +161,10 @@ function haveEmptyParameters($required_params, $request, $response){
     return $error;
 }
 
-$app->run();
-
-/* check connect
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
-    $db = new DbConnect;
+    $db = new DibConnect;
 
     if($db->connect() != null){
       echo 'Connection Successfull';
@@ -174,5 +172,5 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
     return $response;
 });
+
 $app->run();
-*/
