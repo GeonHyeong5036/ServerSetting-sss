@@ -15,13 +15,6 @@ $app = new \Slim\App([
     ]
 ]);
 
-$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
-    "secure"=>false,
-    "users" => [
-        "belalkhan" => "123456",
-    ]
-]));
-
 /*
   endporint: createuser
   parameters: kakaoId, name, memeber
@@ -160,17 +153,19 @@ echo "string";
 });
 
 $app->post('/createcourse', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'start', 'end', 'dayOfWeek'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'start', 'end', 'dayOfWeek'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
+        $title = $request_data['title'];
+        $placee = $request_data['place'];
         $start = $request_data['start'];
         $end = $request_data['end'];
         $dayOfWeek = $request_data['dayOfWeek'];
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $start, $end, $dayOfWeek);
+        $result = $db->createCourse($kakaoId, $title, $place, $start, $end, $dayOfWeek);
 
         if($result == COURSE_CREATED){
             $message = array();
