@@ -94,14 +94,14 @@
       return ($stmt->num_rows > 0);
     }
 
-    public function createCourse($kakaoId, $start, $end, $dayOfWeek){
+    public function createCourse($kakaoId, $title, $place, $start, $end, $dayOfWeek){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return USERID_MISSING;
       }
-      if(!$this->isCourseExist($userId, $start, $end, $dayOfWeek)){
-        $stmt = $this->con->prepare("INSERT into course (userId, start, end, dayOfWeek) values (?, ?, ?, ?)");
-        $stmt->bind_param("isss", $userId, $start, $end, $dayOfWeek);
+      if(!$this->isCourseExist($userId, $title, $place, $start, $end, $dayOfWeek)){
+        $stmt = $this->con->prepare("INSERT into course (userId, title, place, start, end, dayOfWeek) values (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssss", $userId, $title, $place, $start, $end, $dayOfWeek);
         if($stmt->execute()){
           return COURSE_CREATED;
         }else{
@@ -113,23 +113,29 @@
 
     public function getCourse($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id, userId, start, end, dayOfWeek FROM course where userId = ?");
+      $stmt = $this->con->prepare("SELECT id, userId, title, place, start, end, dayOfWeek FROM course where userId = ?");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
-      $stmt->bind_result($id, $userId, $start, $end, $dayOfWeek);
+      $stmt->bind_result($id, $userId, $title, $place, $start, $end, $dayOfWeek);
       $stmt->fetch();
-      $course = array();
-      $course['id'] = $id;
-      $course['userId']=$userId;
-      $course['start'] = $start;
-      $course['end'] = $end;
-      $course['dayOfWeek'] = $dayOfWeek;
-      return $course;
+      $courses = array();
+      while($stmt->fetch()){
+        $course = array();
+        $course['id'] = $id;
+        $course['userId']=$userId;
+        $course['title']=$title;
+        $course['place']=$place;
+        $course['start'] = $start;
+        $course['end'] = $end;
+        $course['dayOfWeek'] = $dayOfWeek;
+        array_push($courses, $course);
+      }
+      return $courses;
     }
 
-    private function isCourseExist($userId, $start, $end, $dayOfWeek){
-      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (start = ?) and (end = ?) and (dayOfWeek = ?))");
-      $stmt->bind_param("isss", $userId, $start, $end, $dayOfWeek);
+    private function isCourseExist($userId, $title, $place, $start, $end, $dayOfWeek){
+      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (title = ?) and (place = ?) and (start = ?) and (end = ?) and (dayOfWeek = ?))");
+      $stmt->bind_param("isssss", $userId, $title, $place, $start, $end, $dayOfWeek);
       $stmt->execute();
       $stmt->store_result();
       return $stmt->num_rows > 0;

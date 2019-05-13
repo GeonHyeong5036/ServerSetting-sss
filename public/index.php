@@ -15,6 +15,13 @@ $app = new \Slim\App([
     ]
 ]);
 
+$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+    "secure"=>false,
+    "users" => [
+        "belalkhan" => "123456",
+    ]
+]));
+
 /*
   endporint: createuser
   parameters: kakaoId, name, memeber
@@ -241,12 +248,12 @@ $app->get('/getcourse', function(Request $request, Response $response){
 
     $db = new DbOperations;
 
-    $course = $db->getCourse($kakaoId);
+    $courses = $db->getCourse($kakaoId);
 
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['course'] = $course;
+    $response_data['courses'] = $courses;
 
     $response->write(json_encode($response_data));
 
