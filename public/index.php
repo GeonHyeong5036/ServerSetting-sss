@@ -91,15 +91,15 @@ $app->post('/createuser', function(Request $request, Response $response){
 });
 
 $app->post('/createfriend', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('userId', 'friendId'), $request, $response)){
+    if(!haveEmptyParameters(array('userKakakoId', 'friendKakakoId'), $request, $response)){
 echo "string";
         $request_data = $request->getParsedBody();
-        $userId = $request_data['userId'];
-        $friendId = $request_data['friendId'];
+        $userKakakoId = $request_data['userKakakoId'];
+        $friendKakakoId = $request_data['friendKakakoId'];
 
         $db = new DbOperations;
 
-        $result = $db->createFriend($userId, $friendId);
+        $result = $db->createFriend($userKakakoId, $friendKakakoId);
 
         if($result == FRIEND_CREATED){
             $message = array();
