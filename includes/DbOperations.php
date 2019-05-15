@@ -125,7 +125,7 @@
         $course['userId']=$userId;
         $course['title']=$title;
         $course['place']=$place;
-        $sellPosition['sellPosition']] = $sellPosition;
+        $sellPosition['sellPosition'] = $sellPosition;
         array_push($courses, $course);
       }
       return $courses;

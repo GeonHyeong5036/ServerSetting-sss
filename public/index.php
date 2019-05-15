@@ -171,7 +171,7 @@ $app->post('/createcourse', function(Request $request, Response $response){
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $title, $place, $sellPositionk);
+        $result = $db->createCourse($kakaoId, $title, $place, $sellPosition);
 
         if($result == COURSE_CREATED){
             $message = array();
