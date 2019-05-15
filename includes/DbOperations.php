@@ -94,7 +94,7 @@
       return ($stmt->num_rows > 0);
     }
 
-    public function createCourse($kakaoId, $title, $place, $start, $end, $dayOfWeek){
+    public function createCourse($kakaoId, $title, $place, $sellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return USERID_MISSING;
