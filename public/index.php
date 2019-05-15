@@ -16,6 +16,14 @@ $app = new \Slim\App([
 ]);
 
 /*
+$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+    "secure"=>false,
+    "users" => [
+        "belalkhan" => "123456",
+    ]
+]));
+*/
+/*
   endporint: createuser
   parameters: kakaoId, name, memeber
   method: Post
@@ -153,19 +161,17 @@ echo "string";
 });
 
 $app->post('/createcourse', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'start', 'end', 'dayOfWeek'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'sellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
         $title = $request_data['title'];
-        $placee = $request_data['place'];
-        $start = $request_data['start'];
-        $end = $request_data['end'];
-        $dayOfWeek = $request_data['dayOfWeek'];
+        $place = $request_data['place'];
+        $sellPosition = $request_data['sellPosition'];
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $title, $place, $start, $end, $dayOfWeek);
+        $result = $db->createCourse($kakaoId, $title, $place, $sellPositionk);
 
         if($result == COURSE_CREATED){
             $message = array();
@@ -202,7 +208,7 @@ $app->post('/createcourse', function(Request $request, Response $response){
         }else if($result == COURSE_EXISTS){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'course already Exists';
+            $message['message'] = 'Course already Exists';
 
             $response->write(json_encode($message));
 

@@ -99,9 +99,9 @@
       if($userId==null){
         return USERID_MISSING;
       }
-      if(!$this->isCourseExist($userId, $title, $place, $start, $end, $dayOfWeek)){
-        $stmt = $this->con->prepare("INSERT into course (userId, title, place, start, end, dayOfWeek) values (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssss", $userId, $title, $place, $start, $end, $dayOfWeek);
+      if(!$this->isCourseExist($userId, $title, $place, $sellPosition)){
+        $stmt = $this->con->prepare("INSERT into course (userId, title, place, sellPosition) values (?, ?, ?, ?)");
+        $stmt->bind_param("issi", $userId, $title, $place, $sellPosition);
         if($stmt->execute()){
           return COURSE_CREATED;
         }else{
@@ -113,10 +113,10 @@
 
     public function getCourse($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id, userId, title, place, start, end, dayOfWeek FROM course where userId = ?");
+      $stmt = $this->con->prepare("SELECT id, userId, title, place, sellPosition FROM course where userId = ?");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
-      $stmt->bind_result($id, $userId, $title, $place, $start, $end, $dayOfWeek);
+      $stmt->bind_result($id, $userId, $title, $place, $sellPosition);
       $stmt->fetch();
       $courses = array();
       while($stmt->fetch()){
@@ -125,17 +125,15 @@
         $course['userId']=$userId;
         $course['title']=$title;
         $course['place']=$place;
-        $course['start'] = $start;
-        $course['end'] = $end;
-        $course['dayOfWeek'] = $dayOfWeek;
+        $sellPosition['sellPosition']] = $sellPosition;
         array_push($courses, $course);
       }
       return $courses;
     }
 
-    private function isCourseExist($userId, $title, $place, $start, $end, $dayOfWeek){
-      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (title = ?) and (place = ?) and (start = ?) and (end = ?) and (dayOfWeek = ?))");
-      $stmt->bind_param("isssss", $userId, $title, $place, $start, $end, $dayOfWeek);
+    private function isCourseExist($userId, $title, $place, $sellPosition){
+      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (title = ?) and (place = ?) and (sellPosition = ?))");
+      $stmt->bind_param("issi", $userId, $title, $place, $sellPosition);
       $stmt->execute();
       $stmt->store_result();
       return $stmt->num_rows > 0;
