@@ -116,7 +116,7 @@
       if($userId==null){
         return USERID_MISSING;
       }
-      $stmt = $this->con->prepare("UPDATE course SET title = ?, place = ?, sellPosition = ?) WHERE userId =?");
+      $stmt = $this->con->prepare("UPDATE course SET title = ?, place = ?, sellPosition = ? WHERE userId =?");
       $stmt->bind_param("ssii", $title, $place, $sellPosition, $userId);
       if($stmt->execute())
         return true;

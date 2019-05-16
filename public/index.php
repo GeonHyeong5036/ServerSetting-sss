@@ -323,7 +323,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
 $app->delete('/deletecourse/{kakaoId}/{sellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
-    $sellPosition = $request_data['sellPosition'];
+    $sellPosition = $args['sellPosition'];
 
     $db = new DbOperations;
 
