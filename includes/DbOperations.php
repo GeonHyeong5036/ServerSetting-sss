@@ -113,7 +113,7 @@
 
     public function getCourse($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id, userId, title, place, sellPosition FROM course where userId = ?");
+      $stmt = $this->con->prepare("SELECT id, userId, title, place, sellPosition FROM course where userId = ? order by sellPosition");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($id, $userId, $title, $place, $sellPosition);
@@ -125,7 +125,7 @@
         $course['userId']=$userId;
         $course['title']=$title;
         $course['place']=$place;
-        $sellPosition['sellPosition'] = $sellPosition;
+        $course['sellPosition'] = $sellPosition;
         array_push($courses, $course);
       }
       return $courses;
