@@ -222,6 +222,51 @@ $app->post('/createcourse', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
+$app->put('/updatecourse/{kakaoId}', function(Request $request, Response $response, array $args){
+
+    $kakaoId = $args['kakaoId'];
+
+    if(!haveEmptyParameters(array('title', 'place', 'sellPosition'), $request, $response)){
+
+        $request_data = $request->getParsedBody();
+        $title = $request_data['title'];
+        $place = $request_data['place'];
+        $sellPosition = $request_data['sellPosition'];
+
+        $db = new DbOperations;
+
+        if($db->updateCourse($kakaoId, $title, $place, $sellPosition)){
+            $response_data = array();
+            $response_data['error'] = false;
+            $response_data['message'] = 'Course Updated Successfully';
+
+            $response->write(json_encode($response_data));
+
+            return $response
+            ->withHeader('Content-type', 'application/json')
+            ->withStatus(200);
+
+        }else{
+            $response_data = array();
+            $response_data['error'] = true;
+            $response_data['message'] = 'Update failed';
+
+            $response->write(json_encode($response_data));
+
+            return $response
+            ->withHeader('Content-type', 'application/json')
+            ->withStatus(200);
+
+        }
+
+    }
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
 $app->get('/getuser', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
@@ -274,6 +319,29 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     }
 
     return $response;
+});
+
+$app->delete('/deletecourse/{kakaoId}/{sellPosition}', function(Request $request, Response $response, array $args){
+    $kakaoId = $args['kakaoId'];
+    $sellPosition = $request_data['sellPosition'];
+
+    $db = new DbOperations;
+
+    $response_data = array();
+
+    if($db->deleteCourse($kakaoId, $sellPosition)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Course has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Delete failed';
+    }
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
 });
 
 function haveEmptyParameters($required_params, $request, $response){

@@ -111,6 +111,18 @@
       return COURSE_EXISTS;
     }
 
+    public function updateCourse($kakaoId, $title, $place, $sellPosition){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      if($userId==null){
+        return USERID_MISSING;
+      }
+      $stmt = $this->con->prepare("UPDATE course SET title = ?, place = ?, sellPosition = ?) WHERE userId =?");
+      $stmt->bind_param("ssii", $title, $place, $sellPosition, $userId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
     public function getCourse($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id, userId, title, place, sellPosition FROM course where userId = ? order by sellPosition");
@@ -131,6 +143,18 @@
       return $courses;
     }
 
+    public function deleteCourse($kakaoId, $sellPosition){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      if($userId==null){
+        return USERID_MISSING;
+      }
+      $stmt = $this->con->prepare("DELETE FROM course WHERE userId = ? and sellPosition = ?");
+      $stmt->bind_param("ii", $userId, $sellPosition);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
     private function isCourseExist($userId, $title, $place, $sellPosition){
       $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (title = ?) and (place = ?) and (sellPosition = ?))");
       $stmt->bind_param("issi", $userId, $title, $place, $sellPosition);
@@ -138,5 +162,24 @@
       $stmt->store_result();
       return $stmt->num_rows > 0;
     }
+
+    public function createGroup($kakaoId, $title, $place, $sellPosition){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      if($userId==null){
+        return USERID_MISSING;
+      }
+      if(!$this->isCourseExist($userId, $title, $place, $sellPosition)){
+        $stmt = $this->con->prepare("INSERT into course (userId, title, place, sellPosition) values (?, ?, ?, ?)");
+        $stmt->bind_param("issi", $userId, $title, $place, $sellPosition);
+        if($stmt->execute()){
+          return COURSE_CREATED;
+        }else{
+          return COURSE_FAILURE;
+        }
+      }
+      return COURSE_EXISTS;
+    }
+
+
 
   }

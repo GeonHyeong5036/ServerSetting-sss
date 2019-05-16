@@ -18,5 +18,4 @@
     define('COURSE_CREATED', 301);
     define('COURSE_EXISTS', 302);
     define('COURSE_FAILURE', 303);
-    define('COURSE_UPDATE', 304);
 ?>
