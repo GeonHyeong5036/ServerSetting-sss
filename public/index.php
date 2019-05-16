@@ -294,7 +294,7 @@ $app->get('/getcourse', function(Request $request, Response $response){
 
     $db = new DbOperations;
 
-    $courses = $db->getCourse($kakaoId);
+    $courses = $db->getCourses($kakaoId);
 
     $response_data = array();
 
@@ -324,9 +324,6 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 $app->delete('/deletecourse/{kakaoId}/{sellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $sellPosition = $args['sellPosition'];
-
-    echo '$sellPosition';
-    echo $kakaoId . $sellPosition;
 
     $db = new DbOperations;
 

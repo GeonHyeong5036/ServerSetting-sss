@@ -123,7 +123,7 @@
       return false;
     }
 
-    public function getCourse($kakaoId){
+    public function getCourses($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id, userId, title, place, sellPosition FROM course where userId = ? order by sellPosition");
       $stmt->bind_param("i", $userId);
@@ -148,8 +148,7 @@
       if($userId==null){
         return false;
       }
-      echo '$sellPosition';
-      echo $userId. $kakaoId . $sellPosition;
+
       $stmt = $this->con->prepare("DELETE FROM course WHERE userId = ? and sellPosition = ?");
       $stmt->bind_param("ii", $userId, $sellPosition);
       if($stmt->execute())
