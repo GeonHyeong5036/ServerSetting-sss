@@ -148,6 +148,8 @@
       if($userId==null){
         return USERID_MISSING;
       }
+      echo '$sellPosition';
+      echo $userId. $kakaoId . $sellPosition;
       $stmt = $this->con->prepare("DELETE FROM course WHERE userId = ? and sellPosition = ?");
       $stmt->bind_param("ii", $userId, $sellPosition);
       if($stmt->execute())
