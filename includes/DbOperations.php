@@ -114,7 +114,7 @@
     public function updateCourse($kakaoId, $title, $place, $sellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
-        return USERID_MISSING;
+        return false;
       }
       $stmt = $this->con->prepare("UPDATE course SET title = ?, place = ?, sellPosition = ? WHERE userId =?");
       $stmt->bind_param("ssii", $title, $place, $sellPosition, $userId);
@@ -146,7 +146,7 @@
     public function deleteCourse($kakaoId, $sellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
-        return USERID_MISSING;
+        return false;
       }
       echo '$sellPosition';
       echo $userId. $kakaoId . $sellPosition;

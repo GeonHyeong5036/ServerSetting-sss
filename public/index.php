@@ -235,9 +235,7 @@ $app->put('/updatecourse/{kakaoId}', function(Request $request, Response $respon
 
         $db = new DbOperations;
 
-
         if($db->updateCourse($kakaoId, $title, $place, $sellPosition)){
-          if($db->updateCourse($kakaoId, $title, $place, $sellPosition != USERID_MISSING){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'Course Updated Successfully';
@@ -247,17 +245,7 @@ $app->put('/updatecourse/{kakaoId}', function(Request $request, Response $respon
             return $response
             ->withHeader('Content-type', 'application/json')
             ->withStatus(200);
-          }else{
-            $response_data = array();
-            $response_data['error'] = true;
-            $response_data['message'] = 'Not find userId in User';
 
-            $response->write(json_encode($response_data));
-
-            return $response
-            ->withHeader('Content-type', 'application/json')
-            ->withStatus(200);
-          }
         }else{
             $response_data = array();
             $response_data['error'] = true;
@@ -337,18 +325,16 @@ $app->delete('/deletecourse/{kakaoId}/{sellPosition}', function(Request $request
     $kakaoId = $args['kakaoId'];
     $sellPosition = $args['sellPosition'];
 
+    echo '$sellPosition';
+    echo $kakaoId . $sellPosition;
+
     $db = new DbOperations;
 
     $response_data = array();
 
     if($db->deleteCourse($kakaoId, $sellPosition)){
-      if($db->deleteCourse($kakaoId, $sellPosition) != USERID_MISSING){
         $response_data['error'] = false;
         $response_data['message'] = 'Course has been deleted';
-      }else {
-        $response_data['error'] = true;
-        $response_data['message'] = 'Not find userId in User';
-      }
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Delete failed';
