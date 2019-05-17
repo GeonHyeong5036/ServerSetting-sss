@@ -15,7 +15,7 @@
     define('FRIEND_FAILURE', 203);
     define('FRIEND_SAME', 204);
 
-    define('COURSE_CREATED', 301);
-    define('COURSE_EXISTS', 302);
-    define('COURSE_FAILURE', 303);
+    define('TIMETABLE_CREATED', 301);
+    define('TIMETABLE_EXISTS', 302);
+    define('TIMETABLE_FAILURE', 303);
 ?>

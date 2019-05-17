@@ -160,7 +160,7 @@ echo "string";
         ->withStatus(422);
 });
 
-$app->post('/createcourse', function(Request $request, Response $response){
+$app->post('/createtimetable', function(Request $request, Response $response){
     if(!haveEmptyParameters(array('kakaoId', 'type','title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
@@ -172,12 +172,12 @@ $app->post('/createcourse', function(Request $request, Response $response){
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $type, $title, $place, $cellPosition);
+        $result = $db->createTimeTable($kakaoId, $type, $title, $place, $cellPosition);
 
-        if($result == COURSE_CREATED){
+        if($result == TIMETABLE_CREATED){
             $message = array();
             $message['error'] = false;
-            $message['message'] = 'Course created successfully';
+            $message['message'] = 'TimeTable created successfully';
 
             $response->write(json_encode($message));
 
@@ -195,10 +195,10 @@ $app->post('/createcourse', function(Request $request, Response $response){
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(422);
 
-        }else if($result == COURSE_FAILURE){
+        }else if($result == TIMETABLE_FAILURE){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'Some error occurred in course';
+            $message['message'] = 'Some error occurred in TimeTable';
 
             $response->write(json_encode($message));
 
@@ -206,10 +206,10 @@ $app->post('/createcourse', function(Request $request, Response $response){
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(422);
 
-        }else if($result == COURSE_EXISTS){
+        }else if($result == TIMETABLE_EXISTS){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'Course already Exists';
+            $message['message'] = 'TimeTable already Exists';
 
             $response->write(json_encode($message));
 
@@ -223,7 +223,7 @@ $app->post('/createcourse', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
-$app->put('/updatecourse/{kakaoId}', function(Request $request, Response $response, array $args){
+$app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
 
     $kakaoId = $args['kakaoId'];
 
@@ -237,10 +237,10 @@ $app->put('/updatecourse/{kakaoId}', function(Request $request, Response $respon
 
         $db = new DbOperations;
 
-        if($db->updateCourse($kakaoId, $type, $title, $place, $cellPosition)){
+        if($db->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition)){
             $response_data = array();
             $response_data['error'] = false;
-            $response_data['message'] = 'Course Updated Successfully';
+            $response_data['message'] = 'TimeTable Updated Successfully';
 
             $response->write(json_encode($response_data));
 
@@ -290,18 +290,18 @@ $app->get('/getuser', function(Request $request, Response $response){
 
 });
 
-$app->get('/getcourse', function(Request $request, Response $response){
+$app->get('/gettimetables', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
 
     $db = new DbOperations;
 
-    $courses = $db->getCourses($kakaoId);
+    $timetables = $db->getTimeTables($kakaoId);
 
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['courses'] = $courses;
+    $response_data['timetables'] = $timetables;
 
     $response->write(json_encode($response_data));
 
@@ -323,7 +323,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     return $response;
 });
 
-$app->delete('/deletecourse/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
+$app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $cellPosition = $args['cellPosition'];
 
@@ -331,9 +331,9 @@ $app->delete('/deletecourse/{kakaoId}/{cellPosition}', function(Request $request
 
     $response_data = array();
 
-    if($db->deleteCourse($kakaoId, $cellPosition)){
+    if($db->deleteTimeTable($kakaoId, $cellPosition)){
         $response_data['error'] = false;
-        $response_data['message'] = 'Course has been deleted';
+        $response_data['message'] = 'TimeTable has been deleted';
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Delete failed';

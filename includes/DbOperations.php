@@ -94,24 +94,24 @@
       return ($stmt->num_rows > 0);
     }
 
-    public function createTime($kakaoId, $type, $title, $place, $cellPosition){
+    public function createTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return USERID_MISSING;
       }
-      if(!$this->isCourseExist($userId, $type, $title, $place, $cellPosition)){
+      if(!$this->isTimeTableExist($userId, $type, $title, $place, $cellPosition)){
         $stmt = $this->con->prepare("INSERT into time (userId, type, title, place, cellPosition) values (?, ?, ?, ?, ?)");
         $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
         if($stmt->execute()){
-          return COURSE_CREATED;
+          return TIMETABLE_CREATED;
         }else{
-          return COURSE_FAILURE;
+          return TIMETABLE_FAILURE;
         }
       }
-      return COURSE_EXISTS;
+      return TIMETABLE_EXISTS;
     }
 
-    public function updateCourse($kakaoId, $type, $title, $place, $cellPosition){
+    public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return false;
@@ -123,28 +123,28 @@
       return false;
     }
 
-    public function getCourses($kakaoId){
+    public function getTimeTables($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id, userId, type, title, place, cellPosition FROM time where userId = ? order by cellPosition");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($id, $userId, $type, $title, $place, $cellPosition);
       $stmt->fetch();
-      $courses = array();
+      $timeTables = array();
       while($stmt->fetch()){
-        $course = array();
-        $course['id'] = $id;
-        $course['userId']=$userId;
-        $course['type']=$type;
-        $course['title']=$title;
-        $course['place']=$place;
-        $course['cellPosition'] = $cellPosition;
-        array_push($courses, $course);
+        $timeTable = array();
+        $timeTable['id'] = $id;
+        $timeTable['userId']=$userId;
+        $timeTable['type']=$type;
+        $timeTable['title']=$title;
+        $timeTable['place']=$place;
+        $timeTable['cellPosition'] = $cellPosition;
+        array_push($timeTables, $$timeTable);
       }
-      return $courses;
+      return $timeTables;
     }
 
-    public function deleteCourse($kakaoId, $cellPosition){
+    public function deleteTimeTable($kakaoId, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return false;
@@ -157,7 +157,7 @@
       return false;
     }
 
-    private function isCourseExist($userId, $type, $title, $place, $cellPosition){
+    private function isTimeTableExist($userId, $type, $title, $place, $cellPosition){
       $stmt = $this->con->prepare("SELECT id from time where ((userId = ?) and  (type = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
       $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
       $stmt->execute();
@@ -170,7 +170,7 @@
       if($userId==null){
         return USERID_MISSING;
       }
-      if(!$this->isCourseExist($userId, $title, $place, $cellPosition)){
+      if(!$this->isTimeTableExist($userId, $title, $place, $cellPosition)){
         $stmt = $this->con->prepare("INSERT into course (userId, title, place, cellPosition) values (?, ?, ?, ?)");
         $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
         if($stmt->execute()){
