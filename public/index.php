@@ -223,7 +223,7 @@ $app->post('/createtimetable', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
-$app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
+$app->put('/updatetimetable/{kakaoid}', function(Request $request, Response $response, array $args){
 
     $kakaoId = $args['kakaoId'];
 
@@ -237,7 +237,7 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
 
         $db = new DbOperations;
 
-        if($db->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition)){
+        if($db->updateTimeTable($kakaoid, $type, $title, $place, $cellPosition)){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'TimeTable Updated Successfully';
@@ -258,7 +258,6 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
             return $response
             ->withHeader('Content-type', 'application/json')
             ->withStatus(200);
-
         }
 
     }

@@ -111,13 +111,17 @@
       return TIMETABLE_EXISTS;
     }
 
-    public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
+    public function updateTimeTable($kakaoid, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
-      if($userId==null){
-        return false;
-      }
-      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ?, cellPosition = ? WHERE userId =?");
-      $stmt->bind_param("sssii", $type, $title, $place, $cellPosition, $userId);
+
+      $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?");
+      $stmt->bind_param("ii", $userId, $cellPosition);
+      $stmt->execute();
+      $stmt->bind_result($id);
+      $stmt->fetch();
+
+      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ?, cellPosition = ? WHERE id =?");
+      $stmt->bind_param("sssii", $type, $title, $place, $cellPosition, $id);
       if($stmt->execute())
         return true;
       return false;
@@ -129,7 +133,7 @@
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($id, $userId, $type, $title, $place, $cellPosition);
-      $stmt->fetch();
+
       $timeTables = array();
       while($stmt->fetch()){
         $timeTable = array();
@@ -139,7 +143,7 @@
         $timeTable['title']=$title;
         $timeTable['place']=$place;
         $timeTable['cellPosition'] = $cellPosition;
-        array_push($timeTables, $$timeTable);
+        array_push($timeTables, $timeTable);
       }
       return $timeTables;
     }
