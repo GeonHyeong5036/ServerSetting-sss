@@ -94,14 +94,14 @@
       return ($stmt->num_rows > 0);
     }
 
-    public function createCourse($kakaoId, $title, $place, $cellPosition){
+    public function createTime($kakaoId, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return USERID_MISSING;
       }
-      if(!$this->isCourseExist($userId, $title, $place, $cellPosition)){
-        $stmt = $this->con->prepare("INSERT into course (userId, title, place, cellPosition) values (?, ?, ?, ?)");
-        $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
+      if(!$this->isCourseExist($userId, $type, $title, $place, $cellPosition)){
+        $stmt = $this->con->prepare("INSERT into time (userId, type, title, place, cellPosition) values (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
         if($stmt->execute()){
           return COURSE_CREATED;
         }else{
@@ -111,13 +111,13 @@
       return COURSE_EXISTS;
     }
 
-    public function updateCourse($kakaoId, $title, $place, $cellPosition){
+    public function updateCourse($kakaoId, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
       if($userId==null){
         return false;
       }
-      $stmt = $this->con->prepare("UPDATE course SET title = ?, place = ?, cellPosition = ? WHERE userId =?");
-      $stmt->bind_param("ssii", $title, $place, $cellPosition, $userId);
+      $stmt = $this->con->prepare("UPDATE time SET type = ?, title = ?, place = ?, cellPosition = ? WHERE userId =?");
+      $stmt->bind_param("sssii", $type, $title, $place, $cellPosition, $userId);
       if($stmt->execute())
         return true;
       return false;
@@ -125,16 +125,17 @@
 
     public function getCourses($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id, userId, title, place, cellPosition FROM course where userId = ? order by cellPosition");
+      $stmt = $this->con->prepare("SELECT id, userId, type, title, place, cellPosition FROM time where userId = ? order by cellPosition");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
-      $stmt->bind_result($id, $userId, $title, $place, $cellPosition);
+      $stmt->bind_result($id, $userId, $type, $title, $place, $cellPosition);
       $stmt->fetch();
       $courses = array();
       while($stmt->fetch()){
         $course = array();
         $course['id'] = $id;
         $course['userId']=$userId;
+        $course['type']=$type;
         $course['title']=$title;
         $course['place']=$place;
         $course['cellPosition'] = $cellPosition;
@@ -149,16 +150,16 @@
         return false;
       }
 
-      $stmt = $this->con->prepare("DELETE FROM course WHERE userId = ? and cellPosition = ?");
+      $stmt = $this->con->prepare("DELETE FROM time WHERE userId = ? and cellPosition = ?");
       $stmt->bind_param("ii", $userId, $cellPosition);
       if($stmt->execute())
         return true;
       return false;
     }
 
-    private function isCourseExist($userId, $title, $place, $cellPosition){
-      $stmt = $this->con->prepare("SELECT id from course where ((userId = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
-      $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
+    private function isCourseExist($userId, $type, $title, $place, $cellPosition){
+      $stmt = $this->con->prepare("SELECT id from time where ((userId = ?) and  (type = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
+      $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
       $stmt->execute();
       $stmt->store_result();
       return $stmt->num_rows > 0;

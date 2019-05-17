@@ -161,17 +161,18 @@ echo "string";
 });
 
 $app->post('/createcourse', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'cellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'type','title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
+        $type = $request_data['type'];
         $title = $request_data['title'];
         $place = $request_data['place'];
         $cellPosition = $request_data['cellPosition'];
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $title, $place, $cellPosition);
+        $result = $db->createCourse($kakaoId, $type, $title, $place, $cellPosition);
 
         if($result == COURSE_CREATED){
             $message = array();
@@ -226,16 +227,17 @@ $app->put('/updatecourse/{kakaoId}', function(Request $request, Response $respon
 
     $kakaoId = $args['kakaoId'];
 
-    if(!haveEmptyParameters(array('title', 'place', 'cellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('type', 'title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
+        $type = $request_data['type'];
         $title = $request_data['title'];
         $place = $request_data['place'];
         $cellPosition = $request_data['cellPosition'];
 
         $db = new DbOperations;
 
-        if($db->updateCourse($kakaoId, $title, $place, $cellPosition)){
+        if($db->updateCourse($kakaoId, $type, $title, $place, $cellPosition)){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'Course Updated Successfully';
