@@ -161,17 +161,17 @@ echo "string";
 });
 
 $app->post('/createcourse', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'sellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
         $title = $request_data['title'];
         $place = $request_data['place'];
-        $sellPosition = $request_data['sellPosition'];
+        $cellPosition = $request_data['cellPosition'];
 
         $db = new DbOperations;
 
-        $result = $db->createCourse($kakaoId, $title, $place, $sellPosition);
+        $result = $db->createCourse($kakaoId, $title, $place, $cellPosition);
 
         if($result == COURSE_CREATED){
             $message = array();
@@ -226,16 +226,16 @@ $app->put('/updatecourse/{kakaoId}', function(Request $request, Response $respon
 
     $kakaoId = $args['kakaoId'];
 
-    if(!haveEmptyParameters(array('title', 'place', 'sellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $title = $request_data['title'];
         $place = $request_data['place'];
-        $sellPosition = $request_data['sellPosition'];
+        $cellPosition = $request_data['cellPosition'];
 
         $db = new DbOperations;
 
-        if($db->updateCourse($kakaoId, $title, $place, $sellPosition)){
+        if($db->updateCourse($kakaoId, $title, $place, $cellPosition)){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'Course Updated Successfully';
@@ -321,15 +321,15 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     return $response;
 });
 
-$app->delete('/deletecourse/{kakaoId}/{sellPosition}', function(Request $request, Response $response, array $args){
+$app->delete('/deletecourse/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
-    $sellPosition = $args['sellPosition'];
+    $cellPosition = $args['cellPosition'];
 
     $db = new DbOperations;
 
     $response_data = array();
 
-    if($db->deleteCourse($kakaoId, $sellPosition)){
+    if($db->deleteCourse($kakaoId, $cellPosition)){
         $response_data['error'] = false;
         $response_data['message'] = 'Course has been deleted';
     }else{
