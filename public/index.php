@@ -300,7 +300,7 @@ $app->get('/gettimetables', function(Request $request, Response $response){
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['timetables'] = $timetables;
+    $response_data['timeTables'] = $timeTables;
 
     $response->write(json_encode($response_data));
 
