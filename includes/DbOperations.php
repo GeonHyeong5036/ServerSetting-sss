@@ -125,7 +125,7 @@
 
     public function getTimeTables($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id, userId, type, title, place, cellPosition FROM time where userId = ? order by cellPosition");
+      $stmt = $this->con->prepare("SELECT id, userId, type, title, place, cellPosition FROM timeTable where userId = ? order by cellPosition");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($id, $userId, $type, $title, $place, $cellPosition);
