@@ -111,7 +111,7 @@
       return TIMETABLE_EXISTS;
     }
 
-    public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
+    public function updateTimeTable($kakaoid, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
 
       $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?");
@@ -120,9 +120,9 @@
       $stmt->bind_result($id);
       $stmt->fetch();
 
-      $stmt1 = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id = ?");
-      $stmt1->bind_param("ssii", $type, $title, $place, $id);
-      if($stmt1->execute())
+      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ?, cellPosition = ? WHERE id =?");
+      $stmt->bind_param("sssii", $type, $title, $place, $cellPosition, $id);
+      if($stmt->execute())
         return true;
       return false;
     }
