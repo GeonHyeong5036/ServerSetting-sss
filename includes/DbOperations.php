@@ -111,7 +111,7 @@
       return TIMETABLE_EXISTS;
     }
 
-    public function updateTimeTable($kakaoid, $type, $title, $place, $cellPosition){
+    public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $userId = $this->getIdByKakaoId($kakaoId);
 
       $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?");
