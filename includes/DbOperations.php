@@ -100,7 +100,7 @@
         return USERID_MISSING;
       }
       if(!$this->isTimeTableExist($userId, $type, $title, $place, $cellPosition)){
-        $stmt = $this->con->prepare("INSERT into time (userId, type, title, place, cellPosition) values (?, ?, ?, ?, ?)");
+        $stmt = $this->con->prepare("INSERT into timeTable (userId, type, title, place, cellPosition) values (?, ?, ?, ?, ?)");
         $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
         if($stmt->execute()){
           return TIMETABLE_CREATED;
@@ -116,7 +116,7 @@
       if($userId==null){
         return false;
       }
-      $stmt = $this->con->prepare("UPDATE time SET type = ?, title = ?, place = ?, cellPosition = ? WHERE userId =?");
+      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ?, cellPosition = ? WHERE userId =?");
       $stmt->bind_param("sssii", $type, $title, $place, $cellPosition, $userId);
       if($stmt->execute())
         return true;
@@ -150,7 +150,7 @@
         return false;
       }
 
-      $stmt = $this->con->prepare("DELETE FROM time WHERE userId = ? and cellPosition = ?");
+      $stmt = $this->con->prepare("DELETE FROM timeTable WHERE userId = ? and cellPosition = ?");
       $stmt->bind_param("ii", $userId, $cellPosition);
       if($stmt->execute())
         return true;
@@ -158,7 +158,7 @@
     }
 
     private function isTimeTableExist($userId, $type, $title, $place, $cellPosition){
-      $stmt = $this->con->prepare("SELECT id from time where ((userId = ?) and  (type = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
+      $stmt = $this->con->prepare("SELECT id from timeTable where ((userId = ?) and  (type = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
       $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);
       $stmt->execute();
       $stmt->store_result();
@@ -171,15 +171,15 @@
         return USERID_MISSING;
       }
       if(!$this->isTimeTableExist($userId, $title, $place, $cellPosition)){
-        $stmt = $this->con->prepare("INSERT into course (userId, title, place, cellPosition) values (?, ?, ?, ?)");
+        $stmt = $this->con->prepare("INSERT into timeTable (userId, title, place, cellPosition) values (?, ?, ?, ?)");
         $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
         if($stmt->execute()){
-          return COURSE_CREATED;
+          return TIMETABLE_CREATED;
         }else{
-          return COURSE_FAILURE;
+          return TIMETABLE_FAILURE;
         }
       }
-      return COURSE_EXISTS;
+      return TIMETABLE_EXISTS;
     }
 
 
