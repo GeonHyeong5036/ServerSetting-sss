@@ -317,12 +317,12 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
 
     $db = new DbAnalysis;
 
-    $availableMeetingTimes = $db->getAvailableMeetingTimes($kakaoIds);
+    //$availableMeetingTimes = $db->getAvailableMeetingTimes($kakaoIds);
 
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['message'] = kakaoIds;
+    $response_data['message'] = $kakaoIds;
     //$response_data['availableMeetingTimes'] = $availableMeetingTimes;
 
     $response->write(json_encode($response_data));
