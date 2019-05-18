@@ -1,5 +1,5 @@
 <?php
-  class DbOperations{
+  class GroupDbOperations{
     private $con;
 
     function __construct(){
