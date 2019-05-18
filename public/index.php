@@ -8,6 +8,7 @@ ini_set('display_errors', 1);
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
+require '../includes/GroupDbOperations.php';
 
 $app = new \Slim\App([
     'settings'=>[
@@ -161,7 +162,7 @@ echo "string";
 });
 
 $app->post('/createtimetable', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'type','title', 'place', 'cellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'type', 'title', 'place', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
@@ -295,12 +296,12 @@ $app->get('/gettimetables', function(Request $request, Response $response){
 
     $db = new DbOperations;
 
-    $timetables = $db->getTimeTables($kakaoId);
+    $timeTables = $db->getTimeTables($kakaoId);
 
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['timeTables'] = $timeTables;
+    $response_data['timeTables1'] = $timeTables;
 
     $response->write(json_encode($response_data));
 
