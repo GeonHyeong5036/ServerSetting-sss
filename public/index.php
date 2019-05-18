@@ -311,6 +311,28 @@ $app->get('/gettimetables', function(Request $request, Response $response){
 
 });
 
+$app->get('/getAvailableMeetingTimes', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $kakaoIds = $request_data['kakaoIds'];
+
+    $db = new DbAnalysis;
+
+    $availableMeetingTimes = $db->getAvailableMeetingTimes($kakaoIds);
+
+    $response_data = array();
+
+    $response_data['error'] = false;
+    $response_data['message'] = kakaoIds;
+    //$response_data['availableMeetingTimes'] = $availableMeetingTimes;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
