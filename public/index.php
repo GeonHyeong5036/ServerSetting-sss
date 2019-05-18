@@ -272,7 +272,7 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
 $app->get('/getuser', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
-
+    echo $kakaoId;
     $db = new DbOperations;
 
     $user = $db->getUser($kakaoId);
