@@ -162,7 +162,7 @@ echo "string";
 });
 
 $app->post('/createtimetable', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'type', 'title', 'place', 'cellPosition'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'type', 'cellPosition'), $request, $response)){
 
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
@@ -301,7 +301,7 @@ $app->get('/gettimetables', function(Request $request, Response $response){
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['timeTables1'] = $timeTables;
+    $response_data['timeTables'] = $timeTables;
 
     $response->write(json_encode($response_data));
 
