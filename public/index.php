@@ -8,6 +8,7 @@ ini_set('display_errors', 1);
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
+require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
 
 $app = new \Slim\App([
