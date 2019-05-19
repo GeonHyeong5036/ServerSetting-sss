@@ -11,10 +11,10 @@
     public function getAvailableMeetingTimes($array){
       $availableCellPositionList = array();
       foreach ($array as $kakaoid) {
-        $availableCellPositionList = $this->getAvailableCellPostion($kakaoid);
-        array_push($availableCellPositionList, $cellPosition);
+        $cellPositionLiist = $this->getAvailableCellPostion($kakaoid);
+        array_push($availableCellPositionList, $cellPositionLiist);
       }
-      $availableMeetingTimes = array_unique($availableCellPositionList);
+      //$availableMeetingTimes = array_unique($availableCellPositionList);
       return arsort($availableMeetingTimes);
     }
 
@@ -23,15 +23,12 @@
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($cellPosition);
-/*
-      $availableCellPositionList = array();
+
       while($stmt->fetch()){
-        $availableCellPosition = array();
-        $availableCellPosition['cellPosition'] = $cellPosition;
-        array_push($availableCellPositionList, $availableCellPosition);
+        $cellPositionLiist = array();
+        $cellPositionLiist['cellPosition'] = $cellPosition;
       }
-*/
-      return $cellPosition;
+      return $cellPositionLiist;
     }
   }
 ?>
