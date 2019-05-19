@@ -15,14 +15,6 @@
       global $targetCellPositionList;
       $availableMeetingTimes = range(0, 39);
 
-      foreach ($availableMeetingTimes as $key) {
-        echo $key . '&';
-      }
-
-      foreach ($availableMeetingTimes as $key => $value) {
-        echo $key . '?';
-      }
-
       foreach ($array as $kakaoid) {
         $this->getUnAvailableCellPostion($kakaoid);
       }
@@ -49,13 +41,21 @@
       }
     }
 
-    private function getAsManyUserAsAvailable($array){
+    public function getAsManyUserAsAvailable($array){
       $availableMeetingTimes = range(0, 39);
-      foreach ($array as $kakaoid) {
-        if($this->existUserAtCellPosition($kakaoid)){
-
+      for($availableMeetingTimes as $index){
+        foreach ($array as $kakaoid) {
+          $sum = 0;
+          if($this->existUserAtCellPosition($kakaoid, $index)){
+            $sum++;
+          }
         }
+        $availableMeetingTimes[$index] = $sum;
       }
+
+      $maxInt = max($availableMeetingTimes);
+      return array_search($maxInt, $availableMeetingTimes);
+
     }
 
     private function existUserAtCellPosition($kakaoId, $cellPosition){

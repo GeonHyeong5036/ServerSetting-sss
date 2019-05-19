@@ -335,6 +335,28 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
 
 });
 
+$app->get('/getAsManyUserAsAvailable', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $array = explode('[', $request_data['kakaoIds']);
+    $array = explode(']', $array[1]);
+    $array = explode(', ', $array[0]);
+
+    $db = new DbAnalysis;
+
+    $getCount = $db->getAsManyUserAsAvailable($array);
+
+    $response_data['error'] = false;
+    $response_data['message'] = $request_data['kakaoIds'];
+    $response_data['getCount'] = $getCount;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
