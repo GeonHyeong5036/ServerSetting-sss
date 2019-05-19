@@ -1,7 +1,6 @@
 <?php
   class DbAnalysis{
     private $con;
-    private $availableMeetingTimes = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39);
     private $targetCellPositionList = array();
     private $index=-1;
 
@@ -14,7 +13,15 @@
 
     public function getAvailableMeetingTimes($array){
       global $targetCellPositionList;
-      global $availableMeetingTimes;
+      $availableMeetingTimes = range(0, 39);
+
+      foreach ($availableMeetingTimes as $key) {
+        echo $key . '&';
+      }
+
+      foreach ($availableMeetingTimes as $key => $value) {
+        echo $key . '?';
+      }
 
       foreach ($array as $kakaoid) {
         $this->getUnAvailableCellPostion($kakaoid);
@@ -42,8 +49,21 @@
       }
     }
 
-    private function countAvailableUser(){
+    private function getAsManyUserAsAvailable($array){
+      $availableMeetingTimes = range(0, 39);
+      foreach ($array as $kakaoid) {
+        if($this->existUserAtCellPosition($kakaoid)){
 
+        }
+      }
+    }
+
+    private function existUserAtCellPosition($kakaoId, $cellPosition){
+        $stmt = $this->con->prepare("SELECT cellPosition FROM timeTable WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?) AND cellPosition = ? order by cellPosition;");
+        $stmt->bind_param("si", $kakaoId, $cellPosition);
+        $stmt->execute();
+        $stmt->store_result();
+        return $stmt->num_rows > 0;
     }
   }
 ?>
