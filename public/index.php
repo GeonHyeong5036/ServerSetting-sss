@@ -343,11 +343,11 @@ $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $resp
 
     $db = new DbAnalysis;
 
-    $getCount = $db->getAsManyUserAsAvailable($array);
+    $asManyUserAsAvailableList = $db->getAsManyUserAsAvailable($array);
 
     $response_data['error'] = false;
     $response_data['message'] = $request_data['kakaoIds'];
-    $response_data['getCount'] = $getCount;
+    $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
 
     $response->write(json_encode($response_data));
 
