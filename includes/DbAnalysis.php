@@ -56,12 +56,9 @@
       arsort($availableMeetingTimes);
       $maxInt = max($availableMeetingTimes);
 
-      $list = array_column($availableMeetingTimes, $maxInt);
+      $filter_availableMeetingTimes = preg_grep("/^$maxInt$/i", $availableMeetingTimes);
 
-      foreach ($list as $key => $data) {
-        echo $key." ";
-      }
-      return $list;
+      return $filter_availableMeetingTimes;
 
     }
 
