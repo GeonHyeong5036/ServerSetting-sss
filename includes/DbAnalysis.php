@@ -11,7 +11,6 @@
     }
 
     public function getAvailableMeetingTimes($array){
-      $availableCellPositionList = array();
       foreach ($array as $kakaoid) {
         $this->getAvailableCellPostion($kakaoid);
       }
@@ -34,6 +33,9 @@
         global $index;
         $index++;
         $availableCellPositionList[$index] = $cellPosition;
+      }
+      foreach ($availableCellPositionList as $key) {
+        echo $key. ' ';
       }
     }
   }
