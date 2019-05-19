@@ -16,22 +16,24 @@
         $this->getAvailableCellPostion($kakaoid);
       }
       $availableMeetingTimes = array_unique($availableCellPositionList);
-      return arsort($availableMeetingTimes);
+
+      foreach ($availableCellPositionList as $key) {
+        echo $key. ' ';
+      }
+      $availableMeetingTimes= arsort($availableMeetingTimes);
+      return $availableMeetingTimes;
     }
 
-    public function getAvailableCellPostion($kakaoId){
+    private function getAvailableCellPostion($kakaoId){
       $stmt = $this->con->prepare("SELECT DISTINCT cellPosition FROM timeTable WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?) order by cellPosition;");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($cellPosition);
 
       while($stmt->fetch()){
+        global $index;
         $index++;
         $availableCellPositionList[$index] = $cellPosition;
-      }
-
-      foreach ($availableCellPositionList as $key => $value) {
-        echo $key. ' ';
       }
     }
   }
