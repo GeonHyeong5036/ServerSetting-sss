@@ -1,6 +1,8 @@
 <?php
   class DbAnalysis{
     private $con;
+    private $index=-1;
+    private $availableCellPositionList = array();
 
     function __construct(){
       require_once dirname(__FILE__) . '/DbConnect.php';
@@ -11,10 +13,9 @@
     public function getAvailableMeetingTimes($array){
       $availableCellPositionList = array();
       foreach ($array as $kakaoid) {
-        $cellPositionLiist = $this->getAvailableCellPostion($kakaoid);
-        array_push($availableCellPositionList, $cellPositionLiist);
+        $this->getAvailableCellPostion($kakaoid);
       }
-      //$availableMeetingTimes = array_unique($availableCellPositionList);
+      $availableMeetingTimes = array_unique($availableCellPositionList);
       return arsort($availableMeetingTimes);
     }
 
@@ -25,10 +26,13 @@
       $stmt->bind_result($cellPosition);
 
       while($stmt->fetch()){
-        $cellPositionLiist = array();
-        $cellPositionLiist['cellPosition'] = $cellPosition;
+        $index++;
+        $availableCellPositionList[$index] = $cellPosition;
       }
-      return $cellPositionLiist;
+
+      foreach ($availableCellPositionList as $key => $value) {
+        echo $key. ' ';
+      }
     }
   }
 ?>
