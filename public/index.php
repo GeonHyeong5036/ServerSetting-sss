@@ -316,9 +316,9 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
     $request_data = $request->getQueryParams();
     $array = explode(', ', $request_data['kakaoIds']);
 
-    $availableMeetingTimes = $db->getAvailableMeetingTimes($array);
-
     $db = new DbAnalysis;
+
+    $availableMeetingTimes = $db->getAvailableMeetingTimes($array);
 
     $response_data['error'] = false;
     $response_data['message'] = $request_data['kakaoIds'];
