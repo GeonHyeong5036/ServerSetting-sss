@@ -53,14 +53,15 @@
         }
         $availableMeetingTimes[$index] = $sum;
       }
-
-      $maxInt = max($availableMeetingTimes);
-      $availableMeetingTimes = array_search($maxInt, $availableMeetingTimes);
       arsort($availableMeetingTimes);
-      foreach ($availableMeetingTimes as $key) {
+      $maxInt = max($availableMeetingTimes);
+
+      $list = array_column($availableMeetingTimes, $maxInt);
+
+      foreach ($list as $key => $data) {
         echo $key." ";
       }
-      return ;
+      return $list;
 
     }
 
