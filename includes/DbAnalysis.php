@@ -11,6 +11,7 @@
     }
 
     public function getAvailableMeetingTimes($array){
+      global $availableCellPositionList;
       foreach ($array as $kakaoid) {
         $this->getAvailableCellPostion($kakaoid);
       }
@@ -24,6 +25,7 @@
     }
 
     private function getAvailableCellPostion($kakaoId){
+      global $availableCellPositionList;
       $stmt = $this->con->prepare("SELECT DISTINCT cellPosition FROM timeTable WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?) order by cellPosition;");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
