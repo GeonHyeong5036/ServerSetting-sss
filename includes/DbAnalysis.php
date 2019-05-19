@@ -8,18 +8,18 @@
       $this->con = $db->connect();
     }
 
-    public function getAvailableMeetingTimes($kakaoIds){
-      if(!$this->isKakaoIdExist($kakaoId)){
-        $stmt = $this->con->prepare("INSERT into users (kakaoId, name, member) values (?, ?, ?)");
-        $stmt->bind_param("sss", $kakaoId, $name, $member);
-        if($stmt->execute()){
-          return USER_CREATED;
-        }else{
-          return USER_FAILURE;
-        }
-      }else if($this->isMemberAlready($kakaoId, $member)){
-          return USER_UPDATE;
+    public function getAvailableMeetingTimes($sql){
+      $stmt = $this->con->prepare($sql);
+      $stmt->execute();
+      $stmt->bind_result($cellPosition);
+
+      $availableMeetingTimes = array();
+      while($stmt->fetch()){
+        $availableMeetingTime = array();
+        $availableMeetingTime['cellPosition'] = $cellPosition;
+        array_push($availableMeetingTimes, $availableMeetingTime);
       }
-      return USER_EXISTS;
+      return $availableMeetingTimes;
     }
   }
+?>

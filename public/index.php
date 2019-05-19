@@ -314,16 +314,22 @@ $app->get('/gettimetables', function(Request $request, Response $response){
 
 $app->get('/getAvailableMeetingTimes', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
+    $array = explode(",", $request_data);
+
+    foreach ($array as $key => $value) {
+      echo "<li>$key: $value</li>";
+    }
+
     $kakaoIds = $request_data['kakaoIds'];
 
     $db = new DbAnalysis;
 
-    //$availableMeetingTimes = $db->getAvailableMeetingTimes($kakaoIds);
+    //$availableMeetingTimes = $db->getAvailableMeetingTimes($sql);
 
     $response_data = array();
 
     $response_data['error'] = false;
-    $response_data['message'] = $kakaoIds;
+    $response_data['message'] = $request_data;
     //$response_data['availableMeetingTimes'] = $availableMeetingTimes;
 
     $response->write(json_encode($response_data));
