@@ -43,9 +43,10 @@
 
     public function getAsManyUserAsAvailable($array){
       $availableMeetingTimes = range(0, 39);
-      for($availableMeetingTimes as $index){
+
+      foreach($availableMeetingTimes as $index){
+        $sum = 0;
         foreach ($array as $kakaoid) {
-          $sum = 0;
           if($this->existUserAtCellPosition($kakaoid, $index)){
             $sum++;
           }
@@ -54,7 +55,12 @@
       }
 
       $maxInt = max($availableMeetingTimes);
-      return array_search($maxInt, $availableMeetingTimes);
+      $availableMeetingTimes = array_search($maxInt, $availableMeetingTimes);
+      arsort($availableMeetingTimes);
+      foreach ($availableMeetingTimes as $key) {
+        echo $key." ";
+      }
+      return ;
 
     }
 
