@@ -2,7 +2,8 @@
   class DbAnalysis{
     private $con;
     private $index=-1;
-    private $availableCellPositionList = array();
+    private $targetCellPositionList = array();
+
 
     function __construct(){
       require_once dirname(__FILE__) . '/DbConnect.php';
@@ -11,21 +12,23 @@
     }
 
     public function getAvailableMeetingTimes($array){
-      global $availableCellPositionList;
+      global $targetCellPositionList;
+      $availableMeetingTimes = array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39);
+
       foreach ($array as $kakaoid) {
         $this->getAvailableCellPostion($kakaoid);
       }
-      $availableMeetingTimes = array_unique($availableCellPositionList);
+      $targetCellPositionList = array_unique($targetCellPositionList);
+      sort($targetCellPositionList);
 
-      foreach ($availableCellPositionList as $key) {
-        echo $key. ' ';
-      }
-      $availableMeetingTimes= arsort($availableMeetingTimes);
+      $availableMeetingTimes = array_diff($availableMeetingTimes, $targetCellPositionList);
+      $availableMeetingTimes = array_values($availableMeetingTimes);
+
       return $availableMeetingTimes;
     }
 
     private function getAvailableCellPostion($kakaoId){
-      global $availableCellPositionList;
+      global $targetCellPositionList;
       $stmt = $this->con->prepare("SELECT DISTINCT cellPosition FROM timeTable WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?) order by cellPosition;");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
@@ -34,10 +37,7 @@
       while($stmt->fetch()){
         global $index;
         $index++;
-        $availableCellPositionList[$index] = $cellPosition;
-      }
-      foreach ($availableCellPositionList as $key) {
-        echo $key. ' ';
+        $targetCellPositionList[$index] = $cellPosition;
       }
     }
   }
