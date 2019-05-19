@@ -325,6 +325,7 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
     $response_data['error'] = false;
     $response_data['message'] = $request_data['kakaoIds'];
     $response_data['availableMeetingTimes'] = $availableMeetingTimes;
+    $response_data['totalCount'] = count($availableMeetingTimes);
 
     $response->write(json_encode($response_data));
 
