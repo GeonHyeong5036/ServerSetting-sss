@@ -57,8 +57,10 @@
       $maxInt = max($availableMeetingTimes);
 
       $filter_availableMeetingTimes = preg_grep("/^$maxInt$/i", $availableMeetingTimes);
+      $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes)
+      sort($filter_availableMeetingTimes);
 
-      return array_keys($filter_availableMeetingTimes);
+      return $filter_availableMeetingTimes;
 
     }
 

@@ -18,4 +18,8 @@
     define('TIMETABLE_CREATED', 301);
     define('TIMETABLE_EXISTS', 302);
     define('TIMETABLE_FAILURE', 303);
+
+    define('GROUP_CREATED', 401);
+    define('GROUP_FAILURE', 402);
+    define('USERANDGROUP_FAILURE', 403);
 ?>

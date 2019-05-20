@@ -225,6 +225,54 @@ $app->post('/createtimetable', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
+$app->post('/createGroup', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('title', 'type'), $request, $response)){
+        $kakaoIdList = $request->getQueryParams();
+        $request_data = $request->getParsedBody();
+        $title = $request_data['title'];
+        $type = $request_data['type'];
+
+        $db = new GroupDbOperations;
+
+        $result = $db->createGroup($kakaoIdList, $title, $type);
+
+        if($result == GROUP_CREATED){
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'Group created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+        }else if($result == GROUP_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred in Group';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }else if($result == USERANDGROUP_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred in User and Group';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
+});
+
 $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
 
     $kakaoId = $args['kakaoId'];
@@ -279,7 +327,6 @@ $app->get('/getuser', function(Request $request, Response $response){
     $user = $db->getUser($kakaoId);
 
     $response_data = array();
-
     $response_data['error'] = false;
     $response_data['user'] = $user;
 
@@ -348,6 +395,7 @@ $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $resp
     $response_data['error'] = false;
     $response_data['message'] = $request_data['kakaoIds'];
     $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
+    $response_data['totalCount'] = count($asManyUserAsAvailableList);
 
     $response->write(json_encode($response_data));
 
