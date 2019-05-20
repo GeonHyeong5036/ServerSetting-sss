@@ -8,10 +8,11 @@
       $this->con = $db->connect();
     }
 
-    public function createGroup($kakaoIdList, $title, $type){
+    public function createGroup($kakaoIdList, $title, $tag){
       $stmt = $this->con->prepare("INSERT into groups(title, tag) values (?, ?)");
       $stmt->bind_param("ss", $title, $type);
       if($stmt->execute()){
+        echo $title . " " . $tag;
         $groupId = $this->getGroupIdByKakaoId($title, $type);
 
         foreach ($kakaoIdList as $kakaoid) {
@@ -25,9 +26,9 @@
       }
     }
 
-    private function createUserGroupReation($userId, $userId){
+    private function createUserGroupReation($userId, $groupId){
       $stmt = $this->con->prepare("INSERT into userGroup(userId, groupId) values (?, ?)");
-      $stmt->bind_param("ii", $userId, $userId);
+      $stmt->bind_param("ii", $userId, $groupId);
       if($stmt->execute()){
         return true;
       }else{
@@ -44,9 +45,10 @@
       return $id;
     }
 
-    private Function getGroupIdByKakaoId($title, $type){
-      $stmt = $this->con->prepare("SELECT id FROM group WHERE title = ? and type = ?;");
-      $stmt->bind_param("ss", $title, $type);
+    private Function getGroupIdByKakaoId($title, $tag){
+      echo $title . " " . $tag;
+      $stmt = $this->con->prepare("SELECT id FROM groups WHERE title = ? and tag = ?;");
+      $stmt->bind_param("ss", $title, $tag);
       $stmt->execute();
       $stmt->bind_result($id);
       $stmt->fetch();
