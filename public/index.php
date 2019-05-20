@@ -226,7 +226,7 @@ $app->post('/createtimetable', function(Request $request, Response $response){
 });
 
 $app->post('/createGroup', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('title', 'type'), $request, $response)){
+    if(!haveEmptyParameters(array('title', 'tag'), $request, $response)){
         $kakaoIdList = $request->getQueryParams();
         $kakaoIdList = explode('[', $kakaoIdList['kakaoIdList']);
         $kakaoIdList = explode(']', $kakaoIdList[1]);
@@ -234,11 +234,11 @@ $app->post('/createGroup', function(Request $request, Response $response){
 
         $request_data = $request->getParsedBody();
         $title = $request_data['title'];
-        $type = $request_data['type'];
+        $tag = $request_data['tag'];
 
         $db = new GroupDbOperations;
 
-        $result = $db->createGroup($kakaoIdList, $title, $type);
+        $result = $db->createGroup($kakaoIdList, $title, $tag);
 
         if($result == GROUP_CREATED){
             $message = array();
