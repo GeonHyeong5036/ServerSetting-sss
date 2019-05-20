@@ -10,10 +10,9 @@
 
     public function createGroup($kakaoIdList, $title, $tag){
       $stmt = $this->con->prepare("INSERT into groups(title, tag) values (?, ?)");
-      $stmt->bind_param("ss", $title, $type);
+      $stmt->bind_param("ss", $title, $tag);
       if($stmt->execute()){
-        echo $title . " " . $tag;
-        $groupId = $this->getGroupIdByKakaoId($title, $type);
+        $groupId = $this->getGroupIdByKakaoId($title, $tag);
 
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
@@ -46,7 +45,6 @@
     }
 
     private Function getGroupIdByKakaoId($title, $tag){
-      echo $title . " " . $tag;
       $stmt = $this->con->prepare("SELECT id FROM groups WHERE title = ? and tag = ?;");
       $stmt->bind_param("ss", $title, $tag);
       $stmt->execute();
