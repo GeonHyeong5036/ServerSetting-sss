@@ -228,6 +228,10 @@ $app->post('/createtimetable', function(Request $request, Response $response){
 $app->post('/createGroup', function(Request $request, Response $response){
     if(!haveEmptyParameters(array('title', 'type'), $request, $response)){
         $kakaoIdList = $request->getQueryParams();
+        $kakaoIdList = explode('[', $kakaoIdList['kakaoIdList']);
+        $kakaoIdList = explode(']', $kakaoIdList[1]);
+        $kakaoIdList = explode(', ', $kakaoIdList[0]);
+
         $request_data = $request->getParsedBody();
         $title = $request_data['title'];
         $type = $request_data['type'];
