@@ -102,12 +102,9 @@
 
       while($stmt->fetch()){
         $index++;
-        $tags = array();
-        $tags['tag'] = $tag;
-        // $tagList[$index] = $tag;
-        array_push($tagList, $tags);
+        $tagList[$index] = $tag;
       }
-      // $tagList = array_values($tagList);
+      $tagList = array_values($tagList);
       return $tagList;
     }
 
