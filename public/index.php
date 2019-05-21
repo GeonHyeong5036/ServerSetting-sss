@@ -421,6 +421,12 @@ $app->get('/getGroup', function(Request $request, Response $response){
     $titleList = $db->getTitleListOfGroup($kakaoId);
     $tagList = $db->getTagListOfGroup($kakaoId);
 
+    // $array = explode('[', $idList);
+    // $array = explode(']', $array[1]);
+    // $array = explode(', ', $array[0]);
+    //
+    // $kakaoList = $db->getUserByGroupId($array);
+
     $response_data = array();
     $response_data['error'] = false;
     $response_data['idList'] = $idList;
