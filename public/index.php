@@ -427,7 +427,7 @@ $app->get('/getGroup', function(Request $request, Response $response){
     $response_data['managerList'] = $managerList;
     $response_data['titleList'] = $titleList;
     $response_data['tagList'] = $tagList;
-    $response_data['getTotalCount'] = count($idList);;
+    $response_data['totalCount'] = count($idList);;
 
     $response->write(json_encode($response_data));
 
