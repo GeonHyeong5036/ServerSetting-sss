@@ -62,10 +62,10 @@
       $managerList = array();
       while($stmt->fetch()){
         $managers = array();
-        $managers['manger'] = $manager;
-        array_push($mangerList, $managers);
+        $managers['manager'] = $manager;
+        array_push($managerList, $managers);
       }
-      return $mangerList;
+      return $managerList;
     }
 
     public function getTitleListOfGroup($kakaoId){
@@ -95,9 +95,9 @@
       while($stmt->fetch()){
         $tags = array();
         $tags['tag'] = $tag;
-        array_push($titleList, $tags);
+        array_push($tagList, $tags);
       }
-      return $titleList;
+      return $tagList;
     }
 
     public Function getUserByGroupId($id){
