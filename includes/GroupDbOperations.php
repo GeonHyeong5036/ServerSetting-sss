@@ -97,6 +97,7 @@
         $tags['tag'] = $tag;
         array_push($tagList, $tags);
       }
+      $tagList = array_values($tagList);
       return $tagList;
     }
 
