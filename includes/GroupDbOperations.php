@@ -37,7 +37,7 @@
     }
 
     public function getIdListGroup($kakaoId){
-      $userId = $this->getIdByKakaoId($kakaoId);
+      $userId = $this->getUserIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
@@ -53,7 +53,7 @@
     }
 
     public function getManagerListOfGroup($kakaoId){
-      $userId = $this->getIdByKakaoId($kakaoId);
+      $userId = $this->getUserIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT manger FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
@@ -69,7 +69,7 @@
     }
 
     public function getTitleListOfGroup($kakaoId){
-      $userId = $this->getIdByKakaoId($kakaoId);
+      $userId = $this->getUserIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT title FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
