@@ -36,7 +36,7 @@
       }
     }
 
-    private function getIdListGroup($kakaoId){
+    public function getIdListGroup($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
@@ -52,7 +52,7 @@
       return $idList;
     }
 
-    private function getManagerListOfGroup($kakaoId){
+    public function getManagerListOfGroup($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT manger FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
@@ -68,7 +68,7 @@
       return $mangerList;
     }
 
-    private function getTitleListOfGroup($kakaoId){
+    public function getTitleListOfGroup($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT title FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
@@ -84,7 +84,7 @@
       return $titleList;
     }
 
-    private function getTagListOfGroup($kakaoId){
+    public function getTagListOfGroup($kakaoId){
       $userId = $this->getTagByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT tag FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
@@ -100,18 +100,17 @@
       return $titleList;
     }
 
-    private Function getUserByGroupId($id){
+    public Function getUserByGroupId($id){
       $stmt = $this->con->prepare("SELECT kakaoId, name FROM users WHERE id IN (SELECT userId FROM userGroup WHERE groupId = ?);");
       $stmt->bind_param("i", $id);
       $stmt->execute();
       $stmt->bind_result($kakaoId, $name);
-      $stmt->fetch();
 
       $kakaoList = array();
       while($stmt->fetch()){
-        $kakaos = array();
-        $kakaos['kakaoId'] = $kakaoId;
-        $kakaos['name'] = $name;
+        $kakao = array();
+        $kakao['kakaoId'] = $kakaoId;
+        $kakao['name'] = $name;
 
         array_push($kakaoList, $kakao);
       }

@@ -416,7 +416,7 @@ $app->get('/getGroup', function(Request $request, Response $response){
 
     $db = new GroupDbOperations;
 
-    $idList = $db->getGroup($kakaoId);
+    $idList = $db->getIdListGroup($kakaoId);
     $mangerList = $db->getManagerListOfGroup($kakaoId);
     $titleList = $db->getTitleListOfGroup($kakaoId);
     $tagList = $db->getTagListOfGroup($kakaoId);
