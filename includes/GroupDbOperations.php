@@ -109,8 +109,8 @@
       $kakaoList = array();
       while($stmt->fetch()){
         $kakao = array();
-        $kakao['kakaoId'] = $kakaoId;
-        $kakao['name'] = $name;
+        $kakao['userId'] = $kakaoId;
+        $kakao['profileNickname'] = $name;
 
         array_push($kakaoList, $kakao);
       }
