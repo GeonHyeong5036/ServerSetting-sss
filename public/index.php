@@ -417,14 +417,14 @@ $app->get('/getGroup', function(Request $request, Response $response){
     $db = new GroupDbOperations;
 
     $idList = $db->getIdListGroup($kakaoId);
-    $mangerList = $db->getManagerListOfGroup($kakaoId);
+    $managerList = $db->getManagerListOfGroup($kakaoId);
     $titleList = $db->getTitleListOfGroup($kakaoId);
     $tagList = $db->getTagListOfGroup($kakaoId);
 
     $response_data = array();
     $response_data['error'] = false;
     $response_data['idList'] = $idList;
-    $response_data['mangerList'] = $mangerList;
+    $response_data['managerList'] = $managerList;
     $response_data['titleList'] = $titleList;
     $response_data['tagList'] = $tagList;
 
