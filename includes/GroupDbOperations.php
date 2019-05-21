@@ -8,9 +8,10 @@
       $this->con = $db->connect();
     }
 
-    public function createGroup($kakaoIdList, $title, $tag){
-      $stmt = $this->con->prepare("INSERT into groups(title, tag) values (?, ?)");
-      $stmt->bind_param("ss", $title, $tag);
+    public function createGroup($kakaoIdList, $manager, $title, $tag){
+      $manager = $this->getUserIdByKakaoId($manager);
+      $stmt = $this->con->prepare("INSERT into groups(manager, title, tag) values (?, ?, ?)");
+      $stmt->bind_param("iss", $manager, $title, $tag);
       if($stmt->execute()){
         $groupId = $this->getGroupIdByKakaoId($title, $tag);
 
@@ -35,8 +36,90 @@
       }
     }
 
+    private function getIdListGroup($kakaoId){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      $stmt = $this->con->prepare("SELECT id FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt->bind_param("i", $userId);
+      $stmt->execute();
+      $stmt->bind_result($id);
+
+      $idList = array();
+      while($stmt->fetch()){
+        $ids = array();
+        $ids['id'] = $id;
+        array_push($idList, $ids);
+      }
+      return $idList;
+    }
+
+    private function getManagerListOfGroup($kakaoId){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      $stmt = $this->con->prepare("SELECT manger FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt->bind_param("i", $userId);
+      $stmt->execute();
+      $stmt->bind_result($manager);
+
+      $managerList = array();
+      while($stmt->fetch()){
+        $managers = array();
+        $managers['manger'] = $manager;
+        array_push($mangerList, $managers);
+      }
+      return $mangerList;
+    }
+
+    private function getTitleListOfGroup($kakaoId){
+      $userId = $this->getIdByKakaoId($kakaoId);
+      $stmt = $this->con->prepare("SELECT title FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt->bind_param("i", $userId);
+      $stmt->execute();
+      $stmt->bind_result($title);
+
+      $titleList = array();
+      while($stmt->fetch()){
+        $titles = array();
+        $titles['title'] = $title;
+        array_push($titleList, $titles);
+      }
+      return $titleList;
+    }
+
+    private function getTagListOfGroup($kakaoId){
+      $userId = $this->getTagByKakaoId($kakaoId);
+      $stmt = $this->con->prepare("SELECT tag FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt->bind_param("i", $userId);
+      $stmt->execute();
+      $stmt->bind_result($tag);
+
+      $tagList = array();
+      while($stmt->fetch()){
+        $tags = array();
+        $tags['tag'] = $tag;
+        array_push($titleList, $tags);
+      }
+      return $titleList;
+    }
+
+    private Function getUserByGroupId($id){
+      $stmt = $this->con->prepare("SELECT kakaoId, name FROM users WHERE id IN (SELECT userId FROM userGroup WHERE groupId = ?);");
+      $stmt->bind_param("i", $id);
+      $stmt->execute();
+      $stmt->bind_result($kakaoId, $name);
+      $stmt->fetch();
+
+      $kakaoList = array();
+      while($stmt->fetch()){
+        $kakaos = array();
+        $kakaos['kakaoId'] = $kakaoId;
+        $kakaos['name'] = $name;
+
+        array_push($kakaoList, $kakao);
+      }
+      return $kakaoList;
+    }
+
     private Function getUserIdByKakaoId($kakaoId){
-      $stmt = $this->con->prepare("SELECT id FROM users WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?);");
+      $stmt = $this->con->prepare("SELECT id FROM users WHERE kakaoId = ?;");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($id);

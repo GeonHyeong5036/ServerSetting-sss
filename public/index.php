@@ -226,19 +226,20 @@ $app->post('/createtimetable', function(Request $request, Response $response){
 });
 
 $app->post('/createGroup', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('title', 'tag'), $request, $response)){
+    if(!haveEmptyParameters(array('manager', 'title', 'tag'), $request, $response)){
         $kakaoIdList = $request->getQueryParams();
         $kakaoIdList = explode('[', $kakaoIdList['kakaoIdList']);
         $kakaoIdList = explode(']', $kakaoIdList[1]);
         $kakaoIdList = explode(', ', $kakaoIdList[0]);
 
         $request_data = $request->getParsedBody();
+        $manager =  $request_data['manager'];
         $title = $request_data['title'];
         $tag = $request_data['tag'];
 
         $db = new GroupDbOperations;
 
-        $result = $db->createGroup($kakaoIdList, $title, $tag);
+        $result = $db->createGroup($kakaoIdList, $manager, $title, $tag);
 
         if($result == GROUP_CREATED){
             $message = array();
@@ -407,6 +408,51 @@ $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $resp
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 
+});
+
+$app->get('/getGroup', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $kakaoId =  $request_data['kakaoId'];
+
+    $db = new GroupDbOperations;
+
+    $idList = $db->getGroup($kakaoId);
+    $mangerList = $db->getManagerListOfGroup($kakaoId);
+    $titleList = $db->getTitleListOfGroup($kakaoId);
+    $tagList = $db->getTagListOfGroup($kakaoId);
+
+    $response_data = array();
+    $response_data['error'] = false;
+    $response_data['idList'] = $idList;
+    $response_data['mangerList'] = $mangerList;
+    $response_data['titleList'] = $titleList;
+    $response_data['tagList'] = $tagList;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
+$app->get('/getUserByGroupId', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $groupId =  $request_data['groupId'];
+
+    $db = new GroupDbOperations;
+
+    $kakaoList = $db->getUserByGroupId($groupId);
+
+    $response_data = array();
+    $response_data['error'] = false;
+    $response_data['kakaoList'] = $kakaoList;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
 });
 
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
