@@ -44,11 +44,13 @@
       $stmt->bind_result($id);
 
       $idList = array();
+      $index = -1;
+
       while($stmt->fetch()){
-        $ids = array();
-        $ids['id'] = $id;
-        array_push($idList, $ids);
+        $index++;
+        $idList[$index] = $id;
       }
+      $idList = array_values($idList);
       return $idList;
     }
 
@@ -60,11 +62,13 @@
       $stmt->bind_result($manager);
 
       $managerList = array();
+      $index = -1;
+
       while($stmt->fetch()){
-        $managers = array();
-        $managers['manager'] = $manager;
-        array_push($managerList, $managers);
+        $index++;
+        $managerList[$index] = $manager;
       }
+      $managerList = array_values($managerList);
       return $managerList;
     }
 
@@ -76,11 +80,13 @@
       $stmt->bind_result($title);
 
       $titleList = array();
+      $index = -1;
+
       while($stmt->fetch()){
-        $titles = array();
-        $titles['title'] = $title;
-        array_push($titleList, $titles);
+        $index++;
+        $titleList[$index] = $title;
       }
+      $titleList = array_values($titleList);
       return $titleList;
     }
 
