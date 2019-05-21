@@ -85,7 +85,7 @@
     }
 
     public function getTagListOfGroup($kakaoId){
-      $userId = $this->getTagByKakaoId($kakaoId);
+      $userId = $this->getUserIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT tag FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
