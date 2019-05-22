@@ -44,5 +44,6 @@
             return true;
         return false;
     }
+  }
 
 ?>
