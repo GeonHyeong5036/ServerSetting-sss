@@ -9,6 +9,7 @@ require '../includes/DbConnect.php';
 require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
 require '../includes/MeetingDbOperations.php';
+require '../includes/AlarmDbOperations.php';
 
 $app = new \Slim\App([
     'settings'=>[
@@ -278,6 +279,47 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
 });
+
+$app->post('/createAlarm', function(Request $request, Response $response){
+
+    if(!haveEmptyParameters(array('type', 'from', 'time'), $request, $response)){
+        $request_data = $request->getParsedBody();
+
+        $_type = $request_data['type'];
+        $_from = $request_data['from'];
+        $_time = $request_data['time'];
+
+        $db = new AlarmDbOperations;
+
+        $result = ;
+
+        if($db->createAlarm($_type, $_from, $_time)){
+          $message = array();
+          $message['error'] = false;
+          $message['message'] = 'Alarm created successfully';
+
+          $response->write(json_encode($message));
+
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }else {
+          $message = array();
+          $message['error'] = true;
+          $message['message'] = 'Some error occurred';
+
+          $response->write(json_encode($message));
+
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
+});
+
 $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     if(!haveEmptyParameters(array('type', 'title', 'place', 'cellPosition'), $request, $response)){
@@ -450,6 +492,24 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     return $response;
 });
 
+$app->get('/getAllAlarm', function(Request $request, Response $response){
+    $db = new AlarmDbOperations;
+
+    $alarms = $db->getAllAlarm();
+
+    $response_data = array();
+
+    $response_data['error'] = false;
+    $response_data['alarms'] = $alarms;
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+
+});
+
 $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $cellPosition = $args['cellPosition'];
@@ -484,6 +544,29 @@ $app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Respons
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
+$app->delete('/deleteAlarm/{id}', function(Request $request, Response $response, array $args){
+    $id = $args['id'];
+
+    $db = new DbOperations;
+
+    $response_data = array();
+
+    if($db->deleteAlarm($id)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Alarm has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Plase try again later';
+    }
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
 function haveEmptyParameters($required_params, $request, $response){
     $error = false;
     $error_params = '';
