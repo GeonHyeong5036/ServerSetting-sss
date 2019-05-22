@@ -446,7 +446,8 @@ $app->get('/getMeeting', function(Request $request, Response $response){
     $response_data['managerList'] = $managerList;
     $response_data['titleList'] = $titleList;
     $response_data['placeList'] = $placeList;
-    $response_data['totalCount'] = count($idList);;
+    $response_data['totalCount'] = count($idList);
+    $response_data['groupId'] = $groupId
     $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')
