@@ -165,6 +165,14 @@
       return false;
     }
 
+    public function deleteAllTimeTable($kakaoId){
+      $stmt = $this->con->prepare("DELETE FROM timeTable WHERE userId In(select id from users where kakaoId = ?)");
+      $stmt->bind_param("s", $kakaoId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
     private function isTimeTableExist($userId, $type, $title, $place, $cellPosition){
       $stmt = $this->con->prepare("SELECT id from timeTable where ((userId = ?) and  (type = ?) and (title = ?) and (place = ?) and (cellPosition = ?))");
       $stmt->bind_param("isssi", $userId, $type, $title, $place, $cellPosition);

@@ -491,6 +491,28 @@ $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $requ
     ->withStatus(200);
 });
 
+$app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Response $response, array $args){
+    $kakaoId = $args['kakaoId'];
+
+    $db = new DbOperations;
+
+    $response_data = array();
+
+    if($db->deleteAllTimeTable($kakaoId)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'All TimeTable has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Delete failed';
+    }
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
 function haveEmptyParameters($required_params, $request, $response){
     $error = false;
     $error_params = '';
