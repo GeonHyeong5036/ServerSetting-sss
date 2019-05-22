@@ -21,6 +21,7 @@ echo $type. $manager. $title. $place;
 
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
+          echo $userId. ' '. $meetingId . ' ' . $groupId;
           if(!$this->createUserMeetingRelation($userId, $meetingId) && !$this->createGroupMeetingRelation($groupId, $meetingId))
             return MEETINGRELATION_FAILURE;
 
