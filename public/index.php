@@ -291,8 +291,6 @@ $app->post('/createAlarm', function(Request $request, Response $response){
 
         $db = new AlarmDbOperations;
 
-        $result = ;
-
         if($db->createAlarm($_type, $_from, $_time)){
           $message = array();
           $message['error'] = false;
