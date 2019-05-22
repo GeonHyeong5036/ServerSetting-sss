@@ -10,6 +10,7 @@ require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
 require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
+require '../includes/MeetingDbOperations.php';
 
 $app = new \Slim\App([
     'settings'=>[
@@ -288,7 +289,7 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         $request_data = $request->getParsedBody();
         $cellPositionList = $request_data['cellPositionList'];
         $groupId =  $request_data['groupId'];
-        $type =  $request_data['type'];
+        $type =  $request_data['type'];f
         $manager =  $request_data['manager'];
         $title = $request_data['title'];
         $place = $request_data['place'];
