@@ -19,14 +19,15 @@ echo $type. $manager. $title. $place;
       if($stmt->execute()){
         $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);
 
+        if(!$this->createGroupMeetingRelation($groupId, $meetingId))
+          return MEETINGRELATION_FAILURE;
+
         foreach ($kakaoIdList as $kakaoId) {
           $userId = $this->getUserIdByKakaoId($kakaoId);
-          echo $userId. ' '. $meetingId . ' ' . $groupId;
+
           if(!$this->createUserMeetingRelation($userId, $meetingId))
             return MEETINGRELATION_FAILURE;
 
-          if(!$this->createGroupMeetingRelation($groupId, $meetingId))
-            return MEETINGRELATION_FAILURE;
 
           foreach ($cellPositionList as $cellPosition) {
             if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
