@@ -511,7 +511,7 @@ $app->get('/getAllAlarm', function(Request $request, Response $response){
 $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $cellPosition = $args['cellPosition'];
-    $db = new AlarmDbOperations;
+    $db = new DbOperations;
     $response_data = array();
     if($db->deleteTimeTable($kakaoId, $cellPosition)){
         $response_data['error'] = false;
@@ -546,7 +546,7 @@ $app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Respons
 $app->delete('/deleteAlarm/{id}', function(Request $request, Response $response, array $args){
     $id = $args['id'];
 
-    $db = new DbOperations;
+    $db = new AlarmDbOperations;
 
     $response_data = array();
 
