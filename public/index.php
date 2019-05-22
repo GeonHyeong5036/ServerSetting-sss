@@ -240,6 +240,8 @@ $app->post('/createMeeting', function(Request $request, Response $response){
 
         $db = new MeetingDbOperations;
 
+echo $cellPositionList, $groupId, $manager, $title, $place;
+
         $result = $db->createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place);
 
         if($result == MEETING_CREATED){
