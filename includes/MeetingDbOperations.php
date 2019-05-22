@@ -19,8 +19,8 @@ echo $type. $manager. $title. $place;
       if($stmt->execute()){
         $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);
 
-        foreach ($kakaoIdList as $kakaoid) {
-          $userId = $this->getUserIdByKakaoId($kakaoid);
+        foreach ($kakaoIdList as $kakaoId) {
+          $userId = $this->getUserIdByKakaoId($kakaoId);
           echo $userId. ' '. $meetingId . ' ' . $groupId;
           if(!$this->createUserMeetingRelation($userId, $meetingId) && !$this->createGroupMeetingRelation($groupId, $meetingId))
             return MEETINGRELATION_FAILURE;

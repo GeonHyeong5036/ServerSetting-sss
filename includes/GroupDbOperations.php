@@ -17,7 +17,7 @@
 
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
-          if(!$this->createUserGroupReation($userId, $groupId))
+          if(!$this->createUserGroupRelation($userId, $groupId))
             return USERANDGROUP_FAILURE;
         }
         return GROUP_CREATED;
@@ -26,7 +26,7 @@
       }
     }
 
-    private function createUserGroupReation($userId, $groupId){
+    private function createUserGroupRelation($userId, $groupId){
       $stmt = $this->con->prepare("INSERT into userGroup(userId, groupId) values (?, ?)");
       $stmt->bind_param("ii", $userId, $groupId);
       if($stmt->execute()){
