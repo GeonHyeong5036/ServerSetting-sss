@@ -14,8 +14,12 @@
       $manager = $this->getUserIdByKakaoId($manager);
       $stmt = $this->con->prepare("INSERT into meeting(type, manager, title, place) values (?, ?, ?, ?)");
       $stmt->bind_param("siss", $type, $manager, $title, $place);
+
+echo $type. $manager. $title. $place;
+
       if($stmt->execute()){
         $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);
+
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
           if(!$this->createUserMeetingReation($userId, $meetingId) && !$this->createGroupMeetingReation($groupId, $meetingId)){
