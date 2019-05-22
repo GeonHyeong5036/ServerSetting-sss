@@ -21,13 +21,12 @@ echo $type. $manager. $title. $place;
 
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
-          if(!$this->createUserMeetingReation($userId, $meetingId) && !$this->createGroupMeetingReation($groupId, $meetingId)){
+          if(!$this->createUserMeetingRelation($userId, $meetingId) && !$this->createGroupMeetingRelation($groupId, $meetingId))
             return MEETINGRELATION_FAILURE;
-          }else{
-            foreach ($cellPositionList as $cellPosition) {
-              if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
-                return MEETING_FAILURE;
-              }
+
+          foreach ($cellPositionList as $cellPosition) {
+            if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
+              return MEETING_FAILURE;
             }
           }
         }
@@ -36,7 +35,7 @@ echo $type. $manager. $title. $place;
         return MEETING_FAILURE;
     }
 
-    private function createUserMeetingReation($userId, $meetingId){
+    private function createUserMeetingRelation($userId, $meetingId){
       $stmt = $this->con->prepare("INSERT into userMeeting(userId, meetingId) values (?, ?)");
       $stmt->bind_param("ii", $userId, $meetingId);
       if($stmt->execute()){
@@ -46,7 +45,7 @@ echo $type. $manager. $title. $place;
       }
     }
 
-    private function createGroupMeetingReation($groupId, $meetingId){
+    private function createGroupMeetingRelation($groupId, $meetingId){
       $stmt = $this->con->prepare("INSERT into groupMeeting(groupId, meetingId) values (?, ?)");
       $stmt->bind_param("ii", $groupId, $meetingId);
       if($stmt->execute()){
