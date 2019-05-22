@@ -59,10 +59,9 @@ echo $type. $manager. $title. $place;
       }
     }
 
-    public function getIdListGroup($kakaoId){
-      $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE id IN (SELECT meetingId FROM userMeeting where userid = ?) AND isActive = 1;");
-      $stmt->bind_param("i", $userId);
+    public function getIdListOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt->bind_param("i", $groupId);
       $stmt->execute();
       $stmt->bind_result($id);
 
@@ -77,28 +76,26 @@ echo $type. $manager. $title. $place;
       return $idList;
     }
 
-    public function getTypeListGroup($kakaoId){
-      $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE id IN (SELECT meetingId FROM userMeeting where userid = ?) AND isActive = 1;");
-      $stmt->bind_param("i", $userId);
+    public function getTypeListOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT type FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt->bind_param("i", $groupId);
       $stmt->execute();
-      $stmt->bind_result($id);
+      $stmt->bind_result($type);
 
-      $idList = array();
+      $typeList = array();
       $index = -1;
 
       while($stmt->fetch()){
         $index++;
-        $idList[$index] = $id;
+        $typeList[$index] = $type;
       }
-      $idList = array_values($idList);
-      return $idList;
+      $typeList = array_values($typeList);
+      return $typeList;
     }
 
-    public function getManagerListOfGroup($kakaoId){
-      $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT manager FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
-      $stmt->bind_param("i", $userId);
+    public function getManagerListOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT manager FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt->bind_param("i", $groupId);
       $stmt->execute();
       $stmt->bind_result($manager);
 
@@ -113,10 +110,9 @@ echo $type. $manager. $title. $place;
       return $managerList;
     }
 
-    public function getTitleListOfGroup($kakaoId){
-      $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT title FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
-      $stmt->bind_param("i", $userId);
+    public function getTitleListOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT title FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt->bind_param("i", $groupId);
       $stmt->execute();
       $stmt->bind_result($title);
 
@@ -131,26 +127,25 @@ echo $type. $manager. $title. $place;
       return $titleList;
     }
 
-    public function getTagListOfGroup($kakaoId){
-      $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT tag FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
-      $stmt->bind_param("i", $userId);
+    public function getPlaceListOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT place FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt->bind_param("i", $groupId);
       $stmt->execute();
-      $stmt->bind_result($tag);
+      $stmt->bind_result($place);
 
-      $tagList = array();
+      $placeList = array();
       $index = -1;
 
       while($stmt->fetch()){
         $index++;
-        $tagList[$index] = $tag;
+        $placeList[$index] = $place;
       }
-      $tagList = array_values($tagList);
-      return $tagList;
+      $placeList = array_values($placeList);
+      return $placeList;
     }
 
-    public Function getUserByGroupId($id){
-      $stmt = $this->con->prepare("SELECT kakaoId, name FROM users WHERE id IN (SELECT userId FROM userGroup WHERE groupId = ?);");
+    public Function getUserByMeetingId($id){
+      $stmt = $this->con->prepare("SELECT kakaoId, name FROM users WHERE id IN (SELECT userId FROM userMeeting WHERE meetingId = ?);");
       $stmt->bind_param("i", $id);
       $stmt->execute();
       $stmt->bind_result($kakaoId, $name);

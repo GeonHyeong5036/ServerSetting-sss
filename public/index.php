@@ -278,17 +278,6 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
 });
-
-
-
-
-
-
-
-
-
-
-
 $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     if(!haveEmptyParameters(array('type', 'title', 'place', 'cellPosition'), $request, $response)){
@@ -395,6 +384,43 @@ $app->get('/getGroup', function(Request $request, Response $response){
     $response_data['titleList'] = $titleList;
     $response_data['tagList'] = $tagList;
     $response_data['totalCount'] = count($idList);;
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+$app->get('/getMeeting', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $groupId =  $request_data['groupId'];
+    $db = new MeetingDbOperations;
+    $idList = $db->getIdListOfMeeting($groupId);
+    $typeList = $db->getTypeListOfMeeting($groupId);
+    $managerList = $db->getManagerListOfMeeting($groupId);
+    $titleList = $db->getTitleListOfMeeting($groupId);
+    $placeList = $db->getPlaceListOfMeeting($groupId);
+
+    $response_data = array();
+    $response_data['error'] = false;
+    $response_data['idList'] = $idList;
+    $response_data['typeList'] = $typeList;
+    $response_data['managerList'] = $managerList;
+    $response_data['titleList'] = $titleList;
+    $response_data['placeList'] = $placeList;
+    $response_data['totalCount'] = count($idList);;
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
+$app->get('/getUserByMeetingId', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $meetingId =  $request_data['meetingId'];
+    $db = new MeetingDbOperations;
+    $kakaoList = $db->getUserByMeetingId($meetingId);
+    $response_data = array();
+    $response_data['error'] = false;
+    $response_data['kakaoList'] = $kakaoList;
     $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')
