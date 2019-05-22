@@ -22,4 +22,9 @@
     define('GROUP_CREATED', 401);
     define('GROUP_FAILURE', 402);
     define('USERANDGROUP_FAILURE', 403);
+
+    define('MEETING_CREATED', 501);
+    define('MEETING_FAILURE', 502);
+    define('MEETINGRELATION_FAILURE', 503);
+
 ?>

@@ -181,22 +181,22 @@
       return $stmt->num_rows > 0;
     }
 
-    public function createGroup($kakaoId, $title, $place, $cellPosition){
-      $userId = $this->getIdByKakaoId($kakaoId);
-      if($userId==null){
-        return USERID_MISSING;
-      }
-      if(!$this->isTimeTableExist($userId, $title, $place, $cellPosition)){
-        $stmt = $this->con->prepare("INSERT into timeTable (userId, title, place, cellPosition) values (?, ?, ?, ?)");
-        $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
-        if($stmt->execute()){
-          return TIMETABLE_CREATED;
-        }else{
-          return TIMETABLE_FAILURE;
-        }
-      }
-      return TIMETABLE_EXISTS;
-    }
+    // public function createGroup($kakaoId, $title, $place, $cellPosition){
+    //   $userId = $this->getIdByKakaoId($kakaoId);
+    //   if($userId==null){
+    //     return USERID_MISSING;
+    //   }
+    //   if(!$this->isTimeTableExist($userId, $title, $place, $cellPosition)){
+    //     $stmt = $this->con->prepare("INSERT into timeTable (userId, title, place, cellPosition) values (?, ?, ?, ?)");
+    //     $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
+    //     if($stmt->execute()){
+    //       return TIMETABLE_CREATED;
+    //     }else{
+    //       return TIMETABLE_FAILURE;
+    //     }
+    //   }
+    //   return TIMETABLE_EXISTS;
+    // }
 
 
 

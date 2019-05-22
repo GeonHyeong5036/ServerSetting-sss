@@ -1,5 +1,5 @@
 <?php
-  class GroupDbOperations{
+  class MeetingDbOeration{
     private $con;
 
     function __construct(){
@@ -8,27 +8,44 @@
       $this->con = $db->connect();
     }
 
-    public function createGroup($kakaoIdList, $manager, $title, $tag){
-      $manager = $this->getUserIdByKakaoId($manager);
-      $stmt = $this->con->prepare("INSERT into groups(manager, title, tag) values (?, ?, ?)");
-      $stmt->bind_param("iss", $manager, $title, $tag);
-      if($stmt->execute()){
-        $groupId = $this->getGroupIdByColumn($title, $tag);
+    public function createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place){
+      $tableDb = new DbOperations;
 
+      $manager = $this->getUserIdByKakaoId($manager);
+      $stmt = $this->con->prepare("INSERT into meeting(type, manager, title, place) values (?, ?, ?, ?)");
+      $stmt->bind_param("siss", $type, $manager, $title, $place);
+      if($stmt->execute()){
+        $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
-          if(!$this->createUserGroupReation($userId, $groupId))
-            return USERANDGROUP_FAILURE;
+          if(!$this->createUserMeetingReation($userId, $meetingId) && !$this->createGroupMeetingReation($groupId, $meetingId)){
+            return MEETINGREATION_FAILURE;
+          }else{
+            foreach ($cellPositionList as $cellPosition) {
+              if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
+                return MEETING_FAILURE;
+              }
+            }
+          }
         }
-        return GROUP_CREATED;
+        return MEETING_CREATED;
+      }else
+        return MEETING_FAILURE;
+    }
+
+    private function createUserMeetingReation($userId, $meetingId){
+      $stmt = $this->con->prepare("INSERT into userMeeting(userId, meetingId) values (?, ?)");
+      $stmt->bind_param("ii", $userId, $meetingId);
+      if($stmt->execute()){
+        return true;
       }else{
-        return GROUP_FAILURE;
+        return false;
       }
     }
 
-    private function createUserGroupReation($userId, $groupId){
-      $stmt = $this->con->prepare("INSERT into userGroup(userId, groupId) values (?, ?)");
-      $stmt->bind_param("ii", $userId, $groupId);
+    private function createGroupMeetingReation($groupId, $meetingId){
+      $stmt = $this->con->prepare("INSERT into groupMeeting(groupId, meetingId) values (?, ?)");
+      $stmt->bind_param("ii", $groupId, $meetingId);
       if($stmt->execute()){
         return true;
       }else{
@@ -38,7 +55,25 @@
 
     public function getIdListGroup($kakaoId){
       $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT id FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE id IN (SELECT meetingId FROM userMeeting where userid = ?) AND isActive = 1;");
+      $stmt->bind_param("i", $userId);
+      $stmt->execute();
+      $stmt->bind_result($id);
+
+      $idList = array();
+      $index = -1;
+
+      while($stmt->fetch()){
+        $index++;
+        $idList[$index] = $id;
+      }
+      $idList = array_values($idList);
+      return $idList;
+    }
+
+    public function getTypeListGroup($kakaoId){
+      $userId = $this->getUserIdByKakaoId($kakaoId);
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE id IN (SELECT meetingId FROM userMeeting where userid = ?) AND isActive = 1;");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($id);
@@ -134,9 +169,9 @@
       return $id;
     }
 
-    private Function getGroupIdByColumn($title, $tag){
-      $stmt = $this->con->prepare("SELECT id FROM groups WHERE title = ? and tag = ?;");
-      $stmt->bind_param("ss", $title, $tag);
+    private Function getMeetingIdByColumn($manager, $title, $place){
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE manager =?, title = ? and tag = ?;");
+      $stmt->bind_param("iss", $manager, $title, $place);
       $stmt->execute();
       $stmt->bind_result($id);
       $stmt->fetch();
