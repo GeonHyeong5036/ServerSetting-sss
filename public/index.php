@@ -438,6 +438,7 @@ $app->get('/getMeeting', function(Request $request, Response $response){
     $managerList = $db->getManagerListOfMeeting($groupId);
     $titleList = $db->getTitleListOfMeeting($groupId);
     $placeList = $db->getPlaceListOfMeeting($groupId);
+    $cellPositionList = $db->getCellPositionOfMeeting($groupId);
 
     $response_data = array();
     $response_data['error'] = false;
@@ -446,6 +447,7 @@ $app->get('/getMeeting', function(Request $request, Response $response){
     $response_data['managerList'] = $managerList;
     $response_data['titleList'] = $titleList;
     $response_data['placeList'] = $placeList;
+    $response_data['cellPositionList'] = $cellPositionList;
     $response_data['totalCount'] = count($idList);
     $response_data['groupId'] = $groupId;
     $response->write(json_encode($response_data));

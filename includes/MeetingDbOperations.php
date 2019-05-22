@@ -14,8 +14,6 @@
       $stmt = $this->con->prepare("INSERT into meeting(type, manager, title, place) values (?, ?, ?, ?)");
       $stmt->bind_param("siss", $type, $manager, $title, $place);
 
-echo $type. $manager. $title. $place;
-
       if($stmt->execute()){
         $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);
 
@@ -30,7 +28,7 @@ echo $type. $manager. $title. $place;
 
 
           foreach ($cellPositionList as $cellPosition) {
-            if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
+            if($tableDb->createTimeTable($kakaoId, "m", $title, $place, $cellPosition) != TIMETABLE_CREATED){
               return MEETING_FAILURE;
             }
           }
@@ -143,6 +141,24 @@ echo $type. $manager. $title. $place;
       }
       $placeList = array_values($placeList);
       return $placeList;
+    }
+
+    public function getCellPositionOfMeeting($groupId){
+      $stmt = $this->con->prepare("SELECT cellPosition FROM timeTable WHERE title IN (SELECT title FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting WHERE groupId = ?));");
+      $stmt->bind_param("i", $groupId);
+      $stmt->execute();
+      $stmt->bind_result($cellPosition);
+
+      $cellPositionList = array();
+      $index = -1;
+
+      while($stmt->fetch()){
+        $index++;
+        $cellPositionList[$index] = $cellPosition;
+      }
+      $cellPositionList = array_unique($cellPositionList);
+      $cellPositionList = array_values($cellPositionList);
+      return $cellPositionList;
     }
 
     public Function getUserByMeetingId($id){
