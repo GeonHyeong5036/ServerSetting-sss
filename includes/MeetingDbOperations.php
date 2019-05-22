@@ -173,7 +173,7 @@ echo $type. $manager. $title. $place;
     }
 
     private Function getMeetingIdByColumn($manager, $title, $place){
-      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE manager = ? and title = ? and tag = ?;");
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE manager = ? and title = ? and place = ?;");
       $stmt->bind_param("iss", $manager, $title, $place);
       $stmt->execute();
       $stmt->bind_result($id);
