@@ -10,7 +10,7 @@ require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
 require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
-require '../includes/MeetingDbOperations.php';
+// require '../includes/MeetingDbOperations.php';
 
 $app = new \Slim\App([
     'settings'=>[
