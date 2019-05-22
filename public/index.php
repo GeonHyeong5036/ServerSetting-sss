@@ -297,7 +297,7 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         $cellPositionList = explode(']', $cellPositionList[1]);
         $cellPositionList = explode(', ', $cellPositionList[0]);
 
-        $db = new GroupDbOperations;
+        $db = new MeetingDbOperations;
 
         $result = $db->createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place);
 
@@ -321,7 +321,7 @@ $app->post('/createMeeting', function(Request $request, Response $response){
             return $response
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(422);
-        }else if($result == MEETINGREALATION_FAILURE){
+        }else if($result == MEETINGRELATION_FAILURE){
             $message = array();
             $message['error'] = true;
             $message['message'] = 'Some error occurred in relation of Meeting';
