@@ -22,7 +22,10 @@ echo $type. $manager. $title. $place;
         foreach ($kakaoIdList as $kakaoId) {
           $userId = $this->getUserIdByKakaoId($kakaoId);
           echo $userId. ' '. $meetingId . ' ' . $groupId;
-          if(!$this->createUserMeetingRelation($userId, $meetingId) && !$this->createGroupMeetingRelation($groupId, $meetingId))
+          if(!$this->createUserMeetingRelation($userId, $meetingId))
+            return MEETINGRELATION_FAILURE;
+
+          if(!$this->createGroupMeetingRelation($groupId, $meetingId))
             return MEETINGRELATION_FAILURE;
 
           foreach ($cellPositionList as $cellPosition) {
