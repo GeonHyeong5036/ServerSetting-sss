@@ -1,5 +1,5 @@
 <?php
-  class MeetingDbOerations{
+  class MeetingDbOperations{
     private $con;
 
     function __construct(){
