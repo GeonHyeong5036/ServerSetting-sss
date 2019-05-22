@@ -475,6 +475,7 @@ $app->get('/getUserByGroupId', function(Request $request, Response $response){
     $response_data = array();
     $response_data['error'] = false;
     $response_data['kakaoList'] = $kakaoList;
+    $response_data['groupId'] = $groupId;
     $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')
