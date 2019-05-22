@@ -8,7 +8,6 @@ require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
 require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
-
 $app = new \Slim\App([
     'settings'=>[
         'displayErrorDetails'=>true
@@ -175,7 +174,6 @@ $app->post('/createtimetable', function(Request $request, Response $response){
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
 });
-
 $app->post('/createGroup', function(Request $request, Response $response){
     if(!haveEmptyParameters(array('manager', 'title', 'tag'), $request, $response)){
         $kakaoIdList = $request->getQueryParams();
@@ -279,6 +277,16 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
+
+
+
+
+
+
+
+
+
+
 $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     if(!haveEmptyParameters(array('type', 'title', 'place', 'cellPosition'), $request, $response)){
@@ -369,6 +377,7 @@ $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $resp
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
 $app->get('/getGroup', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId =  $request_data['kakaoId'];
@@ -412,6 +421,7 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
     }
     return $response;
 });
+
 $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $cellPosition = $args['cellPosition'];
@@ -446,7 +456,6 @@ $app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Respons
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-
 function haveEmptyParameters($required_params, $request, $response){
     $error = false;
     $error_params = '';
