@@ -11,7 +11,6 @@
     public function createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place){
       $tableDb = new DbOperations;
 
-      $manager = $this->getUserIdByKakaoId($manager);
       $stmt = $this->con->prepare("INSERT into meeting(type, manager, title, place) values (?, ?, ?, ?)");
       $stmt->bind_param("siss", $type, $manager, $title, $place);
 
@@ -174,7 +173,7 @@ echo $type. $manager. $title. $place;
     }
 
     private Function getMeetingIdByColumn($manager, $title, $place){
-      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE manager =?, title = ? and tag = ?;");
+      $stmt = $this->con->prepare("SELECT id FROM meeting WHERE manager = ? and title = ? and tag = ?;");
       $stmt->bind_param("iss", $manager, $title, $place);
       $stmt->execute();
       $stmt->bind_result($id);
