@@ -3,13 +3,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 error_reporting(-1);
 ini_set('display_errors', 1);
-
 require '../vendor/autoload.php';
 require '../includes/DbOperations.php';
 require '../includes/DbConnect.php';
 require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
-require '../includes/MeetingDbOperations.php';
 
 $app = new \Slim\App([
     'settings'=>[
@@ -221,65 +219,65 @@ $app->post('/createGroup', function(Request $request, Response $response){
         ->withStatus(422);
 });
 
-// $app->post('/createMeeting', function(Request $request, Response $response){
-//     if(!haveEmptyParameters(array('cellPositionList', 'groupId', 'manager', 'title', 'place'), $request, $response)){
-//         $kakaoIdList = $request->getQueryParams();
-//         $kakaoIdList = explode('[', $kakaoIdList['kakaoIdList']);
-//         $kakaoIdList = explode(']', $kakaoIdList[1]);
-//         $kakaoIdList = explode(', ', $kakaoIdList[0]);
-//
-//         $request_data = $request->getParsedBody();
-//         $cellPositionList = $request_data['cellPositionList'];
-//         $groupId =  $request_data['groupId'];
-//         $type =  $request_data['type'];f
-//         $manager =  $request_data['manager'];
-//         $title = $request_data['title'];
-//         $place = $request_data['place'];
-//
-//         $cellPositionList = explode('[', $cellPositionList);
-//         $cellPositionList = explode(']', $cellPositionList[1]);
-//         $cellPositionList = explode(', ', $cellPositionList[0]);
-//
-//         $db = new MeetingDbOperations;
-//
-//         $result = $db->createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place);
-//
-//         if($result == MEETING_CREATED){
-//             $message = array();
-//             $message['error'] = false;
-//             $message['message'] = 'Meeting created successfully';
-//
-//             $response->write(json_encode($message));
-//
-//             return $response
-//                         ->withHeader('Content-type', 'application/json')
-//                         ->withStatus(201);
-//         }else if($result == MEETING_FAILURE){
-//             $message = array();
-//             $message['error'] = true;
-//             $message['message'] = 'Some error occurred in Group';
-//
-//             $response->write(json_encode($message));
-//
-//             return $response
-//                         ->withHeader('Content-type', 'application/json')
-//                         ->withStatus(422);
-//         }else if($result == MEETINGRELATION_FAILURE){
-//             $message = array();
-//             $message['error'] = true;
-//             $message['message'] = 'Some error occurred in relation of Meeting';
-//
-//             $response->write(json_encode($message));
-//
-//             return $response
-//                         ->withHeader('Content-type', 'application/json')
-//                         ->withStatus(422);
-//         }
-//     }
-//     return $response
-//         ->withHeader('Content-type', 'application/json')
-//         ->withStatus(422);
-// });
+$app->post('/createMeeting', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('cellPositionList', 'groupId', 'manager', 'title', 'place'), $request, $response)){
+        $kakaoIdList = $request->getQueryParams();
+        $kakaoIdList = explode('[', $kakaoIdList['kakaoIdList']);
+        $kakaoIdList = explode(']', $kakaoIdList[1]);
+        $kakaoIdList = explode(', ', $kakaoIdList[0]);
+
+        $request_data = $request->getParsedBody();
+        $cellPositionList = $request_data['cellPositionList'];
+        $groupId =  $request_data['groupId'];
+        $type =  $request_data['type'];f
+        $manager =  $request_data['manager'];
+        $title = $request_data['title'];
+        $place = $request_data['place'];
+
+        $cellPositionList = explode('[', $cellPositionList);
+        $cellPositionList = explode(']', $cellPositionList[1]);
+        $cellPositionList = explode(', ', $cellPositionList[0]);
+
+        $db = new MeetingDbOperations;
+
+        $result = $db->createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place);
+
+        if($result == MEETING_CREATED){
+            $message = array();
+            $message['error'] = false;
+            $message['message'] = 'Meeting created successfully';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(201);
+        }else if($result == MEETING_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred in Group';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }else if($result == MEETINGRELATION_FAILURE){
+            $message = array();
+            $message['error'] = true;
+            $message['message'] = 'Some error occurred in relation of Meeting';
+
+            $response->write(json_encode($message));
+
+            return $response
+                        ->withHeader('Content-type', 'application/json')
+                        ->withStatus(422);
+        }
+    }
+    return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(422);
+});
 
 $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];

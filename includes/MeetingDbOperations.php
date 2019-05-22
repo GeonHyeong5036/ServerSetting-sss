@@ -1,5 +1,5 @@
 <?php
-  class MeetingDbOeration{
+  class MeetingDbOerations{
     private $con;
 
     function __construct(){
@@ -19,7 +19,7 @@
         foreach ($kakaoIdList as $kakaoid) {
           $userId = $this->getUserIdByKakaoId($kakaoid);
           if(!$this->createUserMeetingReation($userId, $meetingId) && !$this->createGroupMeetingReation($groupId, $meetingId)){
-            return MEETINGREATION_FAILURE;
+            return MEETINGRELATION_FAILURE;
           }else{
             foreach ($cellPositionList as $cellPosition) {
               if($tableDb->createTimeTable($kakaoId, $type, $title, $place, $cellPosition) != TIMETABLE_CREATED){
