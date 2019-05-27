@@ -361,7 +361,7 @@ $app->put('/updateMeeting/{groupId}', function(Request $request, Response $respo
 
         $db = new MeetingDbOperations;
 
-        if($db->updateTimeTable($groupId, $type, $manager, $title, $place)){
+        if($db->updateMeeting($groupId, $type, $manager, $title, $place)){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'Meeting Updated Successfully';
@@ -614,7 +614,7 @@ $app->delete('/deleteMeeting/{id}', function(Request $request, Response $respons
 
     $response_data = array();
 
-    if($db->deleteAlarm($id)){
+    if($db->deleteMeeting($id)){
         $response_data['error'] = false;
         $response_data['message'] = 'Meeting has been deleted';
     }else{
