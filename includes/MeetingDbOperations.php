@@ -204,7 +204,7 @@
       return false;
     }
 
-    private Function deleteMeeting($groupId){
+    public Function deleteMeeting($groupId){
       $stmt = $this->con->prepare("DELETE FROM meeting WHERE id = ?");
       $stmt->bind_param("i", $groupId);
       if($stmt->execute())
