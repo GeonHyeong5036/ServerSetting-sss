@@ -349,6 +349,41 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
+$app->put('/updateMeeting/{groupId}', function(Request $request, Response $response, array $args){
+    $groupId = $args['groupId'];
+    if(!haveEmptyParameters(array('type', 'manager', 'title', 'place'), $request, $response)){
+        $request_data = $request->getParsedBody();
+        $type = $request_data['type'];
+        $manager = $request_data['manager'];
+        $title = $request_data['title'];
+        $place = $request_data['place'];
+
+        $db = new MeetingDbOperations;
+
+        if($db->updateTimeTable($groupId, $type, $manager, $title, $place)){
+            $response_data = array();
+            $response_data['error'] = false;
+            $response_data['message'] = 'Meeting Updated Successfully';
+            $response->write(json_encode($response_data));
+            return $response
+            ->withHeader('Content-type', 'application/json')
+            ->withStatus(200);
+        }else{
+            $response_data = array();
+            $response_data['error'] = true;
+            $response_data['message'] = 'Update failed';
+            $response->write(json_encode($response_data));
+            return $response
+            ->withHeader('Content-type', 'application/json')
+            ->withStatus(200);
+        }
+    }
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
 $app->get('/getuser', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
@@ -363,6 +398,7 @@ $app->get('/getuser', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
 $app->get('/gettimetables', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
@@ -376,6 +412,7 @@ $app->get('/gettimetables', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
 $app->get('/getAvailableMeetingTimes', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $array = explode('[', $request_data['kakaoIds']);
@@ -392,6 +429,7 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+
 $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $array = explode('[', $request_data['kakaoIds']);
@@ -557,6 +595,28 @@ $app->delete('/deleteAlarm/{id}', function(Request $request, Response $response,
     if($db->deleteAlarm($id)){
         $response_data['error'] = false;
         $response_data['message'] = 'Alarm has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Plase try again later';
+    }
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
+$app->delete('/deleteMeeting/{id}', function(Request $request, Response $response, array $args){
+    $id = $args['id'];
+
+    $db = new MeetingDbOperations;
+
+    $response_data = array();
+
+    if($db->deleteAlarm($id)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Meeting has been deleted';
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Plase try again later';

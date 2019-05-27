@@ -195,4 +195,20 @@
       $stmt->fetch();
       return $id;
     }
+
+    public function updateMeeting($groupId, $type, $manager, $title, $place){
+      $stmt = $this->con->prepare("UPDATE meeting SET type = ?, manager = ?, title = ?, place = ? WHERE id = ?;");
+      $stmt->bind_param("isssi", $type, $manager, $title, $place, $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
+    private Function deleteMeeting($groupId){
+      $stmt = $this->con->prepare("DELETE FROM meeting WHERE id = ?");
+      $stmt->bind_param("i", $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
   }
