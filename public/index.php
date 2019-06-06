@@ -615,9 +615,9 @@ $app->delete('/deleteGroup/{id}/{cellPositionList}', function(Request $request, 
 
     $response_data = array();
 
-    if($db->deleteGroup($meetingId, $cellPositionList)){
+    if($db->deleteGroup($groupId, $cellPositionList)){
         $response_data['error'] = false;
-        $response_data['message'] = 'Meeting has been deleted';
+        $response_data['message'] = 'Group has been deleted';
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Plase try again later';
