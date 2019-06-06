@@ -612,6 +612,9 @@ $app->delete('/deleteMeeting/{id}', function(Request $request, Response $respons
 
     $request_data = $request->getParsedBody();
     $cellPositionList = $request_data['cellPositionList'];
+    $cellPositionList = explode('[', $cellPositionList);
+    $cellPositionList = explode(']', $cellPositionList[1]);
+    $cellPositionList = explode(', ', $cellPositionList[0]);
 
     $db = new MeetingDbOperations;
 
