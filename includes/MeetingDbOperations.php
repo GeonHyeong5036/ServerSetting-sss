@@ -206,12 +206,17 @@
 
     public Function deleteMeeting($meetingId, $cellPositionList){
       $tableDb = new DbOperations;
-      $kakaoIdList = $this->getKakaoIdbyGroupId($meetingId);
+      $kakaoIdList = $this->getKakaoIdbyMeetingId($meetingId);
+      
+      $cellPositionList = explode('[', $cellPositionList);
+      $cellPositionList = explode(']', $cellPositionList[1]);
+      $cellPositionList = explode(', ', $cellPositionList[0]);
+
 
       foreach ($kakaoIdList as $kakaoId) {
-        foreach ($kakaoId as $key => $value) {
+        foreach ($kakaoId as $key) {
           foreach ($cellPositionList as $cellPosition) {
-            if(!$tableDb->deleteTimeTable($value, $cellPosition)){
+            if(!$tableDb->deleteTimeTable($key, $cellPosition)){
               return true;
             }
           }
@@ -225,7 +230,7 @@
       return false;
     }
 
-    public Function getKakaoIdbyGroupId($meetingId){
+    public Function getKakaoIdbyMeetingId($meetingId){
       $stmt = $this->con->prepare("SELECT kakaoId FROM users WHERE id IN (SELECT userId FROM userMeeting WHERE meetingId = ?);");
       $stmt->bind_param("i", $meetingId);
       $stmt->execute();

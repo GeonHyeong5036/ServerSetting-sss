@@ -607,13 +607,32 @@ $app->delete('/deleteAlarm/{id}', function(Request $request, Response $response,
     ->withStatus(200);
 });
 
+$app->delete('/deleteGroup/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
+    $groupId = $args['id'];
+    $cellPositionList = $args['cellPositionList'];
+
+    $db = new GroupDbOperations;
+
+    $response_data = array();
+
+    if($db->deleteGroup($meetingId, $cellPositionList)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Meeting has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Plase try again later';
+    }
+
+    $response->write(json_encode($response_data));
+
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
 $app->delete('/deleteMeeting/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
     $meetingId = $args['id'];
-
     $cellPositionList = $args['cellPositionList'];
-    $cellPositionList = explode('[', $cellPositionList);
-    $cellPositionList = explode(']', $cellPositionList[1]);
-    $cellPositionList = explode(', ', $cellPositionList[0]);
 
     $db = new MeetingDbOperations;
 

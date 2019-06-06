@@ -143,5 +143,36 @@
       return $id;
     }
 
-    
+    public Function deleteGroup($groupId, $cellPositionList){
+      $meetingDb = new MeetingDbOperations;
+      $meetingIdList = $this->getMeetingIdbyGroupId($groupId);
+
+      foreach ($meetingIdList as $meeting) {
+        foreach ($meeting as $key) {
+          if(!$meetingDb->deleteMeeting($key, $cellPositionList))
+            return true;
+        }
+      }
+      $stmt = $this->con->prepare("DELETE FROM groups WHERE id = ?");
+      $stmt->bind_param("i", $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
+    public Function getMeetingIdbyGroupId($groupId){
+      $stmt = $this->con->prepare("SELECT meetingId FROM groupMeeting WHERE groupId = ?;");
+      $stmt->bind_param("i", $groupId);
+      $stmt->execute();
+      $stmt->bind_result($id);
+
+      $meetingIdList = array();
+      while($stmt->fetch()){
+        $meetingId = array();
+        $meetingId['meetingId'] = $id;
+
+        array_push($meetingIdList, $meetingId);
+      }
+      return $meetingIdList;
+    }
   }
