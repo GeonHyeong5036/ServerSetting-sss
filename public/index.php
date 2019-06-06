@@ -564,24 +564,7 @@ $app->delete('/deleteGroup/{id}/{cellPositionList}', function(Request $request, 
     $response_data = array();
     if($db->deleteGroup($groupId, $cellPositionList)){
         $response_data['error'] = false;
-        $response_data['message'] = 'Group has been deleted';
-    }else{
-        $response_data['error'] = true;
-        $response_data['message'] = 'Plase try again later';
-    }
-    $response->write(json_encode($response_data));
-    return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
-});
-$app->delete('/deleteMeeting/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
-    $meetingId = $args['id'];
-    $cellPositionList = $args['cellPositionList'];
-    $db = new MeetingDbOperations;
-    $response_data = array();
-    if($db->deleteMeeting($meetingId, $cellPositionList)){
-        $response_data['error'] = false;
-        $response_data['message'] = 'Meeting has been deleted';
+        $response_data['message'] = 'Group and Meeting has been deleted';
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Plase try again later';
@@ -608,6 +591,23 @@ $app->delete('/deleteGroupNotMeeting/{id}', function(Request $request, Response 
 
     $response->write(json_encode($response_data));
 
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+$app->delete('/deleteMeeting/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
+    $meetingId = $args['id'];
+    $cellPositionList = $args['cellPositionList'];
+    $db = new MeetingDbOperations;
+    $response_data = array();
+    if($db->deleteMeeting($meetingId, $cellPositionList)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Meeting has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Plase try again later';
+    }
+    $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
