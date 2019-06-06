@@ -48,7 +48,7 @@ $app->post('/createuser', function(Request $request, Response $response){
         }else if($result == USER_UPDATE){
             $message = array();
             $message['error'] = false;
-            $message['message'] = 'User Upate';
+            $message['message'] = 'User upate';
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')
@@ -61,10 +61,10 @@ $app->post('/createuser', function(Request $request, Response $response){
             return $response
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(422);
-        }else if($result == USER_EXISTS){
+        }else if($result == USER_NOT_MEMBER){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'User Already Exists';
+            $message['message'] = 'User is not a member yet';
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')

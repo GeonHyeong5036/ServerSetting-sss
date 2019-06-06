@@ -5,7 +5,7 @@
     define('DB_NAME', 'sss');
 
     define('USER_CREATED', 101);
-    define('USER_EXISTS', 102);
+    define('USER_NOT_MEMBER', 102);
     define('USER_FAILURE', 103);
     define('USER_UPDATE', 104);
     define('USERID_MISSING', 104);

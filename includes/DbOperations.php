@@ -20,7 +20,7 @@
       }else if($this->updateUser($kakaoId, $name, $profileImagePath, $member)){
           return USER_UPDATE;
       }
-      return USER_EXISTS;
+      return USER_NOT_MEMBER;
     }
 
     private function isKakaoIdExist($kakaoId){
@@ -130,15 +130,6 @@
       return $id;
     }
 
-    // private function getIdByUserIdAtTimeTable($userId, $cellPosition){
-    //   $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?;");
-    //   $stmt->bind_param("ii", $userId, $cellPosition);
-    //   $stmt->execute();
-    //   $stmt->bind_result($id);
-    //   $stmt->fetch();
-    //   return $id;
-    // }
-
     public function getTimeTables($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
       $stmt = $this->con->prepare("SELECT id, userId, type, title, place, cellPosition FROM timeTable where userId = ? order by cellPosition");
@@ -161,13 +152,8 @@
     }
 
     public function deleteTimeTable($kakaoId, $cellPosition){
-      $userId = $this->getIdByKakaoId($kakaoId);
-      if($userId==null){
-        return false;
-      }
-
-      $stmt = $this->con->prepare("DELETE FROM timeTable WHERE userId = ? and cellPosition = ?");
-      $stmt->bind_param("ii", $userId, $cellPosition);
+      $stmt = $this->con->prepare("DELETE FROM timeTable WHERE userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?");
+      $stmt->bind_param("ii", $kakaoId, $cellPosition);
       if($stmt->execute())
         return true;
       return false;
@@ -188,24 +174,4 @@
       $stmt->store_result();
       return $stmt->num_rows > 0;
     }
-
-    // public function createGroup($kakaoId, $title, $place, $cellPosition){
-    //   $userId = $this->getIdByKakaoId($kakaoId);
-    //   if($userId==null){
-    //     return USERID_MISSING;
-    //   }
-    //   if(!$this->isTimeTableExist($userId, $title, $place, $cellPosition)){
-    //     $stmt = $this->con->prepare("INSERT into timeTable (userId, title, place, cellPosition) values (?, ?, ?, ?)");
-    //     $stmt->bind_param("issi", $userId, $title, $place, $cellPosition);
-    //     if($stmt->execute()){
-    //       return TIMETABLE_CREATED;
-    //     }else{
-    //       return TIMETABLE_FAILURE;
-    //     }
-    //   }
-    //   return TIMETABLE_EXISTS;
-    // }
-
-
-
   }
