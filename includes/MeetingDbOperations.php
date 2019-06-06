@@ -207,7 +207,7 @@
     public Function deleteMeeting($meetingId, $cellPositionList){
       $tableDb = new DbOperations;
       $kakaoIdList = $this->getKakaoIdbyMeetingId($meetingId);
-      
+
       $cellPositionList = explode('[', $cellPositionList);
       $cellPositionList = explode(']', $cellPositionList[1]);
       $cellPositionList = explode(', ', $cellPositionList[0]);

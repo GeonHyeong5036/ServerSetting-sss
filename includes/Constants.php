@@ -26,5 +26,6 @@
     define('MEETING_CREATED', 501);
     define('MEETING_FAILURE', 502);
     define('MEETINGRELATION_FAILURE', 503);
+    define('MEETING_MSSING', 504);
 
 ?>
