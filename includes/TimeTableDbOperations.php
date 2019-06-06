@@ -21,11 +21,8 @@
         }else{
           return TIMETABLE_FAILURE;
         }
-      }
-
-      if($this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition)){
-        return TIMETABLE_EXISTS;
-      }
+      }else if($this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition))
+        return TIMETABLE_UPDATE;
       return TIMETABLE_FAILURE;
     }
 
