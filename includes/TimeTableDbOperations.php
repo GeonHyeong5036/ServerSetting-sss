@@ -21,8 +21,7 @@
         }else{
           return TIMETABLE_FAILURE;
         }
-      }else if($this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition))
-        return TIMETABLE_UPDATE;
+      }
       return TIMETABLE_FAILURE;
     }
 
