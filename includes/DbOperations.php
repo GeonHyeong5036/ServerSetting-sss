@@ -109,7 +109,7 @@
           return TIMETABLE_FAILURE;
         }
       }
-      return TIMETABLE_EXISTS;
+      return $this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition);
     }
 
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
@@ -117,8 +117,8 @@
       $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id = ?;");
       $stmt->bind_param("sssi", $type, $title, $place, $id);
       if($stmt->execute())
-        return true;
-      return false;
+        return TIMETABLE_EXISTS;
+      return TIMETABLE_FAILURE;;
     }
 
     private function getIdByKakaoIdAtTimeTable($kakaoId, $cellPosition){
