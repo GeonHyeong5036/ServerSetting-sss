@@ -10,17 +10,15 @@
 
     public function createUser($kakaoId, $name, $profileImagePath, $member){
       if(!$this->isKakaoIdExist($kakaoId)){
-        $stmt = $this->con->prepare("INSERT into users (kakaoId, name, profileImagePath, member) values (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $kakaoId, $name, $profileImagePath, $member);
+        $stmt = $this->con->prepare("INSERT into users (kakaoId, name, profileImagePath) values (?, ?, ?)");
+        $stmt->bind_param("sssi", $kakaoId, $name, $profileImagePath);
         if($stmt->execute()){
           return USER_CREATED;
         }else{
           return USER_FAILURE;
         }
-      }else if($this->updateUser($kakaoId, $name, $profileImagePath, $member)){
-          return USER_UPDATE;
       }
-      return USER_EXISTS;
+      return $this->updateUser($kakaoId, $name, $profileImagePath, $member);
     }
 
     private function isKakaoIdExist($kakaoId){
@@ -31,19 +29,6 @@
       return $stmt->num_rows > 0;
     }
 
-    private function updateUser($kakaoId, $name, $profileImagePath, $member){
-      if($member == '1'){
-        $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ?, member = 1 WHERE kakaoId = ?");
-        $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
-        $stmt->execute();
-        return true;
-      }
-      $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ? WHERE kakaoId = ?");
-      $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
-      $stmt->execute();
-      return false;
-    }
-
     private function getIdByKakaoId($kakaoId){
       $stmt = $this->con->prepare("SELECT id from users where kakaoId = ?");
       $stmt->bind_param("s", $kakaoId);
@@ -51,6 +36,16 @@
       $stmt->bind_result($id);
       $stmt->fetch();
       return $id;
+    }
+
+    private function updateUser($kakaoId, $name, $profileImagePath, $member){
+      if($member == '1'){
+        $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ?, member = 1 WHERE kakaoId = ?");
+        $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
+        $stmt->execute();
+        return USER_UPDATE;
+      }
+      return USER_EXISTS;
     }
 
     public function getUser($kakaoId){
@@ -112,15 +107,16 @@
           return TIMETABLE_FAILURE;
         }
       }
-      return TIMETABLE_EXISTS;
+
+      return $this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition);
     }
 
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id IN (SELECT id from timeTable where userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?);");
       $stmt->bind_param("ssssi", $type, $title, $place, $kakaoId, $cellPosition);
       if($stmt->execute())
-        return true;
-      return false;
+        return TIMETABLE_UPDATE;
+      return TIMETABLE_FAILURE;
     }
 
     // private function getIdByUserIdAtTimeTable($userId, $cellPosition){

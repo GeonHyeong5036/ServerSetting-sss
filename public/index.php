@@ -163,10 +163,10 @@ $app->post('/createtimetable', function(Request $request, Response $response){
             return $response
                         ->withHeader('Content-type', 'application/json')
                         ->withStatus(422);
-        }else if($result == TIMETABLE_EXISTS){
+        }else if($result == TIMETABLE_UPDATE){
             $message = array();
             $message['error'] = true;
-            $message['message'] = 'TimeTable already Exists';
+            $message['message'] = 'TimeTable is updated';
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')
@@ -305,7 +305,9 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
         $place = $request_data['place'];
         $cellPosition = $request_data['cellPosition'];
         $db = new DbOperations;
-        if($db->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition)){
+        $result = $db->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition);
+
+        if($result == TIMETABLE_UPDATE){
             $response_data = array();
             $response_data['error'] = false;
             $response_data['message'] = 'TimeTable Updated Successfully';

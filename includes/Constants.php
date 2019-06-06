@@ -18,6 +18,7 @@
     define('TIMETABLE_CREATED', 301);
     define('TIMETABLE_EXISTS', 302);
     define('TIMETABLE_FAILURE', 303);
+    define('TIMETABLE_FAILURE', 304);
 
     define('GROUP_CREATED', 401);
     define('GROUP_FAILURE', 402);
