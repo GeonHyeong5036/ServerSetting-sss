@@ -208,7 +208,7 @@
       $tableDb = new DbOperations;
       $kakaoIdList = $this->getKakaoIdbyGroupId($meetingId);
 
-      foreach ($kakaoIdList as $kakaoId) {
+      foreach ($kakaoIdList as $key => $value) {
         foreach ($cellPositionList as $cellPosition) {
           if(!$tableDb->deleteTimeTable($kakaoId, $cellPosition)){
             return true;
