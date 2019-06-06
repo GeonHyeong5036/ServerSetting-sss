@@ -208,10 +208,12 @@
       $tableDb = new DbOperations;
       $kakaoIdList = $this->getKakaoIdbyGroupId($meetingId);
 
-      foreach ($kakaoIdList as $key => $value) {
-        foreach ($cellPositionList as $cellPosition) {
-          if(!$tableDb->deleteTimeTable($kakaoId, $cellPosition)){
-            return true;
+      foreach ($kakaoIdList as $kakaoId) {
+        foreach ($kakaoId as $key => $value) {
+          foreach ($cellPositionList as $cellPosition) {
+            if(!$tableDb->deleteTimeTable($value, $cellPosition)){
+              return true;
+            }
           }
         }
       }
