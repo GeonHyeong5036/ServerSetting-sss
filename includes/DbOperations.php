@@ -113,11 +113,21 @@
     }
 
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
-      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id IN (SELECT id from timeTable where userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?);");
-      $stmt->bind_param("ssssi", $type, $title, $place, $kakaoId, $cellPosition);
+      $id = $this->getIdByKakaoIdAtTimeTable($kakaoId, $cellPosition);
+      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id = ?;");
+      $stmt->bind_param("sssi", $type, $title, $place, $id);
       if($stmt->execute())
         return true;
       return false;
+    }
+
+    private function getIdByKakaoIdAtTimeTable($kakaoId, $cellPosition){
+      $stmt = $this->con->prepare("SELECT id from timeTable where userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?;");
+      $stmt->bind_param("si", $kakaoId, $cellPosition);
+      $stmt->execute();
+      $stmt->bind_result($id);
+      $stmt->fetch();
+      return $id;
     }
 
     // private function getIdByUserIdAtTimeTable($userId, $cellPosition){
