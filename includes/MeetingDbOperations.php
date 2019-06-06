@@ -228,15 +228,14 @@
       $stmt->bind_param("i", $meetingId);
       $stmt->execute();
       $stmt->bind_result($id);
+
+      $kakaoIdList = array();
+      while($stmt->fetch()){
+        $kakaoId = array();
+        $kakaoId['kakaoId'] = $id;
+
+        array_push($kakaoIdList, $kakaoId);
+      }
+      return $kakaoIdList;
     }
-
-    $kakaoIdList = array();
-    while($stmt->fetch()){
-      $kakaoId = array();
-      $kakaoId['kakaoId'] = $id;
-
-      array_push($kakaoIdList, $kakaoId);
-    }
-    return $kakaoIdList;
-
   }
