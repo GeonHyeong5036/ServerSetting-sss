@@ -17,8 +17,10 @@
         }else{
           return USER_FAILURE;
         }
+      }else if($this->updateUser($kakaoId, $name, $profileImagePath, $member)){
+          return USER_UPDATE;
       }
-      return $this->updateUser($kakaoId, $name, $profileImagePath, $member);
+      return USER_EXISTS;
     }
 
     private function isKakaoIdExist($kakaoId){
@@ -43,9 +45,9 @@
         $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ?, member = 1 WHERE kakaoId = ?");
         $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
         $stmt->execute();
-        return USER_UPDATE;
+        return true;
       }
-      return USER_EXISTS;
+      return false;
     }
 
     public function getUser($kakaoId){
@@ -107,16 +109,15 @@
           return TIMETABLE_FAILURE;
         }
       }
-
-      return $this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition);
+      return TIMETABLE_EXISTS;
     }
 
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id IN (SELECT id from timeTable where userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?);");
       $stmt->bind_param("ssssi", $type, $title, $place, $kakaoId, $cellPosition);
       if($stmt->execute())
-        return TIMETABLE_UPDATE;
-      return TIMETABLE_FAILURE;
+        return true;
+      return false;
     }
 
     // private function getIdByUserIdAtTimeTable($userId, $cellPosition){

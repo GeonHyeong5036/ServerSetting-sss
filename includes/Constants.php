@@ -8,7 +8,7 @@
     define('USER_EXISTS', 102);
     define('USER_FAILURE', 103);
     define('USER_UPDATE', 104);
-    define('USERID_MISSING', 204);
+    define('USERID_MISSING', 104);
 
     define('FRIEND_CREATED', 201);
     define('FRIEND_EXISTS', 202);
@@ -18,7 +18,7 @@
     define('TIMETABLE_CREATED', 301);
     define('TIMETABLE_EXISTS', 302);
     define('TIMETABLE_FAILURE', 303);
-    define('TIMETABLE_FAILURE', 304);
+    define('TIMETABLE_UPDATE', 304);
 
     define('GROUP_CREATED', 401);
     define('GROUP_FAILURE', 402);
