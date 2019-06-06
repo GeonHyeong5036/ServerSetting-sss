@@ -607,11 +607,10 @@ $app->delete('/deleteAlarm/{id}', function(Request $request, Response $response,
     ->withStatus(200);
 });
 
-$app->delete('/deleteMeeting/{id}', function(Request $request, Response $response, array $args){
+$app->delete('/deleteMeeting/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
     $meetingId = $args['id'];
 
-    $request_data = $request->getParsedBody();
-    $cellPositionList = $request_data['cellPositionList'];
+    $cellPositionList = $args['cellPositionList'];
     $cellPositionList = explode('[', $cellPositionList);
     $cellPositionList = explode(']', $cellPositionList[1]);
     $cellPositionList = explode(', ', $cellPositionList[0]);
