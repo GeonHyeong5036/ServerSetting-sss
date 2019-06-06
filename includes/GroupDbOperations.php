@@ -139,6 +139,13 @@
         return true;
       return false;
     }
+    public Function deleteGroupNotMeeting($groupId, $cellPositionList){
+      $stmt = $this->con->prepare("DELETE FROM groups WHERE id = ?");
+      $stmt->bind_param("i", $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
     public Function getMeetingIdbyGroupId($groupId){
       $stmt = $this->con->prepare("SELECT meetingId FROM groupMeeting WHERE groupId = ?;");
       $stmt->bind_param("i", $groupId);
