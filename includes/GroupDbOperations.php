@@ -160,6 +160,26 @@
       return false;
     }
 
+    public Function deleteGroup($groupId, $cellPositionList){
+      $meetingDb = new MeetingDbOperations;
+      if(!$this->isMeetingExist()){
+        $meetingIdList = $this->getMeetingIdbyGroupId($groupId);
+
+        foreach ($meetingIdList as $meeting) {
+          foreach ($meeting as $key) {
+            if(!$meetingDb->deleteMeeting($key, $cellPositionList))
+              return true;
+          }
+        }
+      }
+
+      $stmt = $this->con->prepare("DELETE FROM groups WHERE id = ?");
+      $stmt->bind_param("i", $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
     public Function getMeetingIdbyGroupId($groupId){
       $stmt = $this->con->prepare("SELECT meetingId FROM groupMeeting WHERE groupId = ?;");
       $stmt->bind_param("i", $groupId);
@@ -174,5 +194,14 @@
         array_push($meetingIdList, $meetingId);
       }
       return $meetingIdList;
+    }
+
+    private function isMeetingExist($groupId){
+      $stmt = $this->con->prepare("SELECT meetingId FROM groupMeeting WHERE groupId = ?;");
+      $stmt->bind_param("i", $groupId);
+      $stmt->execute();
+      $stmt->store_result();
+
+      return ($stmt->num_rows > 0);
     }
   }
