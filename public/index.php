@@ -10,6 +10,8 @@ require '../includes/DbAnalysis.php';
 require '../includes/GroupDbOperations.php';
 require '../includes/MeetingDbOperations.php';
 require '../includes/AlarmDbOperations.php';
+require '../includes/TimeTableDbOperations.php';
+
 $app = new \Slim\App([
     'settings'=>[
         'displayErrorDetails'=>true
@@ -137,7 +139,7 @@ $app->post('/createtimetable', function(Request $request, Response $response){
         $title = $request_data['title'];
         $place = $request_data['place'];
         $cellPosition = $request_data['cellPosition'];
-        $db = new DbOperations;
+        $db = new TimeTableDbOperations;
         $result = $db->createTimeTable($kakaoId, $type, $title, $place, $cellPosition);
         if($result == TIMETABLE_CREATED){
             $message = array();
@@ -304,7 +306,7 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
         $title = $request_data['title'];
         $place = $request_data['place'];
         $cellPosition = $request_data['cellPosition'];
-        $db = new DbOperations;
+        $db = new TimeTableDbOperations;
         $result = $db->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition);
 
         if($result == TIMETABLE_UPDATE){
@@ -377,7 +379,7 @@ $app->get('/getuser', function(Request $request, Response $response){
 $app->get('/gettimetables', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId = $request_data['kakaoId'];
-    $db = new DbOperations;
+    $db = new TimeTableDbOperations;
     $timeTables = $db->getTimeTables($kakaoId);
     $response_data = array();
     $response_data['error'] = false;
@@ -491,15 +493,6 @@ $app->get('/getUserByGroupId', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    $db = new DbConnect;
-    if($db->connect() != null){
-      echo 'Connection Successfull';
-    }
-    return $response;
-});
 $app->get('/getAllAlarm', function(Request $request, Response $response){
     $db = new AlarmDbOperations;
     $alarms = $db->getAllAlarm();
@@ -514,7 +507,7 @@ $app->get('/getAllAlarm', function(Request $request, Response $response){
 $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
     $cellPosition = $args['cellPosition'];
-    $db = new DbOperations;
+    $db = new TimeTableDbOperations;
     $response_data = array();
     if($db->deleteTimeTable($kakaoId, $cellPosition)){
         $response_data['error'] = false;
@@ -530,7 +523,7 @@ $app->delete('/deletetimetable/{kakaoId}/{cellPosition}', function(Request $requ
 });
 $app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Response $response, array $args){
     $kakaoId = $args['kakaoId'];
-    $db = new DbOperations;
+    $db = new TimeTableDbOperations;
     $response_data = array();
     if($db->deleteAllTimeTable($kakaoId)){
         $response_data['error'] = false;
