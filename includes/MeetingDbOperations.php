@@ -204,11 +204,39 @@
       return false;
     }
 
-    public Function deleteMeeting($groupId){
+    public Function deleteMeeting($meetingId, $cellPositionList){
+      $tableDb = new DbOperations;
+      $kakaoIdList = $this->getKakaoIdbyGroupId($meetingId);
+
+      foreach ($kakaoIdList as $kakaoId) {
+        foreach ($cellPositionList as $cellPosition) {
+          if(!$tableDb->deleteTimeTable($kakaoId, $cellPosition)){
+            return true;
+          }
+        }
+      }
+
       $stmt = $this->con->prepare("DELETE FROM meeting WHERE id = ?");
-      $stmt->bind_param("i", $groupId);
+      $stmt->bind_param("i", $meetingId);
       if($stmt->execute())
         return true;
       return false;
     }
+
+    public Function getKakaoIdbyGroupId($meetingId){
+      $stmt = $this->con->prepare("SELECT kakaoId FROM users WHERE id IN (SELECT userId FROM userMeeting WHERE meetingId = ?);");
+      $stmt->bind_param("i", $meetingId);
+      $stmt->execute();
+      $stmt->bind_result($id);
+    }
+
+    $kakaoIdList = array();
+    while($stmt->fetch()){
+      $kakaoId = array();
+      $kakaoId['kakaoId'] = $id;
+
+      array_push($kakaoIdList, $kakaoId);
+    }
+    return $kakaoIdList;
+
   }

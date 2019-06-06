@@ -608,13 +608,16 @@ $app->delete('/deleteAlarm/{id}', function(Request $request, Response $response,
 });
 
 $app->delete('/deleteMeeting/{id}', function(Request $request, Response $response, array $args){
-    $id = $args['id'];
+    $meetingId = $args['id'];
+
+    $request_data = $request->getParsedBody();
+    $cellPositionList = $request_data['cellPositionList'];
 
     $db = new MeetingDbOperations;
 
     $response_data = array();
 
-    if($db->deleteMeeting($id)){
+    if($db->deleteMeeting($meetingId, $cellPositionList)){
         $response_data['error'] = false;
         $response_data['message'] = 'Meeting has been deleted';
     }else{
