@@ -574,14 +574,14 @@ $app->delete('/deleteGroup/{id}/{cellPositionList}', function(Request $request, 
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-$app->delete('/deleteGroupNotMeeting/{id}', function(Request $request, Response $response, array $args){
+$app->delete('/deleteGroupWithNoMeeting/{id}', function(Request $request, Response $response, array $args){
     $groupId = $args['id'];
 
     $db = new GroupDbOperations;
 
     $response_data = array();
 
-    if($db->deleteGroupNotMeeting($groupId)){
+    if($db->deleteGroupWithNoMeeting($groupId)){
         $response_data['error'] = false;
         $response_data['message'] = 'Group has been deleted';
     }else{

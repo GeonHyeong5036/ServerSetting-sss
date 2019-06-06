@@ -136,7 +136,7 @@
         return true;
       return false;
     }
-    public Function deleteGroupNotMeeting($groupId){
+    public Function deleteGroupWithNoMeeting($groupId){
       $stmt = $this->con->prepare("DELETE FROM groups WHERE id = ?");
       $stmt->bind_param("i", $groupId);
       if($stmt->execute())
