@@ -29,13 +29,14 @@ $app->add(new Tuupola\Middleware\HttpBasicAuthentication([
   method: Post
 */
 $app->post('/createuser', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('kakaoId', 'name', 'member'), $request, $response)){
+    if(!haveEmptyParameters(array('kakaoId', 'name', 'profileImagePath', 'member'), $request, $response)){
         $request_data = $request->getParsedBody();
         $kakaoId = $request_data['kakaoId'];
         $name = $request_data['name'];
+        $profileImagePath = $request_data['profileImagePath'];
         $member = $request_data['member'];
         $db = new DbOperations;
-        $result = $db->createUser($kakaoId, $name, $member);
+        $result = $db->createUser($kakaoId, $name, $profileImagePath, $member);
         if($result == USER_CREATED){
             $message = array();
             $message['error'] = false;

@@ -8,16 +8,16 @@
       $this->con = $db->connect();
     }
 
-    public function createUser($kakaoId, $name, $member){
+    public function createUser($kakaoId, $name, $profileImagePath, $member){
       if(!$this->isKakaoIdExist($kakaoId)){
-        $stmt = $this->con->prepare("INSERT into users (kakaoId, name, member) values (?, ?, ?)");
-        $stmt->bind_param("sss", $kakaoId, $name, $member);
+        $stmt = $this->con->prepare("INSERT into users (kakaoId, name, profileImagePath, member) values (?, ?, ?, ?)");
+        $stmt->bind_param("sssi", $kakaoId, $name, $profileImagePath, $member);
         if($stmt->execute()){
           return USER_CREATED;
         }else{
           return USER_FAILURE;
         }
-      }else if($this->isMemberAlready($kakaoId, $member)){
+      }else if($this->updateUser($kakaoId, $name, $profileImagePath, $member)){
           return USER_UPDATE;
       }
       return USER_EXISTS;
@@ -31,13 +31,16 @@
       return $stmt->num_rows > 0;
     }
 
-    private function isMemberAlready($kakaoId, $member){
+    private function updateUser($kakaoId, $name, $profileImagePath, $member){
       if($member == '1'){
-        $stmt = $this->con->prepare("UPDATE users SET member = 1 WHERE kakaoId = ?");
-        $stmt->bind_param("s", $kakaoId);
+        $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ?, member = 1 WHERE kakaoId = ?");
+        $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
         $stmt->execute();
         return true;
       }
+      $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ? WHERE kakaoId = ?");
+      $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
+      $stmt->execute();
       return false;
     }
 
@@ -51,15 +54,16 @@
     }
 
     public function getUser($kakaoId){
-        $stmt = $this->con->prepare("SELECT id, kakaoId, name, member FROM users where kakaoId = ?");
+        $stmt = $this->con->prepare("SELECT id, kakaoId, name, profileImagePath, member FROM users where kakaoId = ?");
         $stmt->bind_param("s", $kakaoId);
         $stmt->execute();
-        $stmt->bind_result($id, $kakaoId, $name, $member);
+        $stmt->bind_result($id, $kakaoId, $name, $profileImagePath, $member);
         $stmt->fetch();
         $user = array();
         $user['id'] = $id;
         $user['kakaoId']=$kakaoId;
         $user['name'] = $name;
+        $user['profileImagePath'] = $profileImagePath;
         $user['member'] = $member;
         return $user;
     }
@@ -112,24 +116,21 @@
     }
 
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
-      $userId = $this->getIdByKakaoId($kakaoId);
-      $id = $this->getIdByKakaoIdAtTimeTable($userId, $cellPosition);
-
-      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id = ?;");
-      $stmt->bind_param("sssi", $type, $title, $place, $id);
+      $stmt = $this->con->prepare("UPDATE timeTable SET type = ?, title = ?, place = ? WHERE id IN (SELECT id from timeTable where userId IN (SELECT id from users where kakaoId = ?) and cellPosition = ?);");
+      $stmt->bind_param("ssssi", $type, $title, $place, $kakaoId, $cellPosition);
       if($stmt->execute())
         return true;
       return false;
     }
 
-    private function getIdByKakaoIdAtTimeTable($userId, $cellPosition){
-      $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?;");
-      $stmt->bind_param("ii", $userId, $cellPosition);
-      $stmt->execute();
-      $stmt->bind_result($id);
-      $stmt->fetch();
-      return $id;
-    }
+    // private function getIdByUserIdAtTimeTable($userId, $cellPosition){
+    //   $stmt = $this->con->prepare("SELECT id from timeTable where userId = ? and cellPosition = ?;");
+    //   $stmt->bind_param("ii", $userId, $cellPosition);
+    //   $stmt->execute();
+    //   $stmt->bind_result($id);
+    //   $stmt->fetch();
+    //   return $id;
+    // }
 
     public function getTimeTables($kakaoId){
       $userId = $this->getIdByKakaoId($kakaoId);
