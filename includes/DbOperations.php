@@ -34,9 +34,6 @@
         $stmt->execute();
         return true;
       }
-      $stmt = $this->con->prepare("UPDATE users SET name = ?, profileImagePath = ? WHERE kakaoId = ?");
-      $stmt->bind_param("sss", $name, $profileImagePath, $kakaoId);
-      $stmt->execute();
       return false;
     }
     private function getIdByKakaoId($kakaoId){
