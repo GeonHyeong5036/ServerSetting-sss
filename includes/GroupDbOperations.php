@@ -48,7 +48,7 @@
     }
     public function getManagerListOfGroup($kakaoId){
       $userId = $this->getUserIdByKakaoId($kakaoId);
-      $stmt = $this->con->prepare("SELECT manager FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1;");
+      $stmt = $this->con->prepare("SELECT kakaoId FROM users WHERE id IN (SELECT manager FROM groups WHERE id IN (SELECT groupId FROM userGroup where userid = ?) AND isActive = 1);");
       $stmt->bind_param("i", $userId);
       $stmt->execute();
       $stmt->bind_result($manager);
