@@ -100,8 +100,11 @@
         }else{
           return TIMETABLE_FAILURE;
         }
+      }else if($this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition)){
+        return TIMETABLE_UPDATE;
+      }else{
+        return TIMETABLE_FAILURE;
       }
-      return TIMETABLE_EXISTS;
     }
     public function updateTimeTable($kakaoId, $type, $title, $place, $cellPosition){
       $id = $this->getIdByKakaoIdAtTimeTable($kakaoId, $cellPosition);
