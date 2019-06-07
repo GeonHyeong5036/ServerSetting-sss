@@ -93,7 +93,7 @@
     }
 
     public function getManagerListOfMeeting($groupId){
-      $stmt = $this->con->prepare("SELECT manager FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
+      $stmt = $this->con->prepare("SELECT kakaoId FROM users WHERE id IN (SELECT manager FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1)");
       $stmt->bind_param("i", $groupId);
       $stmt->execute();
       $stmt->bind_result($manager);

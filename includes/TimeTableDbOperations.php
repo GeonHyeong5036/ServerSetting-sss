@@ -21,7 +21,8 @@
         }else{
           return TIMETABLE_FAILURE;
         }
-      }
+      }else if($this->updateTimeTable($kakaoId, $type, $title, $place, $cellPosition))
+        return TIMETABLE_UPDATE;
       return TIMETABLE_FAILURE;
     }
 
@@ -60,7 +61,7 @@
         $timeTable['place']=$place;
         $timeTable['cellPosition'] = $cellPosition;
         array_push($timeTables, $timeTable);
-      }
+      }d
       return $timeTables;
     }
 
