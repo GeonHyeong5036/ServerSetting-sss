@@ -10,7 +10,7 @@
 
     public function createAlarm($_type, $_to, $_from){
       $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) VALUES ?, ?, ?, (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i'))");
-      $stmt->bind_param("ssssss", $_type, $_to, $_from, $_type, $_to, $_from);
+      $stmt->bind_param("sss", $_type, $_to, $_from);
       if($stmt->execute()){
         return ALARM_CREATED;
       }else{
