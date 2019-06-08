@@ -430,22 +430,31 @@ $app->put('/reviseMeetingTime/{id}', function(Request $request, Response $respon
     $insertList = $request_data['insertList'];
 
     $db = new MeetingDbOperations;
-    if($db->reviseMeetingTime($meetingId, $deleteList, $insertList)){
-        $response_data = array();
-        $response_data['error'] = false;
-        $response_data['message'] = 'MeetingTime Updated Successfully';
-        $response->write(json_encode($response_data));
-        return $response
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200);
-    }else{
-        $response_data = array();
-        $response_data['error'] = true;
-        $response_data['message'] = 'MeetingTime not updated successfully';
-        $response->write(json_encode($response_data));
-        return $response
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200);
+    $result = $db->reviseMeetingTime($meetingId, $deleteList, $insertList);
+    if($result == MEETINGTIME_UPDATE){
+      $response_data = array();
+      $response_data['error'] = false;
+      $response_data['message'] = 'MeetingTime Updated Successfully';
+      $response->write(json_encode($response_data));
+      return $response
+      ->withHeader('Content-type', 'application/json')
+      ->withStatus(200);
+    }else if($result == MEETINGINFO_FAILURE){
+      $response_data = array();
+      $response_data['error'] = false;
+      $response_data['message'] = 'Failed to delete meetingInfo';
+      $response->write(json_encode($response_data));
+      return $response
+      ->withHeader('Content-type', 'application/json')
+      ->withStatus(200);
+    }else if($result == MEETINGTIME_FAILURE){
+      $response_data = array();
+      $response_data['error'] = true;
+      $response_data['message'] = 'Failed to delete meetingTime';
+      $response->write(json_encode($response_data));
+      return $response
+      ->withHeader('Content-type', 'application/json')
+      ->withStatus(200);
     }
 });
 $app->get('/getuser', function(Request $request, Response $response){

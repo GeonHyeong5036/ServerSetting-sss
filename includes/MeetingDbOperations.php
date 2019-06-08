@@ -196,20 +196,67 @@
       return $id;
     }
 
+    private Function getTitlebyMeetingId($meetingId){
+      $stmt = $this->con->prepare("SELECT title FROM meeting WHERE id = ?;");
+      $stmt->bind_param("i", $meetingId);
+      $stmt->execute();
+      $stmt->bind_result($title);
+      $stmt->fetch();
+      return $title;
+    }
+
+    private Function getPlacebyMeetingId($meetingId){
+      $stmt = $this->con->prepare("SELECT place FROM meeting WHERE id = ?;");
+      $stmt->bind_param("i", $meetingId);
+      $stmt->execute();
+      $stmt->bind_result($place);
+      $stmt->fetch();
+      return $place;
+    }
+
     public Function reviseMeetingInfo($meetingId, $title, $place){
-      $stmt = $this->con->prepare("UPDATE groups SET tag = ?, title = ? WHERE id = ?;");
-      $stmt->bind_param("ssi", $tag, $title, $groupId);
+      $stmt = $this->con->prepare("UPDATE meeting SET title = ?, place = ? WHERE id = ?;");
+      $stmt->bind_param("ssi", $title, $place, $meetingId);
       if($stmt->execute())
         return true;
       return false;
     }
 
     public Function reviseMeetingTime($meetingId, $deleteList, $insertList){
-      $stmt = $this->con->prepare("UPDATE groups SET tag = ?, title = ? WHERE id = ?;");
-      $stmt->bind_param("ssi", $tag, $title, $groupId);
-      if($stmt->execute())
-        return true;
-      return false;
+      $tableDb = new DbOperations;
+      $kakaoIdList = $this->getKakaoIdbyMeetingId($meetingId);
+      $title = $this->getTitlebyMeetingId($meetingId);
+      $place = $this->getPlacebyMeetingId($meetingId);
+
+      $deleteList = explode('[', $deleteList);
+      $deleteList = explode(']', $deleteList[1]);
+      $deleteList = explode(', ', $deleteList[0]);
+
+      foreach ($kakaoIdList as $kakaoId) {
+        foreach ($kakaoId as $key) {
+          foreach ($deleteList as $cellPosition) {
+            if(!$tableDb->deleteTimeTable($key, $cellPosition)){
+              return MEETINGINFO_FAILURE;
+            }
+          }
+        }
+      }
+
+      $insertList = explode('[', $insertList);
+      $insertList = explode(']', $insertList[1]);
+      $insertList = explode(', ', $insertList[0]);
+
+      foreach ($kakaoIdList as $kakaoId) {
+        foreach ($kakaoId as $key) {
+          foreach ($insertList as $cellPosition) {
+            if($tableDb->createTimeTable($kakaoId, "m", $title, $place, $cellPosition) != TIMETABLE_CREATED){
+              return MEETINGTIME_FAILURE;
+            }
+          }
+        }
+      }
+
+      return MEETINGTIME_UPDATE;
     }
 
     public Function deleteMeeting($meetingId, $cellPositionList){

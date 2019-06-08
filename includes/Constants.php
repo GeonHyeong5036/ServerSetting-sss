@@ -28,6 +28,9 @@
     define('MEETING_FAILURE', 502);
     define('MEETINGRELATION_FAILURE', 503);
     define('MEETING_MSSING', 504);
+    define('MEETINGINFO_FAILURE', 505);
+    define('MEETINGTIME_FAILURE', 506);
+    define('MEETINGTIME_UPDATE', 507);
 
     define('ALARM_CREATED', 601);
     define('ALARM_EXISTS', 602);
