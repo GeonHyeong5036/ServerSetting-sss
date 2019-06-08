@@ -9,15 +9,7 @@
     }
 
     public function createAlarmToken($kakaoId, $token){
-      if(!$this->isAlarmExist($kakaoId, $token)){
-        $stmt = $this->con->prepare("INSERT into alarmToken (kakaoId, token) values (?, ?)");
-        $stmt->bind_param("ss", $kakaoId, $token);
-        if($stmt->execute()){
-          return ALARM_CREATED;
-        }else{
-          return ALARM_FAILURE;
-        }
-      }else if($this->isKakaoIdOfAlarmExist($kakaoId)){
+      if($this->isKakaoIdOfAlarmExist($kakaoId)){
         $stmt = $this->con->prepare("UPDATE alarmToken SET token = ? WHERE kakaoId = ?");
         $stmt->bind_param("ss", $token, $kakaoId);
         if($stmt->execute()){
@@ -25,7 +17,14 @@
         }else{
           return ALARM_UPDATE_FAILURE;
         }
-      }
+      }else if(!$this->isAlarmExist($kakaoId, $token)){
+        $stmt = $this->con->prepare("INSERT into alarmToken (kakaoId, token) values (?, ?)");
+        $stmt->bind_param("ss", $kakaoId, $token);
+        if($stmt->execute()){
+          return ALARM_CREATED;
+        }else{
+          return ALARM_FAILURE;
+        }
       return ALARM_EXISTS;
     }
 
