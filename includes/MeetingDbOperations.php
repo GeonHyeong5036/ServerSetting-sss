@@ -235,6 +235,8 @@
       foreach ($kakaoIdList as $kakaoId) {
         foreach ($kakaoId as $key) {
           foreach ($deleteList as $cellPosition) {
+            echo "kakaoId : ".$key;
+            echo "cellPosition : ".$cellPosition;
             if(!$tableDb->deleteTimeTable($key, $cellPosition)){
               return MEETINGINFO_FAILURE;
             }
