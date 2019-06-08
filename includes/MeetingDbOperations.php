@@ -93,7 +93,7 @@
     }
 
     public function getManagerListOfMeeting($groupId){
-      $stmt = $this->con->prepare("SELECT kakaoId FROM users WHERE id IN (SELECT manager FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1)");
+      $stmt = $this->con->prepare("SELECT manager FROM meeting WHERE id IN (SELECT meetingId FROM groupMeeting where groupId = ?) AND isActive = 1");
       $stmt->bind_param("i", $groupId);
       $stmt->execute();
       $stmt->bind_result($manager);
@@ -196,9 +196,17 @@
       return $id;
     }
 
-    public function updateMeeting($groupId, $type, $manager, $title, $place){
-      $stmt = $this->con->prepare("UPDATE meeting SET type = ?, manager = ?, title = ?, place = ? WHERE id = ?;");
-      $stmt->bind_param("isssi", $type, $manager, $title, $place, $groupId);
+    public Function reviseMeetingInfo($meetingId, $title, $place){
+      $stmt = $this->con->prepare("UPDATE groups SET tag = ?, title = ? WHERE id = ?;");
+      $stmt->bind_param("ssi", $tag, $title, $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
+
+    public Function reviseMeetingTime($meetingId, $deleteList, $insertList){
+      $stmt = $this->con->prepare("UPDATE groups SET tag = ?, title = ? WHERE id = ?;");
+      $stmt->bind_param("ssi", $tag, $title, $groupId);
       if($stmt->execute())
         return true;
       return false;

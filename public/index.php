@@ -373,36 +373,80 @@ $app->put('/updatetimetable/{kakaoId}', function(Request $request, Response $res
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-$app->put('/updateMeeting/{groupId}', function(Request $request, Response $response, array $args){
-    $groupId = $args['groupId'];
-    if(!haveEmptyParameters(array('type', 'manager', 'title', 'place'), $request, $response)){
-        $request_data = $request->getParsedBody();
-        $type = $request_data['type'];
-        $manager = $request_data['manager'];
-        $title = $request_data['title'];
-        $place = $request_data['place'];
-        $db = new MeetingDbOperations;
-        if($db->updateMeeting($groupId, $type, $manager, $title, $place)){
-            $response_data = array();
-            $response_data['error'] = false;
-            $response_data['message'] = 'Meeting Updated Successfully';
-            $response->write(json_encode($response_data));
-            return $response
-            ->withHeader('Content-type', 'application/json')
-            ->withStatus(200);
-        }else{
-            $response_data = array();
-            $response_data['error'] = true;
-            $response_data['message'] = 'Update failed';
-            $response->write(json_encode($response_data));
-            return $response
-            ->withHeader('Content-type', 'application/json')
-            ->withStatus(200);
-        }
+$app->put('/reviseGroupInfo/{id}', function(Request $request, Response $response, array $args){
+    $groupId = $args['id'];
+    $request_data = $request->getParsedBody();
+    $title = $request_data['title'];
+    $tag = $request_data['tag'];
+
+    $db = new GroupDbOperations;
+    if($db->reviseGroupInfo($groupId, $title, $tag)){
+        $response_data = array();
+        $response_data['error'] = false;
+        $response_data['message'] = 'GroupInfo Updated Successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
+    }else{
+        $response_data = array();
+        $response_data['error'] = true;
+        $response_data['message'] = 'GroupInfo not updated successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
     }
-    return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+});
+$app->put('/reviseMeetingInfo/{id}', function(Request $request, Response $response, array $args){
+    $meetingId = $args['id'];
+    $request_data = $request->getParsedBody();
+    $title = $request_data['title'];
+    $place = $request_data['place'];
+
+    $db = new MeetingDbOperations;
+    if($db->reviseMeetingInfo($meetingId, $title, $place)){
+        $response_data = array();
+        $response_data['error'] = false;
+        $response_data['message'] = 'MeetingInfo Updated Successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
+    }else{
+        $response_data = array();
+        $response_data['error'] = true;
+        $response_data['message'] = 'MeetingInfo not updated successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
+    }
+});
+$app->put('/reviseMeetingTime/{id}', function(Request $request, Response $response, array $args){
+    $meetingId = $args['id'];
+    $request_data = $request->getParsedBody();
+    $deleteList = $request_data['deleteList'];
+    $insertList = $request_data['insertList'];
+
+    $db = new MeetingDbOperations;
+    if($db->reviseMeetingTime($meetingId, $deleteList, $insertList)){
+        $response_data = array();
+        $response_data['error'] = false;
+        $response_data['message'] = 'MeetingTime Updated Successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
+    }else{
+        $response_data = array();
+        $response_data['error'] = true;
+        $response_data['message'] = 'MeetingTime not updated successfully';
+        $response->write(json_encode($response_data));
+        return $response
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200);
+    }
 });
 $app->get('/getuser', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
