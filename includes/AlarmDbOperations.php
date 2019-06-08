@@ -9,7 +9,7 @@
     }
 
     public function createAlarmToken($kakaoId, $token){
-      if(!$this->isKakaoIdOfAlarmExist($kakaoId)){
+      if($this->isKakaoIdOfAlarmExist($kakaoId)){
         $stmt = $this->con->prepare("UPDATE alarmToken SET token = ? WHERE kakaoId = ?");
         $stmt->bind_param("ss", $token, $kakaoId);
         if($stmt->execute()){
