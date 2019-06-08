@@ -267,6 +267,36 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
 });
+$app->post('/createAlarm', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('type', 'to', 'from'), $request, $response)){
+        $request_data = $request->getParsedBody();
+        $_type = $request_data['type'];
+        $_to = $request_data['to'];
+        $_from = $request_data['from'];
+        $db = new AlarmDbOperations;
+        $db->createAlarm($_type, $_to, $_from);
+        if($result == ALARM_CREATED){
+          $message = array();
+          $message['error'] = false;
+          $message['message'] = 'Alarm created successfully';
+          $response->write(json_encode($message));
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }else if($result == ALARM_FAILURE){
+          $message = array();
+          $message['error'] = true;
+          $message['message'] = 'Alarm failed to create';
+          $response->write(json_encode($message));
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }
+      }
+      return $response
+      ->withHeader('Content-type', 'application/json')
+      ->withStatus(422);
+});
 $app->post('/createAlarmToken', function(Request $request, Response $response){
     if(!haveEmptyParameters(array('kakaoId', 'token'), $request, $response)){
         $request_data = $request->getParsedBody();
@@ -528,6 +558,19 @@ $app->get('/getUserByGroupId', function(Request $request, Response $response){
 //     }
 //     return $response;
 // });
+$app->get('/getAlarm', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $_from =  $request_data['from'];
+    $db = new AlarmDbOperations;
+    $alarmList = $db->getAlarm($_from);
+    $response_data = array();
+    $response_data['error'] = false;
+    $response_data['alarmList'] = $alarmList;
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
 $app->get('/getAlarmToken', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId =  $request_data['kakaoId'];
@@ -615,6 +658,22 @@ $app->delete('/deleteMeeting/{id}/{cellPositionList}', function(Request $request
     if($db->deleteMeeting($meetingId, $cellPositionList)){
         $response_data['error'] = false;
         $response_data['message'] = 'Meeting has been deleted';
+    }else{
+        $response_data['error'] = true;
+        $response_data['message'] = 'Plase try again later';
+    }
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+$app->delete('/deleteAlarm/{id}', function(Request $request, Response $response, array $args){
+    $alarmId = $args['id'];
+    $db = new AlarmDbOperations;
+    $response_data = array();
+    if($db->deleteAlarm($alarmId)){
+        $response_data['error'] = false;
+        $response_data['message'] = 'Alarm has been deleted';
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Plase try again later';
