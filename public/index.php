@@ -378,6 +378,9 @@ $app->put('/reviseGroupInfo/{id}', function(Request $request, Response $response
     $request_data = $request->getParsedBody();
     $title = $request_data['title'];
     $tag = $request_data['tag'];
+    echo "title : ".$title;
+    echo "tag : ".$tag;
+
 
     $db = new GroupDbOperations;
     if($db->reviseGroupInfo($groupId, $title, $tag)){
