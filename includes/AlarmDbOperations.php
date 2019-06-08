@@ -25,6 +25,7 @@
         }else{
           return ALARM_FAILURE;
         }
+      }
       return ALARM_EXISTS;
     }
 
