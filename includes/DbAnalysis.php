@@ -72,6 +72,7 @@
       $unique_cellPositionList = array_unique($cellPositionList);
       sort($unique_cellPositionList);
       $availableMeetingTimes = array_diff($availableMeetingTimes, $unique_cellPositionList);
+      $availableMeetingTimes = array_values($availableMeetingTimes);
       return $availableMeetingTimes;
     }
 
