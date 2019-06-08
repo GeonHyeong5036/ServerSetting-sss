@@ -121,6 +121,13 @@
       $stmt->fetch();
       return $id;
     }
+    public Function updateGroup($groupId, $type, $title){
+      $stmt = $this->con->prepare("UPDATE groups SET type = ?, manager = ?, title = ?, place = ? WHERE id = ?;");
+      $stmt->bind_param("isssi", $type, $manager, $title, $place, $groupId);
+      if($stmt->execute())
+        return true;
+      return false;
+    }
     public Function deleteGroup($groupId, $cellPositionList){
       $meetingDb = new MeetingDbOperations;
       $meetingIdList = $this->getMeetingIdbyGroupId($groupId);

@@ -417,6 +417,20 @@ $app->get('/getAsManyUserAsAvailable', function(Request $request, Response $resp
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
+$app->get('/getDeduplicatedCellList', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $request_data = $request_data['cellPositionList'];
+    $db = new DbAnalysis;
+    $asManyUserAsAvailableList = $db->getDeduplicatedCellList($request_data);
+    $response_data['error'] = false;
+    $response_data['message'] = $request_data['kakaoIds'];
+    $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
+    $response_data['totalCount'] = count($asManyUserAsAvailableList);
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
 $app->get('/getGroup', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
     $kakaoId =  $request_data['kakaoId'];

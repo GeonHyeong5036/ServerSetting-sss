@@ -63,6 +63,18 @@
       return $filter_availableMeetingTimes;
     }
 
+    public function getDeduplicatedCellList($cellPositionList){
+      $availableMeetingTimes = range(0, 39);
+      $cellPositionList = explode('[', $cellPositionList);
+      $cellPositionList = explode(']', $cellPositionList[1]);
+      $cellPositionList = explode(', ', $cellPositionList[0]);
+
+      $unique_cellPositionList = array_unique($cellPositionList);
+      sort($unique_cellPositionList);
+      $availableMeetingTimes = array_diff($availableMeetingTimes, $unique_cellPositionList);
+      return $availableMeetingTimes;
+    }
+
     private function existUserAtCellPosition($kakaoId, $cellPosition){
         $stmt = $this->con->prepare("SELECT cellPosition FROM timeTable WHERE userid IN (SELECT id FROM users WHERE kakaoId = ?) AND cellPosition = ? order by cellPosition;");
         $stmt->bind_param("si", $kakaoId, $cellPosition);
