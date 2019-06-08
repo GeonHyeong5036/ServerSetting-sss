@@ -39,23 +39,24 @@
       return ALARM_EXISTS;
     }
 
-    // public function getAllAlarmToken($kakaoId){
-    //   $stmt = $this->con->prepare("SELECT id, _type, _from, _time from alarm order by _time");
-    //   $stmt->execute();
-    //   $stmt->bind_result($id, $_type, $_from, $_time);
-    //   $alarms = array();
-    //   while($stmt->fetch()){
-    //       $alarm = array();
-    //       $alarm['id'] = $id;
-    //       $alarm['type']=$_type;
-    //       $alarm['from'] = $_from;
-    //       $alarm['time'] = $_time;
-    //       array_push($alarms, $alarm);
-    //   }
-    //   return $alarms;
-    // }
-    // INSERT INTO alarm (_type, _to, _from, _time) SELECT "c", "1234", "111", (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')) FROM DUAL WHERE NOT EXISTS (SELECT * FROM alarm WHERE _to ="2")
-// SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i');
+    public function getAlarm($_from){
+      $stmt = $this->con->prepare("SELECT id, _type, _to, _from, _time from alarm where _from = ? order by _time");
+      $stmt->bind_param("s", $_from);
+      $stmt->execute();
+      $stmt->bind_result($id, $_type, $_to, $_from, $_time);
+      $alarmList = array();
+      while($stmt->fetch()){
+          $alarm = array();
+          $alarm['id'] = $id;
+          $alarm['type']=$_type;
+          $alarm['to']=$_to;
+          $alarm['from'] = $_from;
+          $alarm['time'] = $_time;
+          array_push($alarmList, $alarm);
+      }
+      return $alarmList;
+    }
+
     public function getAlarmToken($kakaoId){
       $stmt = $this->con->prepare("SELECT token from alarmToken where kakaoId IN (SELECT kakaoId from users where kakaoId = ? and member = 1)");
       $stmt->bind_param("s", $kakaoId);
