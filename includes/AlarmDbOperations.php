@@ -66,6 +66,14 @@
       return $token;
     }
 
+    public function deleteAlarm($alarmId){
+        $stmt = $this->con->prepare("DELETE FROM alarm WHERE id = ?");
+        $stmt->bind_param("i", $alarmId);
+        if($stmt->execute())
+            return true;
+        return false;
+    }
+
     private function isAlarmExist($kakaoId, $token){
       $stmt = $this->con->prepare("SELECT id from alarmToken where kakaoId = ? AND token =?");
       $stmt->bind_param("ss", $kakaoId, $token);
@@ -81,14 +89,6 @@
       $stmt->store_result();
       return $stmt->num_rows > 0;
     }
-
-    // public function deleteAlarm($id){
-    //     $stmt = $this->con->prepare("DELETE FROM alarm WHERE id = ?");
-    //     $stmt->bind_param("i", $id);
-    //     if($stmt->execute())
-    //         return true;
-    //     return false;
-    // }
   }
 
 ?>
