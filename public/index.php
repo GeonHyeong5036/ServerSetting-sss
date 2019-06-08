@@ -273,6 +273,8 @@ $app->post('/createAlarmToken', function(Request $request, Response $response){
         $token = $request_data['token'];
         $request_data = $request->getParsedBody();
         $db = new AlarmDbOperations;
+        echo "kakaoId".$kakaoId;
+        echo $token;
         $result = $db->createAlarmToken($kakaoId, $token);
         if($result == ALARM_CREATED){
           $message = array();
