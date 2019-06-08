@@ -9,7 +9,7 @@
     }
 
     public function createAlarm($_type, $_to, $_from){
-      $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) SELECT ?, ?, ?, (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')) FROM DUAL WHERE NOT EXISTS (SELECT * FROM alarm WHERE _type = ? AND _to = ? AND _from =? AND _time = (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')))");
+      $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) VALUES ?, ?, ?, (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i'))");
       $stmt->bind_param("ssssss", $_type, $_to, $_from, $_type, $_to, $_from);
       if($stmt->execute()){
         return ALARM_CREATED;
@@ -17,6 +17,7 @@
         return ALARM_FAILURE;
       }
     }
+    // $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) SELECT ?, ?, ?, (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')) FROM DUAL WHERE NOT EXISTS (SELECT * FROM alarm WHERE _type = ? AND _to = ? AND _from =? AND _time = (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')))");
 
     public function createAlarmToken($kakaoId, $token){
       if($this->isKakaoIdOfAlarmExist($kakaoId)){
