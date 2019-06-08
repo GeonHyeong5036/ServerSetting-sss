@@ -237,10 +237,13 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         $cellPositionList = explode(', ', $cellPositionList[0]);
         $db = new MeetingDbOperations;
         $result = $db->createMeeting($kakaoIdList, $cellPositionList, $groupId, $type, $manager, $title, $place);
+        $meetingId = $db->getMeetingIdbyGroupId($groupId);
+
         if($result == MEETING_CREATED){
             $message = array();
             $message['error'] = false;
             $message['message'] = 'Meeting created successfully';
+            $message['meetingId'] = $meetingId;
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')
@@ -249,6 +252,7 @@ $app->post('/createMeeting', function(Request $request, Response $response){
             $message = array();
             $message['error'] = true;
             $message['message'] = 'Some error occurred in Group';
+            $message['meetingId'] = "-1";
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')
@@ -257,6 +261,7 @@ $app->post('/createMeeting', function(Request $request, Response $response){
             $message = array();
             $message['error'] = true;
             $message['message'] = 'Some error occurred in relation of Meeting';
+            $message['meetingId'] = "-1";
             $response->write(json_encode($message));
             return $response
                         ->withHeader('Content-type', 'application/json')

@@ -300,4 +300,13 @@
       }
       return $kakaoIdList;
     }
+
+    public Function getMeetingIdbyGroupId($groupId){
+      $stmt = $this->con->prepare("SELECT meetingId FROM groupMeeting WHERE groupId = ?;");
+      $stmt->bind_param("i", $groupId);
+      $stmt->execute();
+      $stmt->bind_result($meetingId);
+      $stmt->fetch();
+      return $meetingId;
+    }
   }
