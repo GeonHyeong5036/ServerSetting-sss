@@ -306,14 +306,6 @@ $app->post('/createAlarmToken', function(Request $request, Response $response){
           return $response
                       ->withHeader('Content-type', 'application/json')
                       ->withStatus(201);
-        }else if($result == ALARM_EXISTS){
-          $message = array();
-          $message['error'] = true;
-          $message['message'] = 'Alarm already exists';
-          $response->write(json_encode($message));
-          return $response
-                      ->withHeader('Content-type', 'application/json')
-                      ->withStatus(201);
         }
     }
     return $response
@@ -527,21 +519,23 @@ $app->get('/getUserByGroupId', function(Request $request, Response $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    $db = new DbConnect;
-    if($db->connect() != null){
-      echo 'Connection Successfull';
-    }
-    return $response;
-});
-$app->get('/getAllAlarm', function(Request $request, Response $response){
+// $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
+//     $name = $args['name'];
+//     $response->getBody()->write("Hello, $name");
+//     $db = new DbConnect;
+//     if($db->connect() != null){
+//       echo 'Connection Successfull';
+//     }
+//     return $response;
+// });
+$app->get('/getAlarmToken', function(Request $request, Response $response){
+    $request_data = $request->getQueryParams();
+    $kakaoId =  $request_data['kakaoId'];
     $db = new AlarmDbOperations;
-    $alarms = $db->getAllAlarm();
+    $alarmToken = $db->getAlarmToken($kakaoId);
     $response_data = array();
     $response_data['error'] = false;
-    $response_data['alarmTokens'] = $alarms;
+    $response_data['alarmToken'] = $alarmToken;
     $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')

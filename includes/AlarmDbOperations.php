@@ -29,20 +29,29 @@
       return ALARM_EXISTS;
     }
 
-    public function getAllAlarm(){
-      $stmt = $this->con->prepare("SELECT id, _type, _from, _time from alarm order by _time");
+    // public function getAllAlarmToken($kakaoId){
+    //   $stmt = $this->con->prepare("SELECT id, _type, _from, _time from alarm order by _time");
+    //   $stmt->execute();
+    //   $stmt->bind_result($id, $_type, $_from, $_time);
+    //   $alarms = array();
+    //   while($stmt->fetch()){
+    //       $alarm = array();
+    //       $alarm['id'] = $id;
+    //       $alarm['type']=$_type;
+    //       $alarm['from'] = $_from;
+    //       $alarm['time'] = $_time;
+    //       array_push($alarms, $alarm);
+    //   }
+    //   return $alarms;
+    // }
+
+    public function getAlarmToken($kakaoId){
+      $stmt = $this->con->prepare("SELECT token from alarmToken where kakaoId IN (SELECT kakaoId from users where kakaoId = ? and member = 1)");
+      $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
-      $stmt->bind_result($id, $_type, $_from, $_time);
-      $alarms = array();
-      while($stmt->fetch()){
-          $alarm = array();
-          $alarm['id'] = $id;
-          $alarm['type']=$_type;
-          $alarm['from'] = $_from;
-          $alarm['time'] = $_time;
-          array_push($alarms, $alarm);
-      }
-      return $alarms;
+      $stmt->bind_result($token);
+      $stmt->fetch();
+      return $token;
     }
 
     private function isAlarmExist($kakaoId, $token){
