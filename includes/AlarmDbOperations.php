@@ -15,6 +15,8 @@
       if(!$this->isAlarmExist($kakaoId, $token)){
         $stmt = $this->con->prepare("INSERT into alarmToken (kakaoId, token) values (?, ?)");
         $stmt->bind_param("ss", $kakaoId, $token);
+        echo $kakaoId;
+        echo $token;
         if($stmt->execute()){
           return ALARM_CREATED;
         }else{
