@@ -423,7 +423,7 @@ $app->get('/getDeduplicatedCellList', function(Request $request, Response $respo
     $db = new DbAnalysis;
     $asManyUserAsAvailableList = $db->getDeduplicatedCellList($request_data);
     $response_data['error'] = false;
-    $response_data['message'] = $request_data['kakaoIds'];
+    $response_data['message'] = $request_data['cellPositionList'];
     $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
     $response_data['totalCount'] = count($asManyUserAsAvailableList);
     $response->write(json_encode($response_data));
