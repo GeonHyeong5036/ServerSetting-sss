@@ -235,8 +235,6 @@
       foreach ($kakaoIdList as $kakaoId) {
         foreach ($kakaoId as $key) {
           foreach ($deleteList as $cellPosition) {
-            echo "kakaoId : ".$key;
-            echo "cellPosition : ".$cellPosition;
             if(!$tableDb->deleteTimeTable($key, $cellPosition)){
               return MEETINGINFO_FAILURE;
             }
@@ -251,7 +249,7 @@
       foreach ($kakaoIdList as $kakaoId) {
         foreach ($kakaoId as $key) {
           foreach ($insertList as $cellPosition) {
-            if($tableDb->createTimeTable($kakaoId, "m", $title, $place, $cellPosition) != TIMETABLE_CREATED){
+            if($tableDb->createTimeTable($key, "m", $title, $place, $cellPosition) != TIMETABLE_CREATED){
               return MEETINGTIME_FAILURE;
             }
           }
