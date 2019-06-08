@@ -1,9 +1,6 @@
 <?php
   class AlarmDbOperations{
     private $con;
-    private $targetCellPositionList = array();
-    private $index=-1;
-
 
     function __construct(){
       require_once dirname(__FILE__) . '/DbConnect.php';
@@ -12,6 +9,8 @@
     }
 
     public function createAlarmToken($kakaoId, $token){
+      echo "kakaoId".$kakaoId;
+      echo $token;
       if(!$this->isAlarmExist($kakaoId, $token)){
         $stmt = $this->con->prepare("INSERT into alarmToken (kakaoId, token) values (?, ?)");
         $stmt->bind_param("ss", $kakaoId, $token);
