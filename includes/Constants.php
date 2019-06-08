@@ -29,4 +29,10 @@
     define('MEETINGRELATION_FAILURE', 503);
     define('MEETING_MSSING', 504);
 
+    define('ALARM_CREATED', 601);
+    define('ALARM_EXISTS', 602);
+    define('ALARM_UPDATE', 603);
+    define('ALARM_FAILURE', 604);
+    define('ALARM_UPDATE_FAILURE', 605);
+
 ?>

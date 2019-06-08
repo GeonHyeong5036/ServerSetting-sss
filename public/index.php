@@ -267,14 +267,14 @@ $app->post('/createMeeting', function(Request $request, Response $response){
         ->withHeader('Content-type', 'application/json')
         ->withStatus(422);
 });
-$app->post('/createAlarm', function(Request $request, Response $response){
-    if(!haveEmptyParameters(array('type', 'from', 'time'), $request, $response)){
+$app->post('/createAlarmToken', function(Request $request, Response $response){
+    if(!haveEmptyParameters(array('kakaoId', 'token'), $request, $response)){
+        $kakaoId = $request_data['kakaoId'];
+        $token = $request_data['token'];
         $request_data = $request->getParsedBody();
-        $_type = $request_data['type'];
-        $_from = $request_data['from'];
-        $_time = $request_data['time'];
         $db = new AlarmDbOperations;
-        if($db->createAlarm($_type, $_from, $_time)){
+        $result = $db->createAlarmToken($kakaoId, $token);
+        if($result == ALARM_CREATED){
           $message = array();
           $message['error'] = false;
           $message['message'] = 'Alarm created successfully';
@@ -282,10 +282,34 @@ $app->post('/createAlarm', function(Request $request, Response $response){
           return $response
                       ->withHeader('Content-type', 'application/json')
                       ->withStatus(201);
-        }else {
+        }else if($result == ALARM_FAILURE){
           $message = array();
           $message['error'] = true;
-          $message['message'] = 'Some error occurred';
+          $message['message'] = 'Alarm failed to create';
+          $response->write(json_encode($message));
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }else if($result == ALARM_UPDATE){
+          $message = array();
+          $message['error'] = true;
+          $message['message'] = 'Alarm updated successfully';
+          $response->write(json_encode($message));
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }else if($result == ALARM_UPDATE_FAILURE){
+          $message = array();
+          $message['error'] = true;
+          $message['message'] = 'Alarm not updated successfully';
+          $response->write(json_encode($message));
+          return $response
+                      ->withHeader('Content-type', 'application/json')
+                      ->withStatus(201);
+        }else if($result == ALARM_EXISTS){
+          $message = array();
+          $message['error'] = true;
+          $message['message'] = 'Alarm already exists';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
@@ -517,7 +541,7 @@ $app->get('/getAllAlarm', function(Request $request, Response $response){
     $alarms = $db->getAllAlarm();
     $response_data = array();
     $response_data['error'] = false;
-    $response_data['alarms'] = $alarms;
+    $response_data['alarmTokens'] = $alarms;
     $response->write(json_encode($response_data));
     return $response
     ->withHeader('Content-type', 'application/json')
@@ -550,22 +574,6 @@ $app->delete('/deleteAllTimeTable/{kakaoId}', function(Request $request, Respons
     }else{
         $response_data['error'] = true;
         $response_data['message'] = 'Delete failed';
-    }
-    $response->write(json_encode($response_data));
-    return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
-});
-$app->delete('/deleteAlarm/{id}', function(Request $request, Response $response, array $args){
-    $id = $args['id'];
-    $db = new AlarmDbOperations;
-    $response_data = array();
-    if($db->deleteAlarm($id)){
-        $response_data['error'] = false;
-        $response_data['message'] = 'Alarm has been deleted';
-    }else{
-        $response_data['error'] = true;
-        $response_data['message'] = 'Plase try again later';
     }
     $response->write(json_encode($response_data));
     return $response
