@@ -60,7 +60,7 @@
         $alarm['to']= $_to;
         // echo "4 : ".$this->getNameBykakaoId($_from);
         $alarm['from'] = $_from;
-        $_from = $this->getNameBykakaoId($alarm['from']);
+        // $_from = $this->getNameBykakaoId($alarm['from']);
         // echo "5 : ".$this->getNameBykakaoId($_from);
         // $q = $this->getNameBykakaoId($_to);
         // echo "\nq : ".$_from;ggdd
