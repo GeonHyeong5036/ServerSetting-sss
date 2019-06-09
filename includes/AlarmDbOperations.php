@@ -72,7 +72,7 @@
 
     public function getNameBykakaoId($kakaoId){
       echo "\n바뀌기전 : ".$kakaoId;
-      $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
+      $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?;");
       echo "\n바뀐후 : ".$kakaoId;
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
