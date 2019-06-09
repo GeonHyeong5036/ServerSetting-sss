@@ -69,9 +69,9 @@
       return $token;
     }
 
-    public function getNameBykakaoId($kakaoId){
+    private function getNameBykakaoId($kakaoId){
       echo "\n바뀌기전 : ".$kakaoId;
-      $stmt = $this->con->prepare("SELECT token from alarmToken where kakaoId IN (SELECT kakaoId from users where kakaoId = ? and member = 1)");
+      $stmt = $this->con->prepare("SELECT id from users where kakaoId = ?");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($name);
