@@ -77,7 +77,7 @@
 
     public function getNameBykakaoId($kakaoId){
       $stmt = $this->con->prepare("SELECT id from users where kakaoId = ?");
-      echo "\nq : ".$_from;
+      echo "\nq : ".$kakaoId;
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($name);
