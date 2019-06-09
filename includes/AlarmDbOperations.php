@@ -50,6 +50,13 @@
       // echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
+          $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
+          $stmt->bind_param("s", $_from);
+          $stmt->execute();
+          $stmt->bind_result($name);
+          $stmt->fetch();
+          echo "\nq : ".$name;
+
           $alarm = array();
           // $_to = $this->getNameBykakaoId($_to);
           // $_from = $this->getNameBykakaoId($alarm['from']);
@@ -76,7 +83,7 @@
     }
 
     public function getNameBykakaoId($kakaoId){
-      $stmt = $this->con->prepare("SELECT id from users where kakaoId = ?");
+      $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
       if($kakaoId == null)
         echo "\nnull : ".$kakaoId;
       $stmt->bind_param("s", $kakaoId);
