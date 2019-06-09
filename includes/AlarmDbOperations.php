@@ -50,7 +50,7 @@
           $alarm = array();
           $alarm['id'] = $id;
           $alarm['type']=$_type;
-          $alarm['to']= $this->getNameBykakaoId($_to);;
+          $alarm['to']= $this->getNameBykakaoId($_to);
           $alarm['from'] = $this->getNameBykakaoId($_from);
           $alarm['time'] = $_time;
           array_push($alarmList, $alarm);
