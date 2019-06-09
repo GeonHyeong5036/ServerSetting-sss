@@ -12,7 +12,7 @@
       $tableDb = new DbOperations;
 
       $stmt = $this->con->prepare("INSERT into meeting(type, manager, title, place) values (?, ?, ?, ?)");
-      $stmt->bind_param("siss", $type, $manager, $title, $place);
+      $stmt->bind_param("ssss", $type, $manager, $title, $place);
 
       if($stmt->execute()){
         $meetingId = $this->getMeetingIdByColumn($manager, $title, $place);

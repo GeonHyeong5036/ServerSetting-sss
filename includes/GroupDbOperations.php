@@ -9,7 +9,7 @@
     public function createGroup($kakaoIdList, $manager, $title, $tag){
       $manager = $this->getUserIdByKakaoId($manager);
       $stmt = $this->con->prepare("INSERT into groups(manager, title, tag) values (?, ?, ?)");
-      $stmt->bind_param("iss", $manager, $title, $tag);
+      $stmt->bind_param("sss", $manager, $title, $tag);
       if($stmt->execute()){
         $groupId = $this->getGroupIdByColumn($title, $tag);
         foreach ($kakaoIdList as $kakaoid) {
