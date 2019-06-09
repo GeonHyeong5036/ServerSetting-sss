@@ -63,7 +63,7 @@
         $_from = $this->getNameBykakaoId($alarm['from']);
         // echo "5 : ".$this->getNameBykakaoId($_from);
         // $q = $this->getNameBykakaoId($_to);
-        // echo "\nq : ".$_from;gg
+        // echo "\nq : ".$_from;ggdd
         $alarm['time'] = $_time;
         array_push($alarmList, $alarm);
       }
