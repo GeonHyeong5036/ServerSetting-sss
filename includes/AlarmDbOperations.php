@@ -45,13 +45,16 @@
       $stmt->bind_param("s", $_from);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
+
+      $x \ $this->getAlarmToken($_to);
+      echo "\nx : ".$x;
       $q = $this->getNameBykakaoId($_to);
-      echo "\n바뀌기전 : ".$q;
+      echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
           $alarm = array();
-          $_to = $this->getNameBykakaoId($_to);
-          $_from = $this->getNameBykakaoId($_from);
+          // $_to = $this->getNameBykakaoId($_to);
+          // $_from = $this->getNameBykakaoId($_from);
           $alarm['id'] = $id;
           $alarm['type']=$_type;
           $alarm['to']= $_to;
