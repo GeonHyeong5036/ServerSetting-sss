@@ -72,7 +72,7 @@
     }
 
     public function getAlarmToken($kakaoId){
-      foreach ($variable as $key => $value) {
+      foreach ($kakaoId as $key => $value) {
         echo "ddd : ".$key.$value;
       }
       $stmt = $this->con->prepare("SELECT token from alarmToken where kakaoId IN (SELECT kakaoId from users where kakaoId = ? and member = 1)");
