@@ -48,8 +48,10 @@
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
 
-      // $x = $this->getAlarmToken($_to);
-      // echo "\nx : ".$x;
+      $x = $this->getAlarmToken($_from);
+      echo "\nx : ".$x;
+      $x = $this->getAlarmToken($_to);
+      echo "\nx : ".$x;
       // $q = $this->getNameBykakaoId($_to);
       // echo "\nq : ".$q;
       $alarmList = array();
