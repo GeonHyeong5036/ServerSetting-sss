@@ -50,11 +50,11 @@
       // echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
-          $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
-          $stmt->bind_param("s", $_from);
-          $stmt->execute();
-          $stmt->bind_result($name);
-          $stmt->fetch();
+          $stmt1 = $this->con->prepare("SELECT name from users where kakaoId = ?");
+          $stmt1->bind_param("s", $_from);
+          $stmt1->execute();
+          $stmt1->bind_result($name);
+          $stmt1->fetch();
           echo "\nq : ".$name;
 
           $alarm = array();
