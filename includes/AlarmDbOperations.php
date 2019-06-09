@@ -51,19 +51,23 @@
       // echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
-          $alarm = array();
-          // $_to = $this->getNameBykakaoId($_to);
-          // $_from = $this->getNameBykakaoId($alarm['from']);
-          $alarm['id'] = $id;
-          $alarm['type']=$_type;
-          $alarm['to']= $_to;
-          $alarm['from'] = $_from;
-          $_from = $this->getNameBykakaoId($alarm['from']);
-          // $q = $this->getNameBykakaoId($_to);
-          // echo "\nq : ".$_from;
-          $alarm['time'] = $_time;
-          array_push($alarmList, $alarm);
+        echo "3 : ".$this->getNameBykakaoId($_from);
+        $alarm = array();
+        // $_to = $this->getNameBykakaoId($_to);
+        // $_from = $this->getNameBykakaoId($alarm['from']);
+        $alarm['id'] = $id;
+        $alarm['type']=$_type;
+        $alarm['to']= $_to;
+        echo "4 : ".$this->getNameBykakaoId($_from);
+        $alarm['from'] = $_from;
+        echo "5 : ".$this->getNameBykakaoId($_from);
+        $_from = $this->getNameBykakaoId($alarm['from']);
+        // $q = $this->getNameBykakaoId($_to);
+        // echo "\nq : ".$_from;
+        $alarm['time'] = $_time;
+        array_push($alarmList, $alarm);
       }
+      echo "6 : ".$this->getNameBykakaoId($_from);
       return $alarmList;
     }
 
