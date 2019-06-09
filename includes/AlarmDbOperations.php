@@ -46,21 +46,21 @@
       $stmt->bind_param("s", $_from);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
-      echo "2 : ".$this->getNameBykakaoId($_from);
+      // echo "2 : ".$this->getNameBykakaoId($_from);
       // $q = $this->getNameBykakaoId($_to);
       // echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
-        echo "3 : ".$this->getNameBykakaoId($_from);
+        // echo "3 : ".$this->getNameBykakaoId($_from);
         $alarm = array();
         // $_to = $this->getNameBykakaoId($_to);
         // $_from = $this->getNameBykakaoId($alarm['from']);
         $alarm['id'] = $id;
         $alarm['type']=$_type;
         $alarm['to']= $_to;
-        echo "4 : ".$this->getNameBykakaoId($_from);
+        // echo "4 : ".$this->getNameBykakaoId($_from);
         $alarm['from'] = $_from;
-        echo "5 : ".$this->getNameBykakaoId($_from);
+        // echo "5 : ".$this->getNameBykakaoId($_from);
         $_from = $this->getNameBykakaoId($alarm['from']);
         // $q = $this->getNameBykakaoId($_to);
         // echo "\nq : ".$_from;
