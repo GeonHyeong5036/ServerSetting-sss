@@ -41,7 +41,7 @@
     }
 
     public function getAlarm($_from){
-      echo "1 : ".$this->getNameBykakaoId($_from);
+      // echo "1 : ".$this->getNameBykakaoId($_from);
       $stmt = $this->con->prepare("SELECT id, _type, _to, _from, _time from alarm where _from = ? order by _time");
       $stmt->bind_param("s", $_from);
       $stmt->execute();
@@ -67,7 +67,7 @@
         $alarm['time'] = $_time;
         array_push($alarmList, $alarm);
       }
-      echo "6 : ".$this->getNameBykakaoId($_from);
+      // echo "6 : ".$this->getNameBykakaoId($_from);
       return $alarmList;
     }
 
@@ -81,9 +81,6 @@
     }
 
     public function getNameBykakaoId($kakaoId){
-      foreach ($kakaoId as $key => $value) {
-        echo "ddd : ".$key.$value;
-      }
       $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
