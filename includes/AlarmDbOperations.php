@@ -51,8 +51,6 @@
           echo "\nto : ".$_to;
           $_to = $this->getNameBykakaoId($_to);
           $_from = $this->getNameBykakaoId($_from);
-          echo "\nto : ".$_to;
-
           $alarm['id'] = $id;
           $alarm['type']=$_type;
           $alarm['to']= $_to;
@@ -73,7 +71,9 @@
     }
 
     public function getNameBykakaoId($kakaoId){
+      echo "\n바뀌기전 : ".$kakaoId;
       $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
+      echo "\n바뀐후 : ".$kakaoId;
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($name);
