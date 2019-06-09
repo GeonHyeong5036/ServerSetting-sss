@@ -45,6 +45,8 @@
       $stmt->bind_param("s", $_from);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
+      $q = $this->getNameBykakaoId($_to);
+      echo "\n바뀌기전 : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
           $alarm = array();
@@ -70,7 +72,6 @@
     }
 
     private function getNameBykakaoId($kakaoId){
-      echo "\n바뀌기전 : ".$kakaoId;
       $stmt = $this->con->prepare("SELECT id from users where kakaoId = ?");
       $stmt->bind_param("s", $kakaoId);
       $stmt->execute();
