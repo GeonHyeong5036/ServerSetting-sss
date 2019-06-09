@@ -9,7 +9,7 @@
     }
 
     public function createAlarm($_type, $_to, $_from){
-      $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) VALUES (?, (SELECT kakaoId fROM alarmToken WHERE token = ?), (SELECT kakaoId fROM alarmToken WHERE token = ?), (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%X %d %m %H %i')))");
+      $stmt = $this->con->prepare("INSERT INTO alarm (_type, _to, _from, _time) VALUES (?, (SELECT kakaoId fROM alarmToken WHERE token = ?), (SELECT kakaoId fROM alarmToken WHERE token = ?), (SELECT DATE_FORMAT((SELECT DATE_ADD((SELECT NOW()), INTERVAL 9 HOUR)), '%d/%m %H:%i')))");
       $stmt->bind_param("sss", $_type, $_to, $_from);
       if($stmt->execute()){
         return ALARM_CREATED;
@@ -50,8 +50,8 @@
           $alarm = array();
           $alarm['id'] = $id;
           $alarm['type']=$_type;
-          $alarm['to']=$_to;
-          $alarm['from'] = $_from;
+          $alarm['to']= $this->getNameBykakaoId($_to);;
+          $alarm['from'] = $this->getNameBykakaoId($_from);
           $alarm['time'] = $_time;
           array_push($alarmList, $alarm);
       }
@@ -65,6 +65,15 @@
       $stmt->bind_result($token);
       $stmt->fetch();
       return $token;
+    }
+
+    public function getNameBykakaoId($kakaoId){
+      $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?");
+      $stmt->bind_param("s", $kakaoId);
+      $stmt->execute();
+      $stmt->bind_result($name);
+      $stmt->fetch();
+      return $name;
     }
 
     public function deleteAlarm($alarmId){
