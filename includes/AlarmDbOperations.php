@@ -48,10 +48,15 @@
       $alarmList = array();
       while($stmt->fetch()){
           $alarm = array();
+          echo "\nto : ".$_to;
+          $_to = $this->getNameBykakaoId($_to);
+          $_from = $this->getNameBykakaoId($_from);
+          echo "\nto : ".$_to;
+
           $alarm['id'] = $id;
           $alarm['type']=$_type;
-          $alarm['to']= $this->getNameBykakaoId($_to);
-          $alarm['from'] = $this->getNameBykakaoId($_from);
+          $alarm['to']= $_to;
+          $alarm['from'] = $_from;
           $alarm['time'] = $_time;
           array_push($alarmList, $alarm);
       }
