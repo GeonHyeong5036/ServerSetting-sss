@@ -7,7 +7,6 @@
       $this->con = $db->connect();
     }
     public function createGroup($kakaoIdList, $manager, $title, $tag){
-      $manager = $this->getUserIdByKakaoId($manager);
       $stmt = $this->con->prepare("INSERT into groups(manager, title, tag) values (?, ?, ?)");
       $stmt->bind_param("sss", $manager, $title, $tag);
       if($stmt->execute()){
