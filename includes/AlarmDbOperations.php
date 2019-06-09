@@ -48,7 +48,6 @@
       $alarmList = array();
       while($stmt->fetch()){
           $alarm = array();
-          echo "\nto : ".$_to;
           $_to = $this->getNameBykakaoId($_to);
           $_from = $this->getNameBykakaoId($_from);
           $alarm['id'] = $id;
@@ -73,8 +72,7 @@
     public function getNameBykakaoId($kakaoId){
       echo "\n바뀌기전 : ".$kakaoId;
       $stmt = $this->con->prepare("SELECT name from users where kakaoId = ?;");
-      echo "\n바뀐후 : ".$kakaoId;
-      $stmt->bind_param("s", $kakaoId);
+      $stmt->bind_param("i", $kakaoId);
       $stmt->execute();
       $stmt->bind_result($name);
       $stmt->fetch();
