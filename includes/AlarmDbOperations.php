@@ -40,9 +40,9 @@
       return ALARM_EXISTS;
     }
 
-    public function getAlarm($_from){
-      $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId WHERE A._to = 1050039103 order by _time");
-      $stmt->bind_param("s", $_from);
+    public function getAlarm($_to){
+      $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId WHERE A._to = ? order by _time");
+      $stmt->bind_param("s", $_to);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
       $alarmList = array();
