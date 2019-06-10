@@ -41,33 +41,20 @@
     }
 
     public function getAlarm($_from){
-      // echo "1 : ".$this->getNameBykakaoId($_from);
-      $stmt = $this->con->prepare("SELECT id, _type, _to, _from, _time from alarm where _from = ? order by _time");
+      $stmt = $this->con->prepare("SELECT A.id, _type, B.NAME, _from, _time from alarm A LEFT JOIN users B ON A._to = B.kakaoId WHERE A._from = ? order by _time");
       $stmt->bind_param("s", $_from);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
-      // echo "2 : ".$this->getNameBykakaoId($_from);
-      // $q = $this->getNameBykakaoId($_to);
-      // echo "\nq : ".$q;
       $alarmList = array();
       while($stmt->fetch()){
-        // echo "3 : ".$this->getNameBykakaoId($_from);
         $alarm = array();
-        // $_to = $this->getNameBykakaoId($_to);
-        // $_from = $this->getNameBykakaoId($alarm['from']);
         $alarm['id'] = $id;
         $alarm['type']=$_type;
         $alarm['to']= $_to;
-        // echo "4 : ".$this->getNameBykakaoId($_from);
         $alarm['from'] = $_from;
-        // $_from = $this->getNameBykakaoId($alarm['from']);
-        // echo "5 : ".$this->getNameBykakaoId($_from);
-        // $q = $this->getNameBykakaoId($_to);
-        // echo "\nq : ".$_from;ggdd
         $alarm['time'] = $_time;
         array_push($alarmList, $alarm);
       }
-      // echo "6 : ".$this->getNameBykakaoId($_from);
       return $alarmList;
     }
 

@@ -14,15 +14,11 @@
     public function getAvailableMeetingTimes($array){
       global $targetCellPositionList;
       $availableMeetingTimes = range(0, 39);
-      // if($array == null){
-      //   $availableMeetingTimes = array_values($availableMeetingTimes);
-      //   return $availableMeetingTimes;
-      // }
 
       foreach ($array as $kakaoid) {
         $this->getUnAvailableCellPostion($kakaoid);
       }
-      if($targetCellPositionList == null){
+      if($targetCellPositionList == null){ //분석할 시간표가 모두 비어 있을때
         $availableMeetingTimes = array_values($availableMeetingTimes);
         return $availableMeetingTimes;
       }
