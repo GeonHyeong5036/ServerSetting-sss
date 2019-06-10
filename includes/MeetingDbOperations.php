@@ -223,7 +223,7 @@
 
       foreach ($kakaoIdList as $kakaoId) {
         foreach ($kakaoId as $key) {
-          foreach ($deleteList as $cellPosition) {
+          foreach ($cellPositionList as $cellPosition) {
             if(!$tableDb->updateTimeTable($key, 'm', $title, $place, $cellPosition)){
               return MEETINGINFO_FAILURE;
             }

@@ -74,7 +74,6 @@
             return true;
         return false;
     }
-
     public function getRecentAlarmId(){
       $stmt = $this->con->prepare("SELECT id FROM alarm ORDER BY id DESC LIMIT 1");
       $stmt->execute();
