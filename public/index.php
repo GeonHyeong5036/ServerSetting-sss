@@ -403,14 +403,15 @@ $app->put('/reviseGroupInfo/{id}', function(Request $request, Response $response
         ->withStatus(200);
     }
 });
-$app->put('/reviseMeetingInfo/{id}', function(Request $request, Response $response, array $args){
+$app->put('/reviseMeetingInfo/{id}/{cellPositionList}', function(Request $request, Response $response, array $args){
     $meetingId = $args['id'];
+    $cellPositionList = $args['cellPositionList'];
     $request_data = $request->getParsedBody();
     $title = $request_data['title'];
     $place = $request_data['place'];
 
     $db = new MeetingDbOperations;
-    if($db->reviseMeetingInfo($meetingId, $title, $place)){
+    if($db->reviseMeetingInfo($meetingId, $title, $place, $cellPositionList)){
         $response_data = array();
         $response_data['error'] = false;
         $response_data['message'] = 'MeetingInfo Updated Successfully';

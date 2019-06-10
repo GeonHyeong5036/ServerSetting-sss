@@ -75,6 +75,13 @@
         return false;
     }
 
+    public function getRecentAlarmId(){
+      $stmt = $this->con->prepare("SELECT id FROM alarm ORDER BY id DESC LIMIT 1");
+      $stmt->execute();
+      $stmt->bind_result($id);
+      $stmt->fetch();
+      return $id;
+    }
     private function isAlarmExist($kakaoId, $token){
       $stmt = $this->con->prepare("SELECT id from alarmToken where kakaoId = ? AND token =?");
       $stmt->bind_param("ss", $kakaoId, $token);

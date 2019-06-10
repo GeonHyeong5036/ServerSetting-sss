@@ -214,7 +214,23 @@
       return $place;
     }
 
-    public Function reviseMeetingInfo($meetingId, $title, $place){
+    public Function reviseMeetingInfo($meetingId, $title, $place, $cellPositionList){
+      $tableDb = new DbOperations;
+      $cellPositionList = explode('[', $cellPositionList);
+      $cellPositionList = explode(']', $cellPositionList[1]);
+      $cellPositionList = explode(', ', $cellPositionList[0]);
+      $kakaoIdList = $this->getKakaoIdbyMeetingId($meetingId);
+
+      foreach ($kakaoIdList as $kakaoId) {
+        foreach ($kakaoId as $key) {
+          foreach ($deleteList as $cellPosition) {
+            if(!$tableDb->updateTimeTable($key, 'm', $title, $place, $cellPosition)){
+              return MEETINGINFO_FAILURE;
+            }
+          }
+        }
+      }
+
       $stmt = $this->con->prepare("UPDATE meeting SET title = ?, place = ? WHERE id = ?;");
       $stmt->bind_param("ssi", $title, $place, $meetingId);
       if($stmt->execute())
