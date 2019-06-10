@@ -281,17 +281,21 @@ $app->post('/createAlarm', function(Request $request, Response $response){
         $db = new AlarmDbOperations;
         $result = $db->createAlarm($_type, $_to, $_from);
         if($result == ALARM_CREATED){
+          $alarm = $db->getRecentAlarmId();
           $message = array();
           $message['error'] = false;
           $message['message'] = 'Alarm created successfully';
+          $meesage['alarm'] = $alarm;
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
                       ->withStatus(201);
         }else if($result == ALARM_FAILURE){
+          $alarm = "failed"
           $message = array();
           $message['error'] = true;
           $message['message'] = 'Alarm failed to create';
+          $meesage['alarm'] = $alarm;
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
@@ -623,9 +627,9 @@ $app->get('/getUserByGroupId', function(Request $request, Response $response){
 // });
 $app->get('/getAlarm', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
-    $_from =  $request_data['from'];
+    $to =  $request_data['from'];
     $db = new AlarmDbOperations;
-    $alarmList = $db->getAlarm($_from);
+    $alarmList = $db->getAlarm($to);
     $response_data = array();
     $response_data['error'] = false;
     $response_data['alarmList'] = $alarmList;

@@ -40,9 +40,9 @@
       return ALARM_EXISTS;
     }
 
-    public function getAlarm($_to){
+    public function getAlarm($to){
       $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId WHERE A._to = ? order by _time");
-      $stmt->bind_param("s", $_to);
+      $stmt->bind_param("s", $to);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
       $alarmList = array();
@@ -75,11 +75,17 @@
         return false;
     }
     public function getRecentAlarmId(){
-      $stmt = $this->con->prepare("SELECT id FROM alarm ORDER BY id DESC LIMIT 1");
+      $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId order by id DESC LIMIT 1");
       $stmt->execute();
-      $stmt->bind_result($id);
+      $stmt->bind_result($id, $_type, $_to, $_from, $_time);
       $stmt->fetch();
-      return $id;
+      $alarm = array();
+      $alarm['id'] = $id;
+      $alarm['type']=$_type;
+      $alarm['to']= $_to;
+      $alarm['from'] = $_from;
+      $alarm['time'] = $_time;
+      return $alarm;
     }
     private function isAlarmExist($kakaoId, $token){
       $stmt = $this->con->prepare("SELECT id from alarmToken where kakaoId = ? AND token =?");
