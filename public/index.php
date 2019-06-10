@@ -412,10 +412,6 @@ $app->put('/reviseMeetingInfo/{id}/{cellPositionList}', function(Request $reques
     $request_data = $request->getParsedBody();
     $title = $request_data['title'];
     $place = $request_data['place'];
-    echo  "\ntitle : ".$title;
-    echo  "\nplace : ".$place;
-    echo  "\nmeetingId : ".$meetingId;
-    echo  "\ncellPositionList : ".$cellPositionList;
 
     $db = new MeetingDbOperations;
     if($db->reviseMeetingInfo($meetingId, $title, $place, $cellPositionList)){
