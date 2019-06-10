@@ -78,17 +78,15 @@
       $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId order by id DESC LIMIT 1");
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
-      $alarmList = array();
-      while($stmt->fetch()){
-        $alarm = array();
-        $alarm['id'] = $id;
-        $alarm['type']=$_type;
-        $alarm['to']= $_to;
-        $alarm['from'] = $_from;
-        $alarm['time'] = $_time;
-        array_push($alarmList, $alarm);
-      }
-      return $alarmList;
+      $stmt->fetch();
+      $alarm = array();
+      $alarm['id'] = $id;
+      $alarm['type']=$_type;
+      $alarm['to']= $_to;
+      $alarm['from'] = $_from;
+      $alarm['time'] = $_time;
+
+      return $alarm;
     }
     private function isAlarmExist($kakaoId, $token){
       $stmt = $this->con->prepare("SELECT id from alarmToken where kakaoId = ? AND token =?");

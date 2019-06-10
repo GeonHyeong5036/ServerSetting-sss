@@ -285,7 +285,7 @@ $app->post('/createAlarm', function(Request $request, Response $response){
           $message = array();
           $message['error'] = false;
           $message['message'] = 'Alarm created successfully';
-          $meesage['alarm'] = $alarm;
+          $message['alarm'] = $alarm;
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
@@ -294,7 +294,7 @@ $app->post('/createAlarm', function(Request $request, Response $response){
           $message = array();
           $message['error'] = true;
           $message['message'] = 'Alarm failed to create';
-          $meesage['alarm'] = true;
+          $message['alarm'] = true;
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
