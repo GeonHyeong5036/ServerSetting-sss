@@ -291,11 +291,10 @@ $app->post('/createAlarm', function(Request $request, Response $response){
                       ->withHeader('Content-type', 'application/json')
                       ->withStatus(201);
         }else if($result == ALARM_FAILURE){
-          $alarm = "failed"
           $message = array();
           $message['error'] = true;
           $message['message'] = 'Alarm failed to create';
-          $meesage['alarm'] = $alarm;
+          $meesage['alarm'] = true;
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type', 'application/json')
