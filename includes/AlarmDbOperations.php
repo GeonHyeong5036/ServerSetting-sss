@@ -41,7 +41,7 @@
     }
 
     public function getAlarm($_from){
-      $stmt = $this->con->prepare("SELECT A.id, _type, B.NAME, _from, _time from alarm A LEFT JOIN users B ON A._to = B.kakaoId WHERE A._from = ? order by _time");
+      $stmt = $this->con->prepare("SELECT A.id, _type, _to, B.name, _time from alarm A LEFT JOIN users B ON A._from = B.kakaoId WHERE A._to = 1050039103 order by _time");
       $stmt->bind_param("s", $_from);
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
