@@ -79,7 +79,12 @@
       $stmt->execute();
       $stmt->bind_result($id, $_type, $_to, $_from, $_time);
       $stmt->fetch();
-
+      $alarm = array();
+      $alarm['id'] = $id;
+      $alarm['type']=$_type;
+      $alarm['to']= $_to;
+      $alarm['from'] = $_from;
+      $alarm['time'] = $_time;
       return $alarm;
     }
     private function isAlarmExist($kakaoId, $token){
