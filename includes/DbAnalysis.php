@@ -22,6 +22,10 @@
       foreach ($array as $kakaoid) {
         $this->getUnAvailableCellPostion($kakaoid);
       }
+      if($targetCellPositionList == null){
+        $availableMeetingTimes = array_values($availableMeetingTimes);
+        return $availableMeetingTimes;
+      }
       $targetCellPositionList = array_unique($targetCellPositionList);
       sort($targetCellPositionList);
 

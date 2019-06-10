@@ -491,7 +491,6 @@ $app->get('/gettimetables', function(Request $request, Response $response){
 });
 $app->get('/getAvailableMeetingTimes', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
-    echo $request_data['kakaoIds'];
     $array = explode('[', $request_data['kakaoIds']);
     $array = explode(']', $array[1]);
     $array = explode(', ', $array[0]);
