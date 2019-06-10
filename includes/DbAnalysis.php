@@ -14,10 +14,6 @@
     public function getAvailableMeetingTimes($array){$availableMeetingTimes
       global $targetCellPositionList;
       $availableMeetingTimes = range(0, 39);
-      if($array == null){
-        $availableMeetingTimes = array_values($availableMeetingTimes);
-        return $availableMeetingTimes;
-      }
 
       foreach ($array as $kakaoid) {
         $this->getUnAvailableCellPostion($kakaoid);
