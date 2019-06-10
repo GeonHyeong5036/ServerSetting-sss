@@ -85,6 +85,12 @@
       $alarm['to']= $_to;
       $alarm['from'] = $_from;
       $alarm['time'] = $_time;
+      echo 'id : ' .$id;
+      echo 't : ' .$_type;
+      echo 'to : ' .$_to;
+      echo 'from : ' .$_from;
+      echo 'time : ' .$_time;
+
       return $alarm;
     }
     private function isAlarmExist($kakaoId, $token){
