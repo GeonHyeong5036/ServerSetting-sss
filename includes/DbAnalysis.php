@@ -64,11 +64,20 @@
         sort($filter_availableMeetingTimes);
         return $filter_availableMeetingTimes;
       }else if($option == "2"){
-
+        $this->getGreatestNumberByDay();
+        return $availableMeetingTimes;
       }
     }
 
+    public function getGreatestNumberByDay(){
+      for($count = 1 ; $count <=12 ; $count++){         // $count 를 1로 초기화 하고
+                                                                      // 12보다 작거나 같으면 반복한다.
+                                                                     // 반복할때마다 $count를 1씩 증가시킨다.
 
+       echo "$count times 12 is " . $count * 12;    // $count값에 따른 문장을 출력한다.
+       echo "<br/>";                                        // 줄바꿈
+
+    }
     // Sun, Mon, Tue, Wed, Thu, Fri, Sat - infos
 
     public function getDeduplicatedCellList($cellPositionList){
