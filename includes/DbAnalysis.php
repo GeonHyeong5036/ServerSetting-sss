@@ -45,12 +45,12 @@
       }
     }
 
-    public function getAsManyUserAsAvailable($array){
+    public function getAsManyUserAsAvailable($kakaoIdList){
       $availableMeetingTimes = range(0, 39);
 
       foreach($availableMeetingTimes as $index){
         $sum = 0;
-        foreach ($array as $kakaoid) {
+        foreach ($kakaoIdList as $kakaoid) {
           if($this->existUserAtCellPosition($kakaoid, $index)){
             $sum++;
           }
@@ -58,7 +58,7 @@
         $availableMeetingTimes[$index] = $sum;
       }
       arsort($availableMeetingTimes);
-      $maxInt = max($availableMeetingTimes);
+      $maxInt = min($availableMeetingTimes);
 
       $filter_availableMeetingTimes = preg_grep("/^$maxInt$/i", $availableMeetingTimes);
       $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
