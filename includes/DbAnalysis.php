@@ -45,7 +45,7 @@
       }
     }
 
-    public function getAsManyUserAsAvailable($kakaoIdList){
+    public function getAsManyUserAsAvailable($kakaoIdList, $option){
       $availableMeetingTimes = range(0, 39);
 
       foreach($availableMeetingTimes as $index){
@@ -57,15 +57,19 @@
         }
         $availableMeetingTimes[$index] = $sum;
       }
-      $minInt = min($availableMeetingTimes);
-      if($minInt == '0'){
+      if($option == "1"){ //전체 시간표에서 최다수의 시간표 cell를 알려준다.
+        $minInt = min($availableMeetingTimes);
         $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
         $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
         sort($filter_availableMeetingTimes);
         return $filter_availableMeetingTimes;
+      }else if($option == "2"){
+
       }
-      return NOT_EMPTY;
     }
+
+
+    // Sun, Mon, Tue, Wed, Thu, Fri, Sat - infos
 
     public function getDeduplicatedCellList($cellPositionList){
       $availableMeetingTimes = range(0, 39);

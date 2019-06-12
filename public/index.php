@@ -509,30 +509,22 @@ $app->get('/getAvailableMeetingTimes', function(Request $request, Response $resp
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });
-$app->get('/getAsManyUserAsAvailable', function(Request $request, Response $response){
+$app->get('/getAsManyUserAsAvailable/{option}', function(Request $request, Response $response, array $args){
+    $option = $args['option'];
     $request_data = $request->getQueryParams();
-    $array = explode('[', $request_data['kakaoIds']);
-    $array = explode(']', $array[1]);
-    $array = explode(', ', $array[0]);
+    $kakaoIdList = explode('[', $request_data['kakaoIds']);
+    $kakaoIdList = explode(']', $kakaoIdList[1]);
+    $kakaoIdList = explode(', ', $kakaoIdList[0]);
     $db = new DbAnalysis;
-    $asManyUserAsAvailableList = $db->getAsManyUserAsAvailable($array);
-    if($asManyUserAsAvailableList == NOT_EMPTY){
-      $response_data['error'] = false;
-      $response_data['message'] = "Not empty hour";
-      $response->write(json_encode($response_data));
-      return $response
-      ->withHeader('Content-type', 'application/json')
-      ->withStatus(200);
-    }else {
-      $response_data['error'] = false;
-      $response_data['message'] = $request_data['kakaoIds'];
-      $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
-      $response_data['totalCount'] = count($asManyUserAsAvailableList);
-      $response->write(json_encode($response_data));
-      return $response
-      ->withHeader('Content-type', 'application/json')
-      ->withStatus(200);
-    }
+    $asManyUserAsAvailableList = $db->getAsManyUserAsAvailable($kakaoIdList, $option);
+    $response_data['error'] = false;
+    $response_data['message'] = $request_data['kakaoIds'];
+    $response_data['asManyUserAsAvailableList'] = $asManyUserAsAvailableList;
+    $response_data['totalCount'] = count($asManyUserAsAvailableList);
+    $response->write(json_encode($response_data));
+    return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
 });
 $app->get('/getDeduplicatedCellList', function(Request $request, Response $response){
     $request_data = $request->getQueryParams();
