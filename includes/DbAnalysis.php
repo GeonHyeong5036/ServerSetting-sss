@@ -73,7 +73,7 @@
       for($day = 0; $day < 5; $day++){
         for($time = $day; $time < 40 ; $time += 5){         // $count 를 1로 초기화 하고
          echo "$time times 12 is " ;
-         echo '\n';
+         echo '<br/>';
        }
       }
     }
