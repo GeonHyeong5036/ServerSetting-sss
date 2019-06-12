@@ -61,12 +61,12 @@
       $minInt = min($availableMeetingTimes);
       echo $minInt;
       if($minInt == '0'){
-        return NOT_EMPTY;
+        $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
+        $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
+        sort($filter_availableMeetingTimes);
+        return $filter_availableMeetingTimes;
       }
-      $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
-      $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
-      sort($filter_availableMeetingTimes);
-      return $filter_availableMeetingTimes;
+      return NOT_EMPTY;
     }
 
     public function getDeduplicatedCellList($cellPositionList){
