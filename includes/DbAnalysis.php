@@ -57,16 +57,15 @@
         }
         $availableMeetingTimes[$index] = $sum;
       }
-      arsort($availableMeetingTimes);
       $minInt = min($availableMeetingTimes);
       echo "최솟값은 :".$minInt;
-      if($minInt == '0'){
+      // if($minInt == '0'){
         $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
         $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
         sort($filter_availableMeetingTimes);
         return $filter_availableMeetingTimes;
-      }
-      return NOT_EMPTY;
+      // }
+      // return NOT_EMPTY;
     }
 
     public function getDeduplicatedCellList($cellPositionList){
