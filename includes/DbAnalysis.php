@@ -59,7 +59,7 @@
       }
       arsort($availableMeetingTimes);
       $minInt = min($availableMeetingTimes);
-      echo $minInt;
+      echo "최솟값은 :".$minInt;
       if($minInt == '0'){
         $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
         $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
