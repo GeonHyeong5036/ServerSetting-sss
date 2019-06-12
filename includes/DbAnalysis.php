@@ -72,7 +72,6 @@
             $cellListByday[$index++] = $availableMeetingTimes[$cell];
           }
           $minInt = min($cellListByday);
-          return $cellListByday;
 
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
           $filter_cellListByday = array_keys($filter_cellListByday);
