@@ -65,7 +65,7 @@
         return $filter_availableMeetingTimes;
       }else if($option == "2"){
         $filter_availableMeetingTimes = array();
-        for($day = 0; $day < 5; $day++){
+        for($day = 1; $day < 5; $day++){
           $cellListByday = range(0, 7);
           $index = -1;
           for($cell = $day; $cell < 40 ; $cell += 5){
@@ -75,6 +75,7 @@
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
           $filter_cellListByday = array_keys($filter_cellListByday);
           sort($filter_cellListByday);
+          return $filter_availableMeetingTimes;
           $filter_availableMeetingTimes = array_merge($filter_availableMeetingTimes, $filter_cellListByday);
         }
         return $filter_availableMeetingTimes;
