@@ -65,17 +65,17 @@
         return $filter_availableMeetingTimes;
       }else if($option == "2"){
         $filter_availableMeetingTimes = array();
-        for($day = 0; $day < 5; $day++){
+        for($day = 1; $day < 5; $day++){
           $cellListByday = range(0, 7);
           $index = 0;
           for($cell = $day; $cell < 40 ; $cell += 5){
             $cellListByday[$index++] = $availableMeetingTimes[$cell];
           }
           $minInt = min($cellListByday);
-          echo $day."의최솟값 : ".$minInt;
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
           $filter_cellListByday = array_keys($filter_cellListByday);
           sort($filter_cellListByday);
+          return $filter_cellListByday;
           $filter_availableMeetingTimes = array_merge($filter_availableMeetingTimes, $filter_cellListByday);
         }
         return $filter_availableMeetingTimes;
