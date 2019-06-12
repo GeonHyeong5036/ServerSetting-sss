@@ -73,8 +73,9 @@
           }
           $minInt = min($cellListByday);
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
+
           $filter_cellListByday = array_keys($filter_cellListByday);
-          return $cellListByday;
+          return $filter_cellListByday;
 
           sort($filter_cellListByday);
 
