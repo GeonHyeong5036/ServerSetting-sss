@@ -38,4 +38,6 @@
     define('ALARM_FAILURE', 604);
     define('ALARM_UPDATE_FAILURE', 605);
 
+    define('NO_EMPTY', 704);
+
 ?>

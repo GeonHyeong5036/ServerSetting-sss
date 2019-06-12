@@ -58,13 +58,15 @@
         $availableMeetingTimes[$index] = $sum;
       }
       arsort($availableMeetingTimes);
-      $maxInt = min($availableMeetingTimes);
+      $minInt = min($availableMeetingTimes);
+      if($minInt != '0'){
+        $filter_availableMeetingTimes = preg_grep("/^$minInt/i", $availableMeetingTimes);
+        $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
+        sort($filter_availableMeetingTimes);
+        return $filter_availableMeetingTimes;
+      }
+      return NOT_EMPTY;
 
-      $filter_availableMeetingTimes = preg_grep("/^$maxInt$/i", $availableMeetingTimes);
-      $filter_availableMeetingTimes = array_keys($filter_availableMeetingTimes);
-      sort($filter_availableMeetingTimes);
-
-      return $filter_availableMeetingTimes;
     }
 
     public function getDeduplicatedCellList($cellPositionList){
