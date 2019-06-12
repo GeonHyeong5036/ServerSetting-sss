@@ -64,19 +64,25 @@
         sort($filter_availableMeetingTimes);
         return $filter_availableMeetingTimes;
       }else if($option == "2"){
-        $this->getGreatestNumberByDay();
+        $availableMeetingTimes = array();
+        for($day = 0; $day < 5; $day++){
+          $cellListByday = range(0, 7);
+          $index = -1;
+          for($cell = $day; $cell < 40 ; $cell += 5){
+            $cellListByday[++$index] = $availableMeetingTimes[$cell];
+          }
+          $minInt = min($cellListByday);
+          $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
+          $filter_cellListByday = array_keys($filter_cellListByday);
+          sort($filter_cellListByday);
+          $availableMeetingTimes = array_merge($availableMeetingTimes, $filter_cellListByday);
+        }
         return $availableMeetingTimes;
       }
     }
 
-    private function getGreatestNumberByDay(){
-      for($day = 0; $day < 5; $day++){
-        for($time = $day; $time < 40 ; $time += 5){         // $count 를 1로 초기화 하고
-         echo "$time times 12 is " ;
-         echo '<br/>';
-       }
-      }
-    }
+    // private function getGreatestNumberByDay(){
+    // }
     // Sun, Mon, Tue, Wed, Thu, Fri, Sat - infos
 
     public function getDeduplicatedCellList($cellPositionList){
