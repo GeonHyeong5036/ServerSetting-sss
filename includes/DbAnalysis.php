@@ -67,11 +67,11 @@
         $filter_availableMeetingTimes = array();
         for($day = 1; $day < 5; $day++){
           $cellListByday = range(0, 7);
-          $index = -1;
+          $index = 0;
           for($cell = $day; $cell < 40 ; $cell += 5){
-            $cellListByday[++$index] = $availableMeetingTimes[$cell];
+            $cellListByday[$index++] = $availableMeetingTimes[$cell];
           }
-          $minInt = min($availableMeetingTimes);
+          $minInt = min($cellListByday);
           return $minInt;
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
           $filter_cellListByday = array_keys($filter_cellListByday);
