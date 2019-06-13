@@ -74,17 +74,7 @@
           $minInt = min($cellListByday);
           $filter_cellListByday = preg_grep("/^$minInt/i", $cellListByday);
           $filter_cellListByday = array_keys($filter_cellListByday);
-          return $filter_cellListByday;
-          // $index = 0;
-          // $cellListByday = range(0, 7);
-          // for($cell = $day; $cell < 40 ; $cell += 5){
-          //   foreach ($cellListByda as $key => $value) {
-          //     if($cellListByday == $cell)
-          //   }
-          //   $cellListByday[$index++] = array_search($cell, $availableMeetingTimes);
-          // }
-          sort($filter_cellListByday);
-          $filter_availableMeetingTimes = array_merge($filter_availableMeetingTimes, $cellListByday);
+          $filter_availableMeetingTimes = array_merge($filter_availableMeetingTimes, $filter_cellListByday);
         }
         return $filter_availableMeetingTimes;
       }
