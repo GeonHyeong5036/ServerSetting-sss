@@ -79,7 +79,7 @@
         return $filter_availableMeetingTimes;
       }else if($option == "3"){ //시간별 최대수의 시간표 cell을 알려준다.
         $filter_availableMeetingTimes = array();
-        for($time = 0; $time =< 35; $time += 5){
+        for($time = 0; $time <= 35; $time += 5){
           $cellListByday = array();
           for($cell = $time; $cell < $time+5 ; $cell++){
             $cellListByday[$cell] = $availableMeetingTimes[$cell];
