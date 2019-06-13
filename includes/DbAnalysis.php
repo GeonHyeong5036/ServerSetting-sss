@@ -76,6 +76,7 @@
           $filter_cellListByday = array_keys($filter_cellListByday);
           $filter_availableMeetingTimes = array_merge($filter_availableMeetingTimes, $filter_cellListByday);
         }
+        sort($filter_availableMeetingTimes);
         return $filter_availableMeetingTimes;
       }
     }
