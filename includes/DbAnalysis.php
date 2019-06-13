@@ -67,6 +67,7 @@
         $filter_availableMeetingTimes = array();
 
         for($day = 1; $day < 5; $day++){
+          $cellListByday = array();
           for($cell = $day; $cell < 40 ; $cell += 5){
             $cellListByday[$cell] = $availableMeetingTimes[$cell];
           }
